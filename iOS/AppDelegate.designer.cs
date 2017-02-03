@@ -9,18 +9,11 @@ using System.CodeDom.Compiler;
 
 namespace Clockwise.iOS
 {
-	[Register ("ViewController")]
-	partial class ViewController
+	partial class AppDelegate
 	{
-		[Outlet]
-		UIKit.UIButton Button { get; set; }
 		
 		void ReleaseDesignerOutlets ()
 		{
-			if (Button != null) {
-				Button.Dispose ();
-				Button = null;
-			}
 		}
 	}
 }

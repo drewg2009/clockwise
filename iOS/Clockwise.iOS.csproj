@@ -118,6 +118,9 @@
     <Compile Include="ViewController.designer.cs">
       <DependentUpon>ViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="AppDelegate.designer.cs">
+      <DependentUpon>AppDelegate.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\add_module_button.png" />
