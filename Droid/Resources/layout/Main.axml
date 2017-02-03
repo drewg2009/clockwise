@@ -213,7 +213,9 @@
             android:layout_above="@+id/pulldown"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="20dp"
-            android:layout_marginBottom="-20dp" />
+            android:layout_marginBottom="-20dp"
+            xmlns:tools="http://schemas.android.com/tools"
+            tools:visibility="visible" />
         <ImageView
             android:src="@drawable/on_toggle"
             android:layout_width="108dp"
@@ -225,6 +227,7 @@
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="20dp"
             android:layout_marginBottom="-20dp"
-            android:alpha="0" />
+            xmlns:tools="http://schemas.android.com/tools"
+            tools:visibility="visible" />
     </RelativeLayout>
 </LinearLayout>

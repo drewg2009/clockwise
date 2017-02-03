@@ -8,6 +8,7 @@ namespace Clockwise.Droid
 	[Activity(Label = "Clockwise", MainLauncher = true, Icon = "@mipmap/icon")]
 	public class MainActivity : Activity
 	{
+		bool alarmOn = true;
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
@@ -21,22 +22,57 @@ namespace Clockwise.Droid
 			NumberPicker ampmpicker = FindViewById<NumberPicker>(Resource.Id.ampm);
 
 			//string[] hours = 
-			hourpicker.SetDisplayedValues(Enumerable.Range(1, 12).Select(n => n.ToString()).ToArray());
+			//hourpicker.SetDisplayedValues(Enumerable.Range(1, 12).Select(n => n.ToString()).ToArray());
 			hourpicker.MinValue = 1;
 			hourpicker.MaxValue = 12;
-			//hourpicker.Value = 3;
-			hourpicker.WrapSelectorWheel = true;
-			minutepicker.SetDisplayedValues(Enumerable.Range(0, 59).Select(n => n.ToString()).ToArray());
-			//ampmpicker.MaxValue = 1;
-			//ampmpicker.MinValue = 0;
+
+			minutepicker.MinValue = 0;
+			minutepicker.MaxValue = 59;
+			minutepicker.SetFormatter(new TwoDigitFormatter());
+
+			ampmpicker.MaxValue = 1;
+			ampmpicker.MinValue = 0;
 			ampmpicker.SetDisplayedValues(new string[] { "am", "pm" });
 
 			//Setup Toggle(s)
 			ImageView on_toggle = FindViewById<ImageView>(Resource.Id.on_toggle);
 			ImageView off_toggle = FindViewById<ImageView>(Resource.Id.off_toggle);
+			off_toggle.Visibility = Android.Views.ViewStates.Gone;
 
+			on_toggle.Click += delegate {
+				System.Console.WriteLine("on clicked");
+
+				if (alarmOn)
+				{
+					System.Console.WriteLine("turning alarm off");
+					alarmOn = false;
+					on_toggle.Visibility = Android.Views.ViewStates.Gone;
+					off_toggle.Visibility = Android.Views.ViewStates.Visible;
+				}
+			};
+
+			off_toggle.Click += delegate
+			{
+				System.Console.WriteLine("off clicked");
+
+				if (!alarmOn)
+				{
+					alarmOn = true;
+					System.Console.WriteLine("turning alarm on");
+					off_toggle.Visibility = Android.Views.ViewStates.Gone;
+					on_toggle.Visibility = Android.Views.ViewStates.Visible;
+				}
+			};
 
 			//button.Click += delegate { button.Text = string.Format("{0} clicks!", count++); };
+		}
+
+		public class TwoDigitFormatter : Java.Lang.Object, NumberPicker.IFormatter
+		{
+			public string Format(int value)
+			{
+				return string.Format("{0:D2}", value);
+			}
 		}
 	}
 }
