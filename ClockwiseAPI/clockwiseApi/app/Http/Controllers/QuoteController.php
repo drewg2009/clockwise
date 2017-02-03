@@ -11,6 +11,6 @@ class QuoteController extends Controller
 
     public function execute(){
         $xmlObject = XMLParserController::get_rss_item($this->url, 1);
-        echo $xmlObject[0];
+        echo $xmlObject[0]->description;
     }
 }

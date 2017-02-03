@@ -10,7 +10,7 @@ class XMLParserController extends Controller
         $entries = array();
         $xml=simplexml_load_file($url);
         for ($x = 0; $x < $limit; $x++) {
-            $items[$x] = $xml->channel->item[0]->description;
+            $items[$x] = $xml->channel->item[$x];
         }
 
         return $entries;
@@ -20,7 +20,7 @@ class XMLParserController extends Controller
         $items = array();
         $xml=simplexml_load_file($url);
         for ($x = 0; $x < $limit; $x++) {
-            $items[$x] = $xml->channel->item[0]->description;
+            $items[$x] = $xml->channel->item[$x];
         }
 
         return $items;
