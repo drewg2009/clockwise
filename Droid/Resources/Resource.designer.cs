@@ -78,23 +78,23 @@ namespace Clockwise.Droid
 			// aapt resource value: 0x7f060017
 			public const int add_module_button = 2131099671;
 			
+			// aapt resource value: 0x7f060006
+			public const int ampm = 2131099654;
+			
 			// aapt resource value: 0x7f060001
 			public const int clock_settings = 2131099649;
 			
 			// aapt resource value: 0x7f060013
 			public const int fridayInput = 2131099667;
 			
-			// aapt resource value: 0x7f06000b
-			public const int mondayInput = 2131099659;
-			
 			// aapt resource value: 0x7f060004
-			public const int numberPicker1 = 2131099652;
+			public const int hour = 2131099652;
 			
 			// aapt resource value: 0x7f060005
-			public const int numberPicker2 = 2131099653;
+			public const int minute = 2131099653;
 			
-			// aapt resource value: 0x7f060006
-			public const int numberPicker3 = 2131099654;
+			// aapt resource value: 0x7f06000b
+			public const int mondayInput = 2131099659;
 			
 			// aapt resource value: 0x7f060019
 			public const int off_toggle = 2131099673;

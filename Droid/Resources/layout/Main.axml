@@ -48,15 +48,15 @@
                     <NumberPicker
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:id="@+id/numberPicker1" />
+                        android:id="@+id/hour" />
                     <NumberPicker
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:id="@+id/numberPicker2" />
+                        android:id="@+id/minute" />
                     <NumberPicker
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:id="@+id/numberPicker3" />
+                        android:id="@+id/ampm" />
                 </LinearLayout>
             </RelativeLayout>
             <RelativeLayout
