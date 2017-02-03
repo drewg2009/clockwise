@@ -64,7 +64,13 @@ namespace Clockwise.Droid
 				}
 			};
 
-			//button.Click += delegate { button.Text = string.Format("{0} clicks!", count++); };
+
+
+		}
+
+		public static void setTime()
+		{
+
 		}
 
 		public class TwoDigitFormatter : Java.Lang.Object, NumberPicker.IFormatter
