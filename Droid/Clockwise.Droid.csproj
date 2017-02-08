@@ -81,6 +81,11 @@
     <AndroidResource Include="Resources\drawable\pulldown.png" />
     <AndroidResource Include="Resources\drawable\settings_button.png" />
     <AndroidResource Include="Resources\layout\Main.axml" />
+    <AndroidResource Include="Resources\layout\module_setting_row.xml" />
+    <AndroidResource Include="Resources\drawable\gradient_bg.xml" />
+    <AndroidResource Include="Resources\layout\weather_settings.xml" />
+    <AndroidResource Include="Resources\drawable\setting_toggle.png" />
+    <AndroidResource Include="Resources\layout\save_button.xml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />
