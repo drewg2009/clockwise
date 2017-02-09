@@ -1,0 +1,18 @@
+﻿<Properties StartupConfiguration="{25923E74-1BCD-4913-9DDD-9AC9574EF53C}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Droid/MainActivity.cs">
+    <Files>
+      <File FileName="Droid/MainActivity.cs" Line="53" Column="8" />
+      <File FileName="iOS/ViewController.cs" Line="1" Column="1" />
+      <File FileName="iOS/Main.cs" Line="1" Column="1" />
+      <File FileName="iOS/AppDelegate.cs" Line="1" Column="1" />
+      <File FileName="iOS/Info.plist" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.Clockwise.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.EDB228CD-2F85-4356-975C-124B5B6A7F77" />
+  <MonoDevelop.Ide.ItemProperties.Clockwise.Droid AndroidDesignerPreferredDevice="Nexus 4" PreferredExecutionTarget="Android.efca1e22" />
+</Properties>

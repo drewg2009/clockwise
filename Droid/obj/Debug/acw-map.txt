@@ -1,0 +1,4 @@
+Clockwise.Droid.MainActivity, Clockwise.Droid;md5008cb7354c6e5213432fa67ee425e7bc.MainActivity
+Clockwise.Droid.MainActivity, Clockwise.Droid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md5008cb7354c6e5213432fa67ee425e7bc.MainActivity
+Clockwise.Droid.MainActivity;md5008cb7354c6e5213432fa67ee425e7bc.MainActivity
+clockwise.droid.MainActivity;md5008cb7354c6e5213432fa67ee425e7bc.MainActivity

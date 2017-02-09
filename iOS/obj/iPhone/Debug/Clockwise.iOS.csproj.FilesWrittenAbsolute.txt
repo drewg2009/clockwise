@@ -1,0 +1,11 @@
+/Users/drewgallagher/Documents/Software/MobileApps/clockwise/xamarin/clockwise/iOS/obj/iPhone/Debug/Xamarin.iOS,Version=v1.0.AssemblyAttribute.cs
+/Users/drewgallagher/Documents/Software/MobileApps/clockwise/xamarin/clockwise/iOS/obj/iPhone/Debug/ibtool/_BundleResourceWithLogicalName.items
+/Users/drewgallagher/Documents/Software/MobileApps/clockwise/xamarin/clockwise/iOS/obj/iPhone/Debug/actool/_PartialAppManifest.items
+/Users/drewgallagher/Documents/Software/MobileApps/clockwise/xamarin/clockwise/iOS/obj/iPhone/Debug/actool/_BundleResourceWithLogicalName.items
+/Users/drewgallagher/Documents/Software/MobileApps/clockwise/xamarin/clockwise/iOS/obj/iPhone/Debug/build-ipad5.1-10.2.1/optimized/
+/Users/drewgallagher/Documents/Software/MobileApps/clockwise/xamarin/clockwise/iOS/bin/iPhone/Debug/Clockwise.iOS.exe.mdb
+/Users/drewgallagher/Documents/Software/MobileApps/clockwise/xamarin/clockwise/iOS/bin/iPhone/Debug/Clockwise.iOS.exe
+/Users/drewgallagher/Documents/Software/MobileApps/clockwise/xamarin/clockwise/iOS/obj/iPhone/Debug/Clockwise.iOS.exe
+/Users/drewgallagher/Documents/Software/MobileApps/clockwise/xamarin/clockwise/iOS/obj/iPhone/Debug/Clockwise.iOS.exe.mdb
+/Users/drewgallagher/Documents/Software/MobileApps/clockwise/xamarin/clockwise/iOS/bin/iPhone/Debug/Clockwise.dll
+/Users/drewgallagher/Documents/Software/MobileApps/clockwise/xamarin/clockwise/iOS/bin/iPhone/Debug/Clockwise.dll.mdb
