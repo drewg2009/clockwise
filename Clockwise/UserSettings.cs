@@ -20,16 +20,16 @@ namespace Clockwise
 
 		#endregion
 
-		public static string GeneralSettings
-		{
-			get
-			{
-				return AppSettings.GetValueOrDefault(SettingsKey, SettingsDefault);
-			}
-			set
-			{
-				AppSettings.AddOrUpdateValue(SettingsKey, value);
-			}
-		}
+		//public static string GeneralSettings
+		//{
+		//	get
+		//	{
+		//		return AppSettings.GetValueOrDefault(SettingsKey, SettingsDefault);
+		//	}
+		//	set
+		//	{
+		//		AppSettings.AddOrUpdateValue(SettingsKey, value);
+		//	}
+		//}
 	}
 }

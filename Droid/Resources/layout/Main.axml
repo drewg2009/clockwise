@@ -203,7 +203,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="35dp"
             android:layout_marginBottom="-10dp" />
-        <ImageView
+    <!--<ImageView xmlns:tools="http://schemas.android.com/tools"
             android:src="@drawable/off_toggle"
             android:layout_width="108dp"
             android:layout_height="52dp"
@@ -214,20 +214,24 @@
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="20dp"
             android:layout_marginBottom="-20dp"
-            xmlns:tools="http://schemas.android.com/tools"
-            tools:visibility="visible" />
-        <ImageView
+            tools:visibility="visible" />-->
+        <ImageSwitcher xmlns:tools="http://schemas.android.com/tools"
             android:src="@drawable/on_toggle"
             android:layout_width="108dp"
             android:layout_height="52dp"
-            android:id="@+id/on_toggle"
+            android:id="@+id/alarm_toggle"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
             android:layout_above="@+id/pulldown"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="20dp"
             android:layout_marginBottom="-20dp"
-            xmlns:tools="http://schemas.android.com/tools"
             tools:visibility="visible" />
+    <!--<ImageSwitcher
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageSwitcher1" />-->
     </RelativeLayout>
 </LinearLayout>

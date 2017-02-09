@@ -48,16 +48,22 @@ namespace Clockwise.Droid
 			public const int add_module_button = 2130837504;
 			
 			// aapt resource value: 0x7f020001
-			public const int off_toggle = 2130837505;
+			public const int gradient_bg = 2130837505;
 			
 			// aapt resource value: 0x7f020002
-			public const int on_toggle = 2130837506;
+			public const int off_toggle = 2130837506;
 			
 			// aapt resource value: 0x7f020003
-			public const int pulldown = 2130837507;
+			public const int on_toggle = 2130837507;
 			
 			// aapt resource value: 0x7f020004
-			public const int settings_button = 2130837508;
+			public const int pulldown = 2130837508;
+			
+			// aapt resource value: 0x7f020005
+			public const int setting_toggle = 2130837509;
+			
+			// aapt resource value: 0x7f020006
+			public const int settings_button = 2130837510;
 			
 			static Drawable()
 			{
@@ -78,6 +84,9 @@ namespace Clockwise.Droid
 			// aapt resource value: 0x7f060017
 			public const int add_module_button = 2131099671;
 			
+			// aapt resource value: 0x7f060019
+			public const int alarm_toggle = 2131099673;
+			
 			// aapt resource value: 0x7f060006
 			public const int ampm = 2131099654;
 			
@@ -90,17 +99,14 @@ namespace Clockwise.Droid
 			// aapt resource value: 0x7f060004
 			public const int hour = 2131099652;
 			
+			// aapt resource value: 0x7f06001c
+			public const int linearLayout1 = 2131099676;
+			
 			// aapt resource value: 0x7f060005
 			public const int minute = 2131099653;
 			
 			// aapt resource value: 0x7f06000b
 			public const int mondayInput = 2131099659;
-			
-			// aapt resource value: 0x7f060019
-			public const int off_toggle = 2131099673;
-			
-			// aapt resource value: 0x7f06001a
-			public const int on_toggle = 2131099674;
 			
 			// aapt resource value: 0x7f060002
 			public const int picker_holder = 2131099650;
@@ -117,6 +123,9 @@ namespace Clockwise.Droid
 			// aapt resource value: 0x7f060015
 			public const int saturdayInput = 2131099669;
 			
+			// aapt resource value: 0x7f06001a
+			public const int setting_title = 2131099674;
+			
 			// aapt resource value: 0x7f060018
 			public const int settings = 2131099672;
 			
@@ -129,8 +138,14 @@ namespace Clockwise.Droid
 			// aapt resource value: 0x7f060003
 			public const int timescrollers = 2131099651;
 			
+			// aapt resource value: 0x7f06001b
+			public const int toggle = 2131099675;
+			
 			// aapt resource value: 0x7f06000d
 			public const int tuesdayInput = 2131099661;
+			
+			// aapt resource value: 0x7f06001d
+			public const int view1 = 2131099677;
 			
 			// aapt resource value: 0x7f060010
 			public const int view10 = 2131099664;
@@ -168,6 +183,15 @@ namespace Clockwise.Droid
 			
 			// aapt resource value: 0x7f040000
 			public const int Main = 2130968576;
+			
+			// aapt resource value: 0x7f040001
+			public const int module_setting_row = 2130968577;
+			
+			// aapt resource value: 0x7f040002
+			public const int save_button = 2130968578;
+			
+			// aapt resource value: 0x7f040003
+			public const int weather_settings = 2130968579;
 			
 			static Layout()
 			{
