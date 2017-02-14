@@ -6,19 +6,23 @@ use Illuminate\Http\Request;
 
 class RedditController extends Controller implements ModuleInterface
 {
-    private $url = "https://www.reddit.com/r/";
-    private $ext = ".rss";
-    private $redditFeed;
-
-    public function __construct($feed)
-    {
-        $this->redditFeed = $feed;
-    }
+    private $url = "http://www.reddit.com/r/";
+    private $ext = "/.rss";
 
     public function execute($name,$limit,$message)
     {
-        $xmlObject = XMLParserController::get_rss_item($this->url . $this->redditFeed . $this->ext, 1);
 
-        return $message . $xmlObject[0]->description;
+        $finalUrl = $this->url . $name . $this->ext;
+        $xmlObject = XMLParserController::get_rss_item($finalUrl, $limit);
+
+        return $message . $name . ". " . $this->getString($xmlObject);
+    }
+
+    private function getString($array){
+        $string = "";
+        for ($i=0;$i<sizeof($array);$i++){
+            $string .= $array[$i]->title . ". ";
+        }
+        return $string;
     }
 }

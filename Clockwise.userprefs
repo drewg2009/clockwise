@@ -1,4 +1,4 @@
-﻿<Properties StartupConfiguration="{25923E74-1BCD-4913-9DDD-9AC9574EF53C}|Default">
+﻿<Properties StartupConfiguration="{B46E161A-E220-482B-B411-3F0B25C20CFD}|Default">
   <MonoDevelop.Ide.Workbench ActiveDocument="Droid/MainActivity.cs">
     <Files>
       <File FileName="Droid/MainActivity.cs" Line="53" Column="8" />
@@ -14,5 +14,5 @@
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.ItemProperties.Clockwise.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.EDB228CD-2F85-4356-975C-124B5B6A7F77" />
-  <MonoDevelop.Ide.ItemProperties.Clockwise.Droid AndroidDesignerPreferredDevice="Nexus 4" PreferredExecutionTarget="Android.efca1e22" />
+  <MonoDevelop.Ide.ItemProperties.Clockwise.Droid AndroidDesignerPreferredDevice="Nexus 4" PreferredExecutionTarget="Android.Nexus_5_API_23" />
 </Properties>

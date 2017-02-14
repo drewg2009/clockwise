@@ -20,7 +20,13 @@ class XMLParserController extends Controller
         $items = array();
         $xml=simplexml_load_file($url);
         for ($x = 0; $x < $limit; $x++) {
-            $items[$x] = $xml->channel->item[$x];
+            //if channel is not in rss feed
+            if(sizeof($xml->channel) == 0){
+                $items[$x] = $xml->entry[$x];
+            }
+            else{
+                $items[$x] = $xml->channel->item[$x];
+            }
         }
 
         return $items;

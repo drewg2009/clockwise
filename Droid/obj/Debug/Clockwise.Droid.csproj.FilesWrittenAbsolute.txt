@@ -23,3 +23,13 @@
 /Users/drewgallagher/Documents/Software/MobileApps/clockwise/xamarin/clockwise/Droid/bin/Debug/Clockwise.dll
 /Users/drewgallagher/Documents/Software/MobileApps/clockwise/xamarin/clockwise/Droid/bin/Debug/Clockwise.dll.mdb
 /Users/drewgallagher/Documents/Software/MobileApps/clockwise/xamarin/clockwise/Droid/obj/Debug/MonoAndroid,Version=v6.0.AssemblyAttribute.cs
+/Users/drewgallagher/Documents/Software/MobileApps/clockwise/xamarin/clockwise/Droid/bin/Debug/com.epoch.Clockwise.apk
+/Users/drewgallagher/Documents/Software/MobileApps/clockwise/xamarin/clockwise/Droid/obj/Debug/android/bin/com.epoch.Clockwise.apk
+/Users/drewgallagher/Documents/Software/MobileApps/clockwise/xamarin/clockwise/Droid/obj/Debug/res/layout/module_setting_row.xml
+/Users/drewgallagher/Documents/Software/MobileApps/clockwise/xamarin/clockwise/Droid/obj/Debug/res/drawable/gradient_bg.xml
+/Users/drewgallagher/Documents/Software/MobileApps/clockwise/xamarin/clockwise/Droid/obj/Debug/res/layout/weather_settings.xml
+/Users/drewgallagher/Documents/Software/MobileApps/clockwise/xamarin/clockwise/Droid/obj/Debug/res/drawable/setting_toggle.png
+/Users/drewgallagher/Documents/Software/MobileApps/clockwise/xamarin/clockwise/Droid/obj/Debug/res/layout/save_button.xml
+/Users/drewgallagher/Documents/Software/MobileApps/clockwise/xamarin/clockwise/Droid/bin/Debug/com.epoch.Clockwise-Signed.apk
+/Users/drewgallagher/Documents/Software/MobileApps/clockwise/xamarin/clockwise/Droid/bin/Debug/Plugin.Settings.Abstractions.dll
+/Users/drewgallagher/Documents/Software/MobileApps/clockwise/xamarin/clockwise/Droid/bin/Debug/Plugin.Settings.dll
