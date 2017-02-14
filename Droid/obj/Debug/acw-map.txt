@@ -2,3 +2,19 @@ Clockwise.Droid.MainActivity, Clockwise.Droid;md5008cb7354c6e5213432fa67ee425e7b
 Clockwise.Droid.MainActivity, Clockwise.Droid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md5008cb7354c6e5213432fa67ee425e7bc.MainActivity
 Clockwise.Droid.MainActivity;md5008cb7354c6e5213432fa67ee425e7bc.MainActivity
 clockwise.droid.MainActivity;md5008cb7354c6e5213432fa67ee425e7bc.MainActivity
+Clockwise.Droid.MainActivity/TwoDigitFormatter, Clockwise.Droid;md5008cb7354c6e5213432fa67ee425e7bc.MainActivity_TwoDigitFormatter
+Clockwise.Droid.MainActivity+TwoDigitFormatter, Clockwise.Droid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md5008cb7354c6e5213432fa67ee425e7bc.MainActivity_TwoDigitFormatter
+Clockwise.Droid.MainActivity.TwoDigitFormatter;md5008cb7354c6e5213432fa67ee425e7bc.MainActivity_TwoDigitFormatter
+clockwise.droid.MainActivity_TwoDigitFormatter;md5008cb7354c6e5213432fa67ee425e7bc.MainActivity_TwoDigitFormatter
+Clockwise.Droid.MainActivity/Toggle, Clockwise.Droid;md5008cb7354c6e5213432fa67ee425e7bc.MainActivity_Toggle
+Clockwise.Droid.MainActivity+Toggle, Clockwise.Droid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md5008cb7354c6e5213432fa67ee425e7bc.MainActivity_Toggle
+Clockwise.Droid.MainActivity.Toggle;md5008cb7354c6e5213432fa67ee425e7bc.MainActivity_Toggle
+clockwise.droid.MainActivity_Toggle;md5008cb7354c6e5213432fa67ee425e7bc.MainActivity_Toggle
+Clockwise.Droid.AlarmReceiver, Clockwise.Droid;md5008cb7354c6e5213432fa67ee425e7bc.AlarmReceiver
+Clockwise.Droid.AlarmReceiver, Clockwise.Droid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md5008cb7354c6e5213432fa67ee425e7bc.AlarmReceiver
+Clockwise.Droid.AlarmReceiver;md5008cb7354c6e5213432fa67ee425e7bc.AlarmReceiver
+clockwise.droid.AlarmReceiver;md5008cb7354c6e5213432fa67ee425e7bc.AlarmReceiver
+Clockwise.Droid.SpeechService, Clockwise.Droid;md5008cb7354c6e5213432fa67ee425e7bc.SpeechService
+Clockwise.Droid.SpeechService, Clockwise.Droid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md5008cb7354c6e5213432fa67ee425e7bc.SpeechService
+Clockwise.Droid.SpeechService;md5008cb7354c6e5213432fa67ee425e7bc.SpeechService
+clockwise.droid.SpeechService;md5008cb7354c6e5213432fa67ee425e7bc.SpeechService

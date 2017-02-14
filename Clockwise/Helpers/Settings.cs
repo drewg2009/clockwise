@@ -39,8 +39,38 @@ namespace Clockwise.Helpers
 		private const string SnoozeKey = "snooze_key";
 		private static readonly string SnoozeDef = string.Empty;
 
+		private const string WeatherKey = "weather_key";
+		private static readonly string WeatherDef = string.Empty;
 
+		private const string RedditKey = "reddit_key";
+		private static readonly string RedditDef = string.Empty;
 
+		private const string TwitterKey = "twitter_key";
+		private static readonly string TwitterDef = string.Empty;
+
+		private const string NewsKey = "news_key";
+		private static readonly string NewsDef = string.Empty;
+
+		private const string RemindersKey = "reminders_key";
+		private static readonly string RemindersDef = string.Empty;
+
+		private const string CountdownKey = "countdown_key";
+		private static readonly string CountdownDef = string.Empty;
+
+		private const string TrafficKey = "traffic_key";
+		private static readonly string TrafficDef = string.Empty;
+
+		private const string QuoteKey = "quote_key";
+		private static readonly string QuoteDef = string.Empty;
+
+		private const string TDIHKey = "tdih_key";
+		private static readonly string TDIHDef = string.Empty;
+
+		private const string FactKey = "fact_key";
+		private static readonly string FactDef = string.Empty;
+
+		private const string AndroidFileAccessKey = "android_file_access_key";
+		private static readonly string AndroidFileAccessDef = string.Empty;
     #endregion
 
 
@@ -80,5 +110,70 @@ namespace Clockwise.Helpers
 			set { AppSettings.AddOrUpdateValue<string>(SnoozeKey, value); }
 		}
 
+		public static string Weather
+		{
+			get { return AppSettings.GetValueOrDefault<string>(WeatherKey, WeatherDef); }
+			set { AppSettings.AddOrUpdateValue<string>(WeatherKey, value); }
+		}
+
+		public static string Reddit
+		{
+			get { return AppSettings.GetValueOrDefault<string>(RedditKey, RedditDef); }
+			set { AppSettings.AddOrUpdateValue<string>(RedditKey, value); }
+		}
+
+		public static string Twitter
+		{
+			get { return AppSettings.GetValueOrDefault<string>(TwitterKey, TwitterDef); }
+			set { AppSettings.AddOrUpdateValue<string>(TwitterKey, value); }
+		}
+
+		public static string News
+		{
+			get { return AppSettings.GetValueOrDefault<string>(NewsKey, NewsDef); }
+			set { AppSettings.AddOrUpdateValue<string>(NewsKey, value); }
+		}
+
+		public static string Reminders
+		{
+			get { return AppSettings.GetValueOrDefault<string>(RemindersKey, RemindersDef); }
+			set { AppSettings.AddOrUpdateValue<string>(RemindersKey, value); }
+		}
+
+		public static string Countdown
+		{
+			get { return AppSettings.GetValueOrDefault<string>(CountdownKey, CountdownDef); }
+			set { AppSettings.AddOrUpdateValue<string>(CountdownKey, value); }
+		}
+
+		public static string Traffic
+		{
+			get { return AppSettings.GetValueOrDefault<string>(TrafficKey, TrafficDef); }
+			set { AppSettings.AddOrUpdateValue<string>(TrafficKey, value); }
+		}
+
+		public static string Quote
+		{
+			get { return AppSettings.GetValueOrDefault<string>(QuoteKey, QuoteDef); }
+			set { AppSettings.AddOrUpdateValue<string>(QuoteKey, value); }
+		}
+
+		public static string TDIH
+		{
+			get { return AppSettings.GetValueOrDefault<string>(TDIHKey, TDIHDef); }
+			set { AppSettings.AddOrUpdateValue<string>(TDIHKey, value); }
+		}
+
+		public static string Fact
+		{
+			get { return AppSettings.GetValueOrDefault<string>(FactKey, FactDef); }
+			set { AppSettings.AddOrUpdateValue<string>(FactKey, value); }
+		}
+
+		public static string AndroidFileAccess
+		{
+			get { return AppSettings.GetValueOrDefault<string>(AndroidFileAccessKey, AndroidFileAccessDef); }
+			set { AppSettings.AddOrUpdateValue<string>(AndroidFileAccessKey, value); }
+		}
   }
 }

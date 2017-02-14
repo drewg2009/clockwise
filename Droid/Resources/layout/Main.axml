@@ -14,6 +14,64 @@
         android:id="@+id/relativeLayout1"
         android:paddingRight="10dp"
         android:paddingLeft="10dp">
+        <FrameLayout
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:id="@+id/moduleTest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-20dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+            <HorizontalScrollView
+                android:minWidth="25px"
+                android:minHeight="25px"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/module_scroller"
+                android:fadingEdge="vertical"
+                android:fadingEdgeLength="50dp"
+                android:scrollbars="none"
+                android:requiresFadingEdge="vertical">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:minWidth="25px"
+                    android:minHeight="25px">
+                    <FrameLayout
+                        android:minWidth="25px"
+                        android:minHeight="25px"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/module1Holder">
+                        <include
+                            layout="@layout/module_display"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/include1"
+                            android:layout_marginRight="15dp"
+                            android:layout_marginLeft="15dp" />
+                    </FrameLayout>
+                    <FrameLayout
+                        android:minWidth="25px"
+                        android:minHeight="25px"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/module2Holder"
+                        android:layout_marginRight="10dp">
+                        <include
+                            layout="@layout/module_display"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/include2"
+                            android:layout_marginRight="15dp"
+                            android:layout_marginLeft="15dp" />
+                    </FrameLayout>
+                </LinearLayout>
+            </HorizontalScrollView>
+        </FrameLayout>
         <RelativeLayout
             android:orientation="vertical"
             android:minWidth="25px"
@@ -21,7 +79,7 @@
             android:id="@+id/clock_settings"
             android:background="#ffffffff"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="295dp"
             android:paddingTop="20dp">
             <RelativeLayout
                 android:minWidth="25px"
@@ -203,18 +261,6 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="35dp"
             android:layout_marginBottom="-10dp" />
-    <!--<ImageView xmlns:tools="http://schemas.android.com/tools"
-            android:src="@drawable/off_toggle"
-            android:layout_width="108dp"
-            android:layout_height="52dp"
-            android:id="@+id/off_toggle"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true"
-            android:layout_above="@+id/pulldown"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="20dp"
-            android:layout_marginBottom="-20dp"
-            tools:visibility="visible" />-->
         <ImageSwitcher xmlns:tools="http://schemas.android.com/tools"
             android:src="@drawable/on_toggle"
             android:layout_width="108dp"
@@ -227,11 +273,5 @@
             android:layout_marginLeft="20dp"
             android:layout_marginBottom="-20dp"
             tools:visibility="visible" />
-    <!--<ImageSwitcher
-            android:minWidth="25px"
-            android:minHeight="25px"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageSwitcher1" />-->
     </RelativeLayout>
 </LinearLayout>

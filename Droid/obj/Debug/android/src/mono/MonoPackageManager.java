@@ -100,6 +100,8 @@ class MonoPackageManager_Resources {
 		/* We need to ensure that "Clockwise.Droid.dll" comes first in this list. */
 		"Clockwise.Droid.dll",
 		"System.Runtime.dll",
+		"Plugin.Settings.Abstractions.dll",
+		"Plugin.Settings.dll",
 		"Clockwise.dll",
 		"System.Threading.dll",
 		"System.Collections.dll",
@@ -110,6 +112,7 @@ class MonoPackageManager_Resources {
 		"System.Runtime.InteropServices.dll",
 		"System.Runtime.Extensions.dll",
 		"System.Reflection.Extensions.dll",
+		"System.Resources.ResourceManager.dll",
 	};
 	public static final String[] Dependencies = new String[]{
 	};
