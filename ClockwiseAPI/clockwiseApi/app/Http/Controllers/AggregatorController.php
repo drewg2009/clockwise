@@ -19,10 +19,10 @@ class AggregatorController extends Controller
         $twitterController = new TwitterController();
 
 
-        $this->finalString .= $quoteController->execute(null, null, "Here is the quote of the day. ");
-        $this->finalString .= $twitterController->execute("epochSoftware",3, "Here are the top posts from ");
-        $this->finalString .= $twitterController->execute("OddFunFacts",1, "Here is the fun fact of the day from ");
-        $this->finalString .= $redditController->execute("sports",3, "Here are the top reddit posts from ");
+        $this->finalString .= $quoteController->execute(null, null, "Here is the quote of the day. ") . ". ";
+        $this->finalString .= $twitterController->execute("epochSoftware",3, "Here are the top posts from ") . ". ";
+        $this->finalString .= $twitterController->execute("OddFunFacts",1, "Here is the fun fact of the day from ") . ". ";
+        $this->finalString .= $redditController->execute("sports",3, "Here are the top reddit posts from ") . ". ";
 
         echo $this->finalString;
     }
