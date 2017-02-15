@@ -1,12 +1,9 @@
 ﻿<Properties StartupConfiguration="{B46E161A-E220-482B-B411-3F0B25C20CFD}|Default" GitUserInfo="UsingGIT">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Clockwise Status">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Droid/AlarmUtils.cs">
     <Files>
       <File FileName="Droid/MainActivity.cs" Line="84" Column="6" />
       <File FileName="Droid/AlarmReceiver.cs" Line="32" Column="41" />
-      <File FileName="Droid/SpeechService.cs" Line="17" Column="4" />
       <File FileName="Droid/AlarmUtils.cs" Line="75" Column="4" />
-      <File FileName="Droid/Properties/AndroidManifest.xml" Line="5" Column="1" />
-      <File FileName="Clockwise Status" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

@@ -15,9 +15,11 @@ class TwitterController extends Controller implements ModuleInterface
     }
 
     private function getString($array){
+        $string = "";
         for ($i=0;$i<sizeof($array);$i++){
             //dd($array[$i]);
-            echo $array[$i]->text . " ";
+            $string .= $array[$i]->text . " ";
         }
+        return $string;
     }
 }
