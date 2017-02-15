@@ -40,18 +40,22 @@ class TwitterAPI
         //TODO add check to add/remove filters based on params
 
         $connection = new TwitterOAuth($this->CONSUMER_KEY, $this->CONSUMER_SECRET, $this->ACCESS_TOKEN, $this->ACCESS_TOKEN_SECRET);
-        $content = $connection->get("search/tweets", ["q" => $this->name . "-filter:retweets", "exclude_replies" => true]);
+        $content = $connection->get("search/tweets", ["q" =>  $this->name . "-filter:retweets", "exclude_replies" => true]);
         $array = array();
         $validCount = 0;
         $index = 0;
 
         while ($validCount < $this->limit) {
-            if ($content->statuses[$index]->in_reply_to_status_id == null) {
+            if ($content->statuses[$index]->in_reply_to_status_id == null
+            && $content->statuses[$index]->user->screen_name == $this->name) {
                 array_push($array, $content->statuses[$index]);
                 $validCount++;
             }
             $index++;
         }
+
+        dd($array);
+
         return $array;
     }
 
