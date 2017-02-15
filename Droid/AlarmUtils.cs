@@ -7,7 +7,7 @@ using Android.OS;
 using Android.Widget;
 using Android.Content.PM;
 using Android.Provider;
-
+using Java.Util;
 namespace Clockwise.Droid
 {
 	public class AlarmUtils
@@ -44,13 +44,10 @@ namespace Clockwise.Droid
 			for (int j = 0; j < 7; j++)
 			{
 				daySelection[j] = (repeatDays & (1 << j)) == (1 << j);
-				Console.WriteLine("daySelection " + j + ": " + daySelection[j].ToString());
-
 			}
 
 			int currentDay = (int) DateTime.Now.DayOfWeek;
 			Console.WriteLine("currentDay: " + currentDay);
-
 
 			int daysUntilNextAlarm = currentDay < 6 ? currentDay + 1 : 0;
 			while (daysUntilNextAlarm != currentDay && !daySelection[daysUntilNextAlarm])
@@ -64,37 +61,35 @@ namespace Clockwise.Droid
 				daysUntilNextAlarm += 7;
 			}
 
-			Console.WriteLine("daysUntilNextAlarm: " + daysUntilNextAlarm);
 
 			long offset = 0;
-			DateTime temp = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour, minute, 0);
-			Console.WriteLine("this minute: " +temp.ToLongDateString() + ", " + temp.ToLongTimeString());
 
-			if (DateTime.Compare(temp, DateTime.Now) < 0 || !daySelection[currentDay])
-				offset = daysUntilNextAlarm * TimeSpan.TicksPerDay;
+			Calendar calendar = Calendar.Instance;
+			calendar.TimeInMillis = Java.Lang.JavaSystem.CurrentTimeMillis();
+			calendar.Set(CalendarField.Hour, hour);
+			calendar.Set(CalendarField.Minute, minute);
+			calendar.Set(CalendarField.Second, 0);
 
-			Console.WriteLine("offset: " + offset);
+			Date current = new Date(DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond);
+			Java.Util.Date current2 = new Java.Util.Date(Java.Lang.JavaSystem.CurrentTimeMillis());
 
-			DateTime setTime = new DateTime(temp.Ticks + offset);
-
+			if (calendar.Time.Before(current2) || !daySelection[currentDay])
+			{
+				offset = daysUntilNextAlarm * 1000 * 60 * 60 * 24;
+			}
 
 			if ((int)Build.VERSION.SdkInt >= 21)
 			{
-				AlarmManager.AlarmClockInfo info = new AlarmManager.AlarmClockInfo(setTime.Ticks, notificationClickIntent);
+				AlarmManager.AlarmClockInfo info = new AlarmManager.AlarmClockInfo(calendar.TimeInMillis + offset, notificationClickIntent);
 				am.SetAlarmClock(info, pendingIntent);
 			}
 			else {
-				am.SetExact(AlarmType.RtcWakeup, setTime.Ticks, notificationClickIntent);
+				am.SetExact(AlarmType.RtcWakeup, calendar.TimeInMillis + offset, notificationClickIntent);
 			}
 
 			//Toast
-			string toast = "Set time: " + setTime.Month + "/" + setTime.Day + "/" + setTime.Year
-												 + ", " + setTime.Hour + ":" + setTime.Minute;
-			DateTime dt = new DateTime(am.NextAlarmClock.TriggerTime);
-			string nextAlarm2 = dt.ToLongDateString() + ", " + dt.ToLongTimeString();
- 			Console.WriteLine("next alarm: " + nextAlarm2);
-
-			Console.WriteLine(toast);
+			string toast = "Set time: " + (calendar.Get(CalendarField.Month) + 1) + "/" + calendar.Get(CalendarField.DayOfMonth) + "/" + calendar.Get(CalendarField.Year)
+			                                      + ", " + calendar.Get(CalendarField.Hour) + ":" + calendar.Get(CalendarField.Minute);
 			Toast.MakeText(context, toast, ToastLength.Long).Show();
 		}
 
