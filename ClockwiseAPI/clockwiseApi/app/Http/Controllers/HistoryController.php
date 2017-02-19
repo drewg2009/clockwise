@@ -11,7 +11,6 @@ class HistoryController extends Controller implements ModuleInterface
     public function execute($name, $limit, $message)
     {
         $xmlObject = XMLParserController::get_rss_item($this->url, $limit);
-        dd($xmlObject);
 
     }
 

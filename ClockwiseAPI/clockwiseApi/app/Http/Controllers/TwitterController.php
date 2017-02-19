@@ -2,22 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 class TwitterController extends Controller implements ModuleInterface
 {
 
-    public function execute($name,$limit,$message)
+    public function execute($name, $limit, $message)
     {
-        $twitterAPI = new TwitterAPI($name,$limit);
+        $string = "";
+        $twitterAPI = new TwitterAPI($name, $limit);
         $twitterContent = $twitterAPI->getContent(false, false, false);
-        return $message . $name . $this->getString($twitterContent);
+
+        if (sizeof($twitterContent) > 0) {
+            $string = $message . $name . $this->getString($twitterContent);
+        } else {
+            $string = "Could not pull from twitter";
+        }
+        return $string;
     }
 
-    private function getString($array){
+    private function getString($array)
+    {
         $string = "";
-        for ($i=0;$i<sizeof($array);$i++){
-            //dd($array[$i]);
+        for ($i = 0; $i < sizeof($array); $i++) {
             $string .= $array[$i]->text . " ";
         }
         return $string;

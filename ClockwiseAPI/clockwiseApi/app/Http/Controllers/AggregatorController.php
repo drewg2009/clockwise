@@ -19,15 +19,14 @@ class AggregatorController extends Controller
         $twitterController = new TwitterController();
         //$history = new HistoryController();
 
-        /*
 
-        $this->finalString .= $quoteController->execute(null, null, "Here is the quote of the day. ") . ". ";
-        $this->finalString .= $twitterController->execute("epochSoftware",3, "Here are the top posts from ") . ". ";
-        $this->finalString .= $twitterController->execute("OddFunFacts",1, "Here is the fun fact of the day from ") . ". ";
-        $this->finalString .= $redditController->execute("sports",3, "Here are the top reddit posts from ") . ". ";
-        */
-        $this->finalString .= $twitterController->execute("yesterday_today",10, "On this day in history ");
 
+        //$this->finalString .= $quoteController->execute(null, null, "Here is the quote of the day. ") . ". ";
+        //$this->finalString .= $twitterController->execute("epochSoftware",5, "Here are the top posts from ") . ". ";
+//        $this->finalString .= $twitterController->execute("OddFunFacts",10, "Here is the fun fact of the day from ") . ". ";
+        //$this->finalString .= $redditController->execute("sports",3, "Here are the top reddit posts from ") . ". ";
+
+        
         echo $this->finalString;
     }
 }
