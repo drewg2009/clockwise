@@ -65,6 +65,9 @@
     <Compile Include="PermissionsUtil.cs" />
     <Compile Include="SpeechService.cs" />
     <Compile Include="AlarmUtils.cs" />
+    <Compile Include="AnimationHelper.cs" />
+    <Compile Include="AnimationManager.cs" />
+    <Compile Include="CreateModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -93,6 +96,22 @@
     <AndroidResource Include="Resources\layout\module_display.xml" />
     <AndroidResource Include="Resources\drawable\ic_alarm_white_48dp.png" />
     <AndroidResource Include="Resources\drawable\circle_high_res.png" />
+    <AndroidResource Include="Resources\drawable\settings_about.png" />
+    <AndroidResource Include="Resources\drawable\settings_order.png" />
+    <AndroidResource Include="Resources\drawable\settings_snooze.png" />
+    <AndroidResource Include="Resources\drawable\settings_speech.png" />
+    <AndroidResource Include="Resources\drawable\settings_tone.png" />
+    <AndroidResource Include="Resources\layout\create_module.xml" />
+    <AndroidResource Include="Resources\drawable\cancel_create_module.png" />
+    <AndroidResource Include="Resources\drawable\countdown_icon.png" />
+    <AndroidResource Include="Resources\drawable\create_module_bg.xml" />
+    <AndroidResource Include="Resources\drawable\news_icon.png" />
+    <AndroidResource Include="Resources\drawable\plus.png" />
+    <AndroidResource Include="Resources\drawable\reddit_icon.png" />
+    <AndroidResource Include="Resources\drawable\todo_icon.png" />
+    <AndroidResource Include="Resources\drawable\traffic_icon.png" />
+    <AndroidResource Include="Resources\drawable\twitter_icon.png" />
+    <AndroidResource Include="Resources\drawable\weather_icon.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />

@@ -1,7 +1,9 @@
-﻿<Properties StartupConfiguration="{B46E161A-E220-482B-B411-3F0B25C20CFD}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Droid/AlarmUtils.cs">
+﻿<Properties StartupConfiguration="{B46E161A-E220-482B-B411-3F0B25C20CFD}|Default" GitUserInfo="UsingGIT">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Clockwise Status">
     <Files>
-      <File FileName="Droid/AlarmUtils.cs" Line="2" Column="23" />
+      <File FileName="Droid/MainActivity.cs" Line="199" Column="26" />
+      <File FileName="Droid/CreateModule.cs" Line="22" Column="35" />
+      <File FileName="Clockwise Status" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
@@ -9,6 +11,6 @@
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.ItemProperties.Clockwise.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.EDB228CD-2F85-4356-975C-124B5B6A7F77" />
-  <MonoDevelop.Ide.ItemProperties.Clockwise.Droid PreferredExecutionTarget="Android.Nexus_5_API_23" />
+  <MonoDevelop.Ide.ItemProperties.Clockwise.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.340BF5CD-6F29-425C-B049-DBB88494B27B" />
+  <MonoDevelop.Ide.ItemProperties.Clockwise.Droid AndroidDesignerPreferredDevice="Nexus 4" PreferredExecutionTarget="Android.03157df34c99320c" AndroidDesignerPreferredTheme="Theme.Holo.Light.NoActionBar" />
 </Properties>

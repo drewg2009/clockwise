@@ -18,3 +18,11 @@ Clockwise.Droid.SpeechService, Clockwise.Droid;md5008cb7354c6e5213432fa67ee425e7
 Clockwise.Droid.SpeechService, Clockwise.Droid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md5008cb7354c6e5213432fa67ee425e7bc.SpeechService
 Clockwise.Droid.SpeechService;md5008cb7354c6e5213432fa67ee425e7bc.SpeechService
 clockwise.droid.SpeechService;md5008cb7354c6e5213432fa67ee425e7bc.SpeechService
+Clockwise.Droid.AnimationHelper/UpdateLister, Clockwise.Droid;md5008cb7354c6e5213432fa67ee425e7bc.AnimationHelper_UpdateLister
+Clockwise.Droid.AnimationHelper+UpdateLister, Clockwise.Droid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md5008cb7354c6e5213432fa67ee425e7bc.AnimationHelper_UpdateLister
+Clockwise.Droid.AnimationHelper.UpdateLister;md5008cb7354c6e5213432fa67ee425e7bc.AnimationHelper_UpdateLister
+clockwise.droid.AnimationHelper_UpdateLister;md5008cb7354c6e5213432fa67ee425e7bc.AnimationHelper_UpdateLister
+Clockwise.Droid.CreateModule, Clockwise.Droid;md5008cb7354c6e5213432fa67ee425e7bc.CreateModule
+Clockwise.Droid.CreateModule, Clockwise.Droid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md5008cb7354c6e5213432fa67ee425e7bc.CreateModule
+Clockwise.Droid.CreateModule;md5008cb7354c6e5213432fa67ee425e7bc.CreateModule
+clockwise.droid.CreateModule;md5008cb7354c6e5213432fa67ee425e7bc.CreateModule
