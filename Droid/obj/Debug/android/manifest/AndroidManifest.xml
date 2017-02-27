@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.epoch.Clockwise">
-  <!--suppress UsesMinSdkAttributes-->
-  <uses-sdk android:minSdkVersion="15" />
+  <uses-sdk android:minSdkVersion="15" android:targetSdkVersion="23" />
   <uses-permission android:name="android.permission.INTERNET" />
   <application android:theme="@android:style/Theme.Holo.Light.NoActionBar" android:label="Clockwise" android:name="android.app.Application" android:allowBackup="true" android:icon="@mipmap/icon" android:debuggable="true">
     <activity android:icon="@mipmap/icon" android:label="Clockwise" android:name="md5008cb7354c6e5213432fa67ee425e7bc.MainActivity">

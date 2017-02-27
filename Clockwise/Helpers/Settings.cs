@@ -31,7 +31,7 @@ namespace Clockwise.Helpers
 		private static readonly string FirstTimeDef = string.Empty;
 
 		private const string RepeatDaysKey = "repeat_days_key";
-		private static readonly string RepeatDaysDef = string.Empty;
+		private static readonly string RepeatDaysDef = "0";
 
 		private const string ModuleOrderKey = "module_order_key";
 		private static readonly string ModuleOrderDef = string.Empty;
