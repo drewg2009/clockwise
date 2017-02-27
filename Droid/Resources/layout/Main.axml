@@ -11,9 +11,7 @@
         android:minHeight="25px"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/relativeLayout1"
-        android:paddingRight="10dp"
-        android:paddingLeft="10dp">
+        android:id="@+id/relativeLayout1">
         <FrameLayout
             android:minWidth="25px"
             android:minHeight="25px"
@@ -21,9 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="-20dp"
-            android:paddingBottom="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+            android:layout_alignParentBottom="true">
             <HorizontalScrollView
                 android:minWidth="25px"
                 android:minHeight="25px"
@@ -40,21 +36,19 @@
                     android:layout_height="match_parent"
                     android:minWidth="25px"
                     android:minHeight="25px">
-                    <FrameLayout
+                    <RelativeLayout
                         android:minWidth="25px"
                         android:minHeight="25px"
-                        android:layout_width="wrap_content"
+                        android:layout_width="385dp"
                         android:layout_height="match_parent"
                         android:id="@+id/module1Holder">
                         <include
                             layout="@layout/module_display"
-                            android:layout_width="match_parent"
+                            android:layout_width="300dp"
                             android:layout_height="match_parent"
-                            android:id="@+id/include1"
-                            android:layout_marginRight="15dp"
-                            android:layout_marginLeft="15dp" />
-                    </FrameLayout>
-                    <FrameLayout
+                            android:id="@+id/module1" />
+                    </RelativeLayout>
+                    <RelativeLayout
                         android:minWidth="25px"
                         android:minHeight="25px"
                         android:layout_width="wrap_content"
@@ -65,10 +59,8 @@
                             layout="@layout/module_display"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:id="@+id/include2"
-                            android:layout_marginRight="15dp"
-                            android:layout_marginLeft="15dp" />
-                    </FrameLayout>
+                            android:id="@+id/module2" />
+                    </RelativeLayout>
                 </LinearLayout>
             </HorizontalScrollView>
         </FrameLayout>
@@ -80,14 +72,14 @@
             android:background="#ffffffff"
             android:layout_width="wrap_content"
             android:layout_height="295dp"
-            android:paddingTop="20dp">
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
             <RelativeLayout
                 android:minWidth="25px"
                 android:minHeight="25px"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/picker_holder"
-                android:paddingBottom="10dp">
+                android:id="@+id/picker_holder">
                 <LinearLayout
                     android:orientation="horizontal"
                     android:minWidth="25px"
@@ -122,8 +114,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:id="@+id/RepeatSelectorLayout"
-                android:layout_below="@+id/picker_holder"
-                android:paddingBottom="60dp">
+                android:layout_below="@+id/picker_holder">
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="wrap_content"
@@ -226,6 +217,51 @@
                 </LinearLayout>
             </RelativeLayout>
         </RelativeLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="match_parent"
+            android:id="@+id/settings_row"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="#ffffffff"
+            android:layout_below="@id/clock_settings"
+            android:layout_height="0dp"
+            android:paddingTop="30dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
+            <ImageView
+                android:src="@drawable/settings_tone"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/imageView1"
+                android:layout_weight="1" />
+            <ImageView
+                android:src="@drawable/settings_snooze"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/imageView1"
+                android:layout_weight="1" />
+            <ImageView
+                android:src="@drawable/settings_speech"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/imageView1"
+                android:layout_weight="1" />
+            <ImageView
+                android:src="@drawable/settings_order"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/imageView1"
+                android:layout_weight="1" />
+            <ImageView
+                android:src="@drawable/settings_about"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/imageView1"
+                android:layout_weight="1" />
+        </LinearLayout>
         <ImageView
             android:src="@drawable/pulldown"
             android:id="@+id/pulldown"
@@ -233,14 +269,16 @@
             android:adjustViewBounds="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/clock_settings" />
+            android:layout_below="@id/settings_row"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" />
         <ImageView
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:id="@+id/add_module_button"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
-            android:layout_above="@+id/pulldown"
+            android:layout_above="@id/settings_row"
             android:layout_alignParentLeft="false"
             android:layout_alignParentTop="false"
             android:layout_alignParentRight="false"
@@ -257,7 +295,7 @@
             android:id="@+id/settings"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
-            android:layout_above="@+id/pulldown"
+            android:layout_above="@id/settings_row"
             android:layout_alignParentRight="true"
             android:layout_marginRight="35dp"
             android:layout_marginBottom="-10dp" />
@@ -268,7 +306,7 @@
             android:id="@+id/alarm_toggle"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
-            android:layout_above="@+id/pulldown"
+            android:layout_above="@id/settings_row"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="20dp"
             android:layout_marginBottom="-20dp"

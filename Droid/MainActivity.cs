@@ -6,6 +6,7 @@ using System.Linq;
 using Android.Content.PM;
 using Android.Graphics;
 using Android.Views;
+using Android.Views.Animations;
 using Android.Animation;
 using System;
 using Clockwise.Helpers;
@@ -166,33 +167,74 @@ namespace Clockwise.Droid
 
 			//Settings expansion
 			RelativeLayout clock_settings_layout = FindViewById<RelativeLayout>(Resource.Id.clock_settings);
+			LinearLayout settings_row = FindViewById<LinearLayout>(Resource.Id.settings_row);
 			ImageView settingsBtn = FindViewById<ImageView>(Resource.Id.settings);
+			AnimationManager settingsAnimationManager = new AnimationManager(false);
+			AnimationHelper settingsHelper = new AnimationHelper(settings_row, settingsAnimationManager);
 			settingsBtn.Click += delegate
 			{
-
-				//clock_settings_layout.Animate().SetInterpolator(
-				//clock_settings_layout.Measure(RelativeLayout.LayoutParams.WrapContent, RelativeLayout.LayoutParams.WrapContent)
 				int initialHeight = clock_settings_layout.Height;
 				System.Console.WriteLine("clock height: " + initialHeight);
+
+				if (!settingsAnimationManager.Animating)
+				{
+					if (settings_row.LayoutParameters.Height == 0)
+					{
+						//Expand
+						int targetHeight = (int)(75 * settings_row.Context.Resources.DisplayMetrics.Density);
+						int duration = (int)(200);
+						settingsHelper.expand(duration, targetHeight);
+					}
+					else {
+						//Collapse
+						int targetHeight = 0;
+						int duration = (int)(200);
+						settingsHelper.collapse(duration, targetHeight);
+					}
+				}
 			};
+
+			ImageView addModuleBtn = FindViewById<ImageView>(Resource.Id.add_module_button);
+			addModuleBtn.Click += delegate {
+				StartActivity(typeof(CreateModule));
+			};
+
+			var metrics = Resources.DisplayMetrics;
+
+			//Set clocksettings height
+			RelativeLayout.LayoutParams clock_settings_layout_params = (RelativeLayout.LayoutParams)clock_settings_layout.LayoutParameters;
+			clock_settings_layout_params.Height = (int)(metrics.HeightPixels * .4);
+			clock_settings_layout.LayoutParameters = clock_settings_layout_params;
+			//clock_settings_layout.LayoutParameters
 
 			//Align test module
 			FrameLayout testLayout = FindViewById<FrameLayout>(Resource.Id.moduleTest);
 			RelativeLayout.LayoutParams testParams = (RelativeLayout.LayoutParams)testLayout.LayoutParameters;
 			testParams.AddRule(LayoutRules.Below, Resource.Id.pulldown);
+			testParams.Width = (int)metrics.WidthPixels;
 
-			var metrics = Resources.DisplayMetrics;
-			var widthInDp = (int)((metrics.WidthPixels) / Resources.DisplayMetrics.Density);
-
-			FrameLayout module1Holder = FindViewById<FrameLayout>(Resource.Id.module1Holder);
-			module1Holder.LayoutParameters = new LinearLayout.LayoutParams((int)(metrics.WidthPixels * .9), LinearLayout.LayoutParams.MatchParent);
-
-			FrameLayout module2Holder = FindViewById<FrameLayout>(Resource.Id.module2Holder);
-			module2Holder.LayoutParameters = new LinearLayout.LayoutParams((int)(metrics.WidthPixels * .9), LinearLayout.LayoutParams.MatchParent);
-
-			//holderParams.Width = (int)(widthInDp * .75f);
+			//Pulldown
+			ImageView pulldown = FindViewById<ImageView>(Resource.Id.pulldown);
+			RelativeLayout.LayoutParams pulldownParams = (RelativeLayout.LayoutParams)pulldown.LayoutParameters;
+			pulldownParams.AddRule(LayoutRules.Below, Resource.Id.settings_row);
 
 
+
+			RelativeLayout module1Holder = FindViewById<RelativeLayout>(Resource.Id.module1Holder);
+			module1Holder.LayoutParameters = new LinearLayout.LayoutParams((int)(metrics.WidthPixels), LinearLayout.LayoutParams.MatchParent);
+
+			RelativeLayout module2Holder = FindViewById<RelativeLayout>(Resource.Id.module2Holder);
+			module2Holder.LayoutParameters = new LinearLayout.LayoutParams((int)(metrics.WidthPixels), LinearLayout.LayoutParams.MatchParent);
+
+			LinearLayout module1 = FindViewById<LinearLayout>(Resource.Id.module1);
+			RelativeLayout.LayoutParams module1Params = new RelativeLayout.LayoutParams((int)(metrics.WidthPixels * .85), RelativeLayout.LayoutParams.MatchParent);
+			module1Params.AddRule(LayoutRules.CenterHorizontal);
+			module1.LayoutParameters = module1Params;
+
+			LinearLayout module2 = FindViewById<LinearLayout>(Resource.Id.module2);
+			RelativeLayout.LayoutParams module2Params = new RelativeLayout.LayoutParams((int)(metrics.WidthPixels * .85), RelativeLayout.LayoutParams.MatchParent);
+			module2Params.AddRule(LayoutRules.CenterHorizontal);
+			module2.LayoutParameters = module2Params;
 		}
 
 
@@ -222,6 +264,7 @@ namespace Clockwise.Droid
 		//		return myView;
 		//	}
 		//}
+
 		public override async void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
 		{
 			switch (requestCode)

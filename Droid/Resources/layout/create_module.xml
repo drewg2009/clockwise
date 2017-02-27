@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="25px"
+    android:minHeight="25px"
+    android:orientation="vertical"
+    android:background="@drawable/create_module_bg">
+    <RelativeLayout
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/relativeLayout1"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+        <ImageView
+            android:src="@drawable/cancel_create_module"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/cancel_button"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+    <TextView
+        android:text="Create a Module"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView1"
+        android:textColor="#ffffffff"
+        android:textSize="35dp"
+        android:paddingLeft="60dp" />
+    <ScrollView
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView1">
+        <LinearLayout
+            android:orientation="vertical"
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/linearLayout1">
+            <TextView
+                android:text="Single"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView2"
+                android:textSize="20dp"
+                android:textColor="#ffffffff"
+                android:textStyle="bold"
+                android:paddingLeft="60dp"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp" />
+            <View
+                android:layout_height="1dp"
+                android:layout_width="match_parent"
+                android:background="#ffffff"
+                android:layout_marginLeft="60dp" />
+            <RelativeLayout
+                android:minWidth="25px"
+                android:minHeight="25px"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/weatherRow"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp">
+                <ImageView
+                    android:src="@drawable/weather_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/imageView1"
+                    android:layout_marginLeft="10dp" />
+                <TextView
+                    android:text="Get the weather in your area"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView3"
+                    android:textColor="#ffffffff"
+                    android:textSize="16dp"
+                    android:layout_marginLeft="60dp"
+                    android:layout_centerVertical="true" />
+                <ImageView
+                    android:src="@drawable/plus"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:id="@+id/addWeather"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="20dp"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+            <View
+                android:layout_height="1dp"
+                android:layout_width="match_parent"
+                android:background="#ffffff"
+                android:layout_marginLeft="60dp"
+                android:id="@+id/view1" />
+            <TextView
+                android:text="Custom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/textView2"
+                android:textSize="20dp"
+                android:textColor="#ffffffff"
+                android:textStyle="bold"
+                android:paddingLeft="60dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp" />
+            <View
+                android:layout_height="1dp"
+                android:layout_width="match_parent"
+                android:background="#ffffff"
+                android:layout_marginLeft="60dp"
+                android:id="@+id/view2" />
+            <RelativeLayout
+                android:minWidth="25px"
+                android:minHeight="25px"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/newsRow"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp">
+                <ImageView
+                    android:src="@drawable/news_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/imageView1"
+                    android:layout_marginLeft="10dp" />
+                <TextView
+                    android:text="Get news by category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView3"
+                    android:textColor="#ffffffff"
+                    android:textSize="16dp"
+                    android:layout_marginLeft="60dp"
+                    android:layout_centerVertical="true" />
+                <ImageView
+                    android:src="@drawable/plus"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:id="@+id/addNews"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="20dp"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+            <View
+                android:layout_height="1dp"
+                android:layout_width="match_parent"
+                android:background="#ffffff"
+                android:layout_marginLeft="60dp"
+                android:id="@+id/view2" />
+            <RelativeLayout
+                android:minWidth="25px"
+                android:minHeight="25px"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/redditRow"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp">
+                <ImageView
+                    android:src="@drawable/reddit_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/imageView1"
+                    android:layout_marginLeft="10dp" />
+                <TextView
+                    android:text="Get top Reddit posts by subreddit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView3"
+                    android:textColor="#ffffffff"
+                    android:textSize="16dp"
+                    android:layout_marginLeft="60dp"
+                    android:layout_centerVertical="true" />
+                <ImageView
+                    android:src="@drawable/plus"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:id="@+id/addReddit"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="20dp"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+            <View
+                android:layout_height="1dp"
+                android:layout_width="match_parent"
+                android:background="#ffffff"
+                android:layout_marginLeft="60dp"
+                android:id="@+id/view3" />
+            <RelativeLayout
+                android:minWidth="25px"
+                android:minHeight="25px"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/twitterRow"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp">
+                <ImageView
+                    android:src="@drawable/twitter_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/imageView1"
+                    android:layout_marginLeft="10dp" />
+                <TextView
+                    android:text="Get top Twitter posts by user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView3"
+                    android:textColor="#ffffffff"
+                    android:textSize="16dp"
+                    android:layout_marginLeft="60dp"
+                    android:layout_centerVertical="true" />
+                <ImageView
+                    android:src="@drawable/plus"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:id="@+id/addTwitter"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="20dp"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+            <View
+                android:layout_height="1dp"
+                android:layout_width="match_parent"
+                android:background="#ffffff"
+                android:layout_marginLeft="60dp"
+                android:id="@+id/view4" />
+            <RelativeLayout
+                android:minWidth="25px"
+                android:minHeight="25px"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/countdownRow"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp">
+                <ImageView
+                    android:src="@drawable/countdown_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/imageView1"
+                    android:layout_marginLeft="10dp" />
+                <TextView
+                    android:text="Countdown to an event"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView3"
+                    android:textColor="#ffffffff"
+                    android:textSize="16dp"
+                    android:layout_marginLeft="60dp"
+                    android:layout_centerVertical="true" />
+                <ImageView
+                    android:src="@drawable/plus"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:id="@+id/addCountdown"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="20dp"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+            <View
+                android:layout_height="1dp"
+                android:layout_width="match_parent"
+                android:background="#ffffff"
+                android:layout_marginLeft="60dp"
+                android:id="@+id/view2" />
+            <RelativeLayout
+                android:minWidth="25px"
+                android:minHeight="25px"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/countdownRow"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp">
+                <ImageView
+                    android:src="@drawable/todo_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/imageView1"
+                    android:layout_marginLeft="10dp" />
+                <TextView
+                    android:text="Set some reminders"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView3"
+                    android:textColor="#ffffffff"
+                    android:textSize="16dp"
+                    android:layout_marginLeft="60dp"
+                    android:layout_centerVertical="true" />
+                <ImageView
+                    android:src="@drawable/plus"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:id="@+id/addReminders"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="20dp"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+            <View
+                android:layout_height="1dp"
+                android:layout_width="match_parent"
+                android:background="#ffffff"
+                android:layout_marginLeft="60dp"
+                android:id="@+id/view2" />
+            <RelativeLayout
+                android:minWidth="25px"
+                android:minHeight="25px"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/trafficRow"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp">
+                <ImageView
+                    android:src="@drawable/traffic_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/imageView1"
+                    android:layout_marginLeft="10dp" />
+                <TextView
+                    android:text="Get the travel time to your destination"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView3"
+                    android:textColor="#ffffffff"
+                    android:textSize="16dp"
+                    android:layout_marginLeft="60dp"
+                    android:layout_centerVertical="true" />
+                <ImageView
+                    android:src="@drawable/plus"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:id="@+id/addTraffic"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="20dp"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+            <TextView
+                android:text="Toggle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/textView2"
+                android:textSize="20dp"
+                android:textColor="#ffffffff"
+                android:textStyle="bold"
+                android:paddingLeft="60dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

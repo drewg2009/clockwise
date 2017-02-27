@@ -12,6 +12,7 @@
     </activity>
     <receiver android:enabled="false" android:process=":remote" android:name="md5008cb7354c6e5213432fa67ee425e7bc.AlarmReceiver" />
     <service android:name="md5008cb7354c6e5213432fa67ee425e7bc.SpeechService" />
+    <activity android:label="CreateModule" android:name="md5008cb7354c6e5213432fa67ee425e7bc.CreateModule" />
     <provider android:name="mono.MonoRuntimeProvider" android:exported="false" android:initOrder="2147483647" android:authorities="com.epoch.Clockwise.mono.MonoRuntimeProvider.__mono_init__" />
     <provider android:name="mono.MonoRuntimeProvider_1" android:exported="false" android:initOrder="2147483647" android:process=":remote" android:authorities="com.epoch.Clockwise.mono.MonoRuntimeProvider_1.__mono_init__" />
     <!--suppress ExportedReceiver-->

@@ -37,6 +37,7 @@ namespace Clockwise.Droid
 
 			am.Cancel(pendingIntent);
 
+
 			int repeatDays = Int32.Parse(Helpers.Settings.RepeatDays);
 			bool[] daySelection = new bool[7];
 
@@ -46,7 +47,12 @@ namespace Clockwise.Droid
 				daySelection[j] = (repeatDays & (1 << j)) == (1 << j);
 			}
 
-			int currentDay = (int) DateTime.Now.DayOfWeek;
+
+			Java.Util.Date temp = new Java.Util.Date(Java.Lang.JavaSystem.CurrentTimeMillis());
+			Calendar calendar = Calendar.Instance;
+			calendar.TimeInMillis = temp.Time;
+				        
+			int currentDay = calendar.Get(CalendarField.DayOfWeek) - 1;
 			Console.WriteLine("currentDay: " + currentDay);
 
 			int daysUntilNextAlarm = currentDay < 6 ? currentDay + 1 : 0;
@@ -61,19 +67,18 @@ namespace Clockwise.Droid
 				daysUntilNextAlarm += 7;
 			}
 
+			Console.WriteLine("days until next alarm: " + daysUntilNextAlarm);
+
 
 			long offset = 0;
-
-			Calendar calendar = Calendar.Instance;
 			calendar.TimeInMillis = Java.Lang.JavaSystem.CurrentTimeMillis();
 			calendar.Set(CalendarField.Hour, hour);
 			calendar.Set(CalendarField.Minute, minute);
 			calendar.Set(CalendarField.Second, 0);
 
-			Date current = new Date(DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond);
-			Java.Util.Date current2 = new Java.Util.Date(Java.Lang.JavaSystem.CurrentTimeMillis());
+			Java.Util.Date current = new Java.Util.Date(Java.Lang.JavaSystem.CurrentTimeMillis());
 
-			if (calendar.Time.Before(current2) || !daySelection[currentDay])
+			if (calendar.Time.Before(current) || !daySelection[currentDay])
 			{
 				offset = daysUntilNextAlarm * 1000 * 60 * 60 * 24;
 			}
