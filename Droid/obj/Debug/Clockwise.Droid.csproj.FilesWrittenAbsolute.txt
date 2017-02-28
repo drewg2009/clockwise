@@ -48,3 +48,4 @@
 /Users/Seth/Projects/Clockwise/Droid/bin/Debug/Plugin.Settings.dll
 /Users/Seth/Projects/Clockwise/Droid/bin/Debug/Clockwise.dll
 /Users/Seth/Projects/Clockwise/Droid/bin/Debug/Clockwise.dll.mdb
+/Users/Seth/Projects/Clockwise/Droid/obj/Debug/res/drawable/launcher_icon.png

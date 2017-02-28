@@ -77,14 +77,11 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml" />
-    <AndroidResource Include="Resources\mipmap-hdpi\Icon.png" />
     <AndroidResource Include="Resources\mipmap-mdpi\Icon.png" />
     <AndroidResource Include="Resources\mipmap-xhdpi\Icon.png" />
     <AndroidResource Include="Resources\mipmap-xxhdpi\Icon.png" />
     <AndroidResource Include="Resources\mipmap-xxxhdpi\Icon.png" />
     <AndroidResource Include="Resources\drawable\add_module_button.png" />
-    <AndroidResource Include="Resources\drawable\off_toggle.png" />
-    <AndroidResource Include="Resources\drawable\on_toggle.png" />
     <AndroidResource Include="Resources\drawable\pulldown.png" />
     <AndroidResource Include="Resources\drawable\settings_button.png" />
     <AndroidResource Include="Resources\layout\Main.axml" />
@@ -112,10 +109,14 @@
     <AndroidResource Include="Resources\drawable\traffic_icon.png" />
     <AndroidResource Include="Resources\drawable\twitter_icon.png" />
     <AndroidResource Include="Resources\drawable\weather_icon.png" />
+    <AndroidResource Include="Resources\drawable\off_toggle.png" />
+    <AndroidResource Include="Resources\drawable\on_toggle.png" />
+    <AndroidResource Include="Resources\mipmap-hdpi\Icon.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />
     <Folder Include="Resources\layout\" />
+    <Folder Include="Resources\mipmap-hdpi\" />
   </ItemGroup>
   <ItemGroup>
     <XamarinComponentReference Include="SettingsPlugin">

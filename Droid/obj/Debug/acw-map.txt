@@ -26,3 +26,7 @@ Clockwise.Droid.CreateModule, Clockwise.Droid;md5008cb7354c6e5213432fa67ee425e7b
 Clockwise.Droid.CreateModule, Clockwise.Droid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md5008cb7354c6e5213432fa67ee425e7bc.CreateModule
 Clockwise.Droid.CreateModule;md5008cb7354c6e5213432fa67ee425e7bc.CreateModule
 clockwise.droid.CreateModule;md5008cb7354c6e5213432fa67ee425e7bc.CreateModule
+Clockwise.Droid.Toggle, Clockwise.Droid;md5008cb7354c6e5213432fa67ee425e7bc.Toggle
+Clockwise.Droid.Toggle, Clockwise.Droid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md5008cb7354c6e5213432fa67ee425e7bc.Toggle
+Clockwise.Droid.Toggle;md5008cb7354c6e5213432fa67ee425e7bc.Toggle
+clockwise.droid.Toggle;md5008cb7354c6e5213432fa67ee425e7bc.Toggle
