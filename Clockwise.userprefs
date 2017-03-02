@@ -1,7 +1,8 @@
 ﻿<Properties StartupConfiguration="{B46E161A-E220-482B-B411-3F0B25C20CFD}|Default" GitUserInfo="UsingGIT">
   <MonoDevelop.Ide.Workbench ActiveDocument="Clockwise Status">
     <Files>
-      <File FileName="Droid/MainActivity.cs" Line="73" Column="5" />
+      <File FileName="Droid/MainActivity.cs" Line="91" Column="80" />
+      <File FileName="Droid/AlarmUtils.cs" Line="37" Column="29" />
       <File FileName="Clockwise Status" />
     </Files>
   </MonoDevelop.Ide.Workbench>

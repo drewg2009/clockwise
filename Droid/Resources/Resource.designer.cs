@@ -186,6 +186,9 @@ namespace Clockwise.Droid
 			// aapt resource value: 0x7f060007
 			public const int imageView1 = 2131099655;
 			
+			// aapt resource value: 0x7f06003d
+			public const int imageView2 = 2131099709;
+			
 			// aapt resource value: 0x7f060004
 			public const int linearLayout1 = 2131099652;
 			
@@ -204,11 +207,11 @@ namespace Clockwise.Droid
 			// aapt resource value: 0x7f060021
 			public const int module2Holder = 2131099681;
 			
-			// aapt resource value: 0x7f06003f
-			public const int moduleImage = 2131099711;
+			// aapt resource value: 0x7f060040
+			public const int moduleImage = 2131099712;
 			
 			// aapt resource value: 0x7f06001d
-			public const int moduleTest = 2131099677;
+			public const int moduleSection = 2131099677;
 			
 			// aapt resource value: 0x7f06001e
 			public const int module_scroller = 2131099678;
@@ -234,11 +237,11 @@ namespace Clockwise.Droid
 			// aapt resource value: 0x7f060000
 			public const int relativeLayout1 = 2131099648;
 			
-			// aapt resource value: 0x7f06003e
-			public const int relativeLayout2 = 2131099710;
+			// aapt resource value: 0x7f06003f
+			public const int relativeLayout2 = 2131099711;
 			
-			// aapt resource value: 0x7f060040
-			public const int relativeLayout3 = 2131099712;
+			// aapt resource value: 0x7f060041
+			public const int relativeLayout3 = 2131099713;
 			
 			// aapt resource value: 0x7f06002a
 			public const int repeatDaysInput = 2131099690;
@@ -249,8 +252,8 @@ namespace Clockwise.Droid
 			// aapt resource value: 0x7f060003
 			public const int scrollView1 = 2131099651;
 			
-			// aapt resource value: 0x7f06003d
-			public const int setting_title = 2131099709;
+			// aapt resource value: 0x7f06003e
+			public const int setting_title = 2131099710;
 			
 			// aapt resource value: 0x7f06003b
 			public const int settings = 2131099707;
@@ -279,8 +282,8 @@ namespace Clockwise.Droid
 			// aapt resource value: 0x7f060025
 			public const int timescrollers = 2131099685;
 			
-			// aapt resource value: 0x7f060041
-			public const int toggle = 2131099713;
+			// aapt resource value: 0x7f060042
+			public const int toggle = 2131099714;
 			
 			// aapt resource value: 0x7f060017
 			public const int trafficRow = 2131099671;

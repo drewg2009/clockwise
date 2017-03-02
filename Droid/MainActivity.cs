@@ -88,6 +88,7 @@ namespace Clockwise.Droid
 						if (hourSet == 24) hourSet = 12;
 						alarm_toggle.SetImageResource(Resource.Drawable.on_toggle);
 						alarm_toggle.Activated = true;
+						Console.WriteLine("passing time: " + hourSet + ":" + minutepicker.Value);
 						AlarmUtils.SetTime(Android.App.Application.Context, hourSet, minutepicker.Value);
 					}
 					else {
@@ -181,7 +182,7 @@ namespace Clockwise.Droid
 					if (settings_row.LayoutParameters.Height == 0)
 					{
 						//Expand
-						int targetHeight = (int)(75 * settings_row.Context.Resources.DisplayMetrics.Density);
+						int targetHeight = (int)(80 * settings_row.Context.Resources.DisplayMetrics.Density);
 						int duration = (int)(200);
 						settingsHelper.expand(duration, targetHeight);
 					}
@@ -208,7 +209,7 @@ namespace Clockwise.Droid
 			//clock_settings_layout.LayoutParameters
 
 			//Align test module
-			FrameLayout testLayout = FindViewById<FrameLayout>(Resource.Id.moduleTest);
+			FrameLayout testLayout = FindViewById<FrameLayout>(Resource.Id.moduleSection);
 			RelativeLayout.LayoutParams testParams = (RelativeLayout.LayoutParams)testLayout.LayoutParameters;
 			testParams.AddRule(LayoutRules.Below, Resource.Id.pulldown);
 			testParams.Width = (int)metrics.WidthPixels;
@@ -237,6 +238,24 @@ namespace Clockwise.Droid
 			module2.LayoutParameters = module2Params;
 		}
 
+		private void addModules()
+		{
+			string[] modules = ModuleHelper.GetActiveModules();
+			foreach(string m in modules)
+			{
+				if (m != string.Empty)
+				{
+					string type = m.Substring(0, m.IndexOf(':'));
+					switch (type)
+					{
+						case "fact":
+							
+							break;
+					}
+				}
+			}
+		}
+
 
 		public class TwoDigitFormatter : Java.Lang.Object, NumberPicker.IFormatter
 		{
@@ -255,15 +274,6 @@ namespace Clockwise.Droid
 			}
 		}
 
-		//public class SettingsAnimation : Java.Lang.Object, Android.Animation.ITimeInterpolator
-
-		//{
-		//	public View MakeView()
-		//	{
-		//		ImageView myView = new ImageView(Android.App.Application.Context);
-		//		return myView;
-		//	}
-		//}
 
 		public override async void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
 		{

@@ -34,8 +34,9 @@ namespace Clockwise.Helpers
 		private static readonly string RepeatDaysDef = "0";
 
 		private const string ModuleOrderKey = "module_order_key";
-		private static readonly string ModuleOrderDef = string.Empty;
-
+		private static readonly string ModuleOrderDef = 
+			"notifications|weather|news|reddit|twitter|countdown|reminders|traffic|fact|quote|tdih";
+		
 		private const string SnoozeKey = "snooze_key";
 		private static readonly string SnoozeDef = string.Empty;
 

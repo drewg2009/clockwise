@@ -6,7 +6,6 @@ using Clockwise.Helpers;
 using Android.OS;
 using Android.Widget;
 using Android.Content.PM;
-using Android.Provider;
 using Java.Util;
 namespace Clockwise.Droid
 {
@@ -37,7 +36,6 @@ namespace Clockwise.Droid
 
 			am.Cancel(pendingIntent);
 
-
 			int repeatDays = Int32.Parse(Helpers.Settings.RepeatDays);
 			bool[] daySelection = new bool[7];
 
@@ -47,10 +45,8 @@ namespace Clockwise.Droid
 				daySelection[j] = (repeatDays & (1 << j)) == (1 << j);
 			}
 
-
-			Java.Util.Date temp = new Java.Util.Date(Java.Lang.JavaSystem.CurrentTimeMillis());
 			Calendar calendar = Calendar.Instance;
-			calendar.TimeInMillis = temp.Time;
+			calendar.TimeInMillis = Java.Lang.JavaSystem.CurrentTimeMillis();
 				        
 			int currentDay = calendar.Get(CalendarField.DayOfWeek) - 1;
 			Console.WriteLine("currentDay: " + currentDay);
@@ -67,34 +63,34 @@ namespace Clockwise.Droid
 				daysUntilNextAlarm += 7;
 			}
 
-			Console.WriteLine("days until next alarm: " + daysUntilNextAlarm);
-
-
 			long offset = 0;
-			calendar.TimeInMillis = Java.Lang.JavaSystem.CurrentTimeMillis();
-			calendar.Set(CalendarField.Hour, hour);
+
+			calendar.Set(CalendarField.HourOfDay, hour);
 			calendar.Set(CalendarField.Minute, minute);
 			calendar.Set(CalendarField.Second, 0);
 
 			Java.Util.Date current = new Java.Util.Date(Java.Lang.JavaSystem.CurrentTimeMillis());
 
+			//set time is before current time or current day isn't selected
 			if (calendar.Time.Before(current) || !daySelection[currentDay])
 			{
 				offset = daysUntilNextAlarm * 1000 * 60 * 60 * 24;
 			}
 
+			Console.WriteLine("offset: " + offset);
+			calendar.TimeInMillis = calendar.TimeInMillis + offset;
 			if ((int)Build.VERSION.SdkInt >= 21)
 			{
-				AlarmManager.AlarmClockInfo info = new AlarmManager.AlarmClockInfo(calendar.TimeInMillis + offset, notificationClickIntent);
+				AlarmManager.AlarmClockInfo info = new AlarmManager.AlarmClockInfo(calendar.TimeInMillis, notificationClickIntent);
 				am.SetAlarmClock(info, pendingIntent);
 			}
 			else {
-				am.SetExact(AlarmType.RtcWakeup, calendar.TimeInMillis + offset, notificationClickIntent);
+				am.SetExact(AlarmType.RtcWakeup, calendar.TimeInMillis, notificationClickIntent);
 			}
 
 			//Toast
 			string toast = "Set time: " + (calendar.Get(CalendarField.Month) + 1) + "/" + calendar.Get(CalendarField.DayOfMonth) + "/" + calendar.Get(CalendarField.Year)
-			                                      + ", " + calendar.Get(CalendarField.Hour) + ":" + calendar.Get(CalendarField.Minute);
+			                                                                                      + ", " + calendar.Get(CalendarField.HourOfDay) + ":" + calendar.Get(CalendarField.Minute);
 			Toast.MakeText(context, toast, ToastLength.Long).Show();
 		}
 

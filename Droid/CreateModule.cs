@@ -52,19 +52,19 @@ namespace Clockwise.Droid
 
 			factToggle.Click += delegate
 			{
-				Settings.Fact = Settings.Fact == string.Empty ? "true" : string.Empty;
+				Settings.Fact = Settings.Fact == string.Empty ? "fact:" : string.Empty;
 				factToggle.ScaleX = Settings.Fact == string.Empty ? 1 : -1;
 			};
 
 			quoteToggle.Click += delegate
 			{
-				Settings.Quote = Settings.Quote == string.Empty ? "true" : string.Empty;
+				Settings.Quote = Settings.Quote == string.Empty ? "quote:" : string.Empty;
 				quoteToggle.ScaleX = Settings.Quote == string.Empty ? 1 : -1;
 			};
 
 			tdihToggle.Click += delegate
 			{
-				Settings.TDIH = Settings.TDIH == string.Empty ? "true" : string.Empty;
+				Settings.TDIH = Settings.TDIH == string.Empty ? "tdih:" : string.Empty;
 				tdihToggle.ScaleX = Settings.TDIH == string.Empty ? 1 : -1;
 			};
 		}
