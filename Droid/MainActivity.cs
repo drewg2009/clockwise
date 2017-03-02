@@ -219,43 +219,72 @@ namespace Clockwise.Droid
 			RelativeLayout.LayoutParams pulldownParams = (RelativeLayout.LayoutParams)pulldown.LayoutParameters;
 			pulldownParams.AddRule(LayoutRules.Below, Resource.Id.settings_row);
 
+			//Scrollview
+			HorizontalScrollView scrollView = FindViewById<HorizontalScrollView>(Resource.Id.module_scroller);
+			LinearLayout scroll_layout = FindViewById<LinearLayout>(Resource.Id.module_layout);
 
+			scrollView.ScrollChange += delegate {
+				Console.WriteLine("scrollview x: " + scrollView.ScrollX);
+				//Console.WriteLine("scrollview width: " + scrollView.Width);
 
-			RelativeLayout module1Holder = FindViewById<RelativeLayout>(Resource.Id.module1Holder);
-			module1Holder.LayoutParameters = new LinearLayout.LayoutParams((int)(metrics.WidthPixels), LinearLayout.LayoutParams.MatchParent);
+				Console.WriteLine("percent scrolled: " + (double)scrollView.ScrollX/(double)scroll_layout.Width);
 
-			RelativeLayout module2Holder = FindViewById<RelativeLayout>(Resource.Id.module2Holder);
-			module2Holder.LayoutParameters = new LinearLayout.LayoutParams((int)(metrics.WidthPixels), LinearLayout.LayoutParams.MatchParent);
-
-			LinearLayout module1 = FindViewById<LinearLayout>(Resource.Id.module1);
-			RelativeLayout.LayoutParams module1Params = new RelativeLayout.LayoutParams((int)(metrics.WidthPixels * .85), RelativeLayout.LayoutParams.MatchParent);
-			module1Params.AddRule(LayoutRules.CenterHorizontal);
-			module1.LayoutParameters = module1Params;
-
-			LinearLayout module2 = FindViewById<LinearLayout>(Resource.Id.module2);
-			RelativeLayout.LayoutParams module2Params = new RelativeLayout.LayoutParams((int)(metrics.WidthPixels * .85), RelativeLayout.LayoutParams.MatchParent);
-			module2Params.AddRule(LayoutRules.CenterHorizontal);
-			module2.LayoutParameters = module2Params;
+			};
 		}
 
 		private void addModules()
 		{
 			string[] modules = ModuleHelper.GetActiveModules();
+			LinearLayout moduleLayout = FindViewById<LinearLayout>(Resource.Id.module_layout);
+			var metrics = Resources.DisplayMetrics;
+
 			foreach(string m in modules)
 			{
 				if (m != string.Empty)
 				{
+					RelativeLayout rl = (RelativeLayout)LayoutInflater.Inflate(Resource.Layout.module_holder, null);
+					rl.LayoutParameters = new LinearLayout.LayoutParams((int)(metrics.WidthPixels), LinearLayout.LayoutParams.MatchParent);
+
+					LinearLayout module = rl.FindViewById<LinearLayout>(Resource.Id.module);
+					RelativeLayout.LayoutParams moduleParams = new RelativeLayout.LayoutParams((int)(metrics.WidthPixels * .85), RelativeLayout.LayoutParams.MatchParent);
+					moduleParams.AddRule(LayoutRules.CenterHorizontal);
+					module.LayoutParameters = moduleParams;
+
+					TextView settingTitle = rl.FindViewById<TextView>(Resource.Id.setting_title);
+					settingTitle.Typeface = Typeface.CreateFromAsset(Resources.Assets, "HelveticaNeueLight.ttf");
+					settingTitle.TextSize = (int)((metrics.HeightPixels/metrics.Density) * .06);
+					RelativeLayout.LayoutParams titleParams = (RelativeLayout.LayoutParams)settingTitle.LayoutParameters;
+					titleParams.Width = (int)((metrics.WidthPixels * .85) / 2);
+					settingTitle.LayoutParameters = titleParams;
+
 					string type = m.Substring(0, m.IndexOf(':'));
 					switch (type)
 					{
 						case "fact":
-							
+							settingTitle.Text = "Fun Fact";
+							moduleLayout.AddView(rl);
+							break;
+						case "quote":
+							settingTitle.Text = "Quote of the Day";
+
+							moduleLayout.AddView(rl);
+							break;
+						case "tdih":
+							settingTitle.Text = "This Day in History";
+							moduleLayout.AddView(rl);
 							break;
 					}
 				}
 			}
 		}
 
+		protected override void OnResume()
+		{
+			base.OnResume();
+			LinearLayout moduleLayout = FindViewById<LinearLayout>(Resource.Id.module_layout);
+			while(moduleLayout.ChildCount > 0) moduleLayout.RemoveViewAt(0);
+			addModules();
+		}
 
 		public class TwoDigitFormatter : Java.Lang.Object, NumberPicker.IFormatter
 		{
@@ -274,7 +303,14 @@ namespace Clockwise.Droid
 			}
 		}
 
-
+		public class ScrollListener : Java.Lang.Object, View.IOnDragListener
+		{
+			public bool OnDrag(View v, DragEvent e)
+			{
+				return true;
+			}
+		}
+				
 		public override async void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
 		{
 			switch (requestCode)

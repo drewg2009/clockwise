@@ -4,14 +4,11 @@
 /Users/Seth/Projects/Clockwise/Droid/bin/Debug/com.epoch.Clockwise.apk
 /Users/Seth/Projects/Clockwise/Droid/obj/Debug/android/bin/com.epoch.Clockwise.apk
 /Users/Seth/Projects/Clockwise/Droid/obj/Debug/res/values/strings.xml
-/Users/Seth/Projects/Clockwise/Droid/obj/Debug/res/mipmap-hdpi/icon.png
 /Users/Seth/Projects/Clockwise/Droid/obj/Debug/res/mipmap-mdpi/icon.png
 /Users/Seth/Projects/Clockwise/Droid/obj/Debug/res/mipmap-xhdpi/icon.png
 /Users/Seth/Projects/Clockwise/Droid/obj/Debug/res/mipmap-xxhdpi/icon.png
 /Users/Seth/Projects/Clockwise/Droid/obj/Debug/res/mipmap-xxxhdpi/icon.png
 /Users/Seth/Projects/Clockwise/Droid/obj/Debug/res/drawable/add_module_button.png
-/Users/Seth/Projects/Clockwise/Droid/obj/Debug/res/drawable/off_toggle.png
-/Users/Seth/Projects/Clockwise/Droid/obj/Debug/res/drawable/on_toggle.png
 /Users/Seth/Projects/Clockwise/Droid/obj/Debug/res/drawable/pulldown.png
 /Users/Seth/Projects/Clockwise/Droid/obj/Debug/res/drawable/settings_button.png
 /Users/Seth/Projects/Clockwise/Droid/obj/Debug/res/layout/main.xml
@@ -39,6 +36,10 @@
 /Users/Seth/Projects/Clockwise/Droid/obj/Debug/res/drawable/traffic_icon.png
 /Users/Seth/Projects/Clockwise/Droid/obj/Debug/res/drawable/twitter_icon.png
 /Users/Seth/Projects/Clockwise/Droid/obj/Debug/res/drawable/weather_icon.png
+/Users/Seth/Projects/Clockwise/Droid/obj/Debug/res/drawable/off_toggle.png
+/Users/Seth/Projects/Clockwise/Droid/obj/Debug/res/drawable/on_toggle.png
+/Users/Seth/Projects/Clockwise/Droid/obj/Debug/res/mipmap-hdpi/icon.png
+/Users/Seth/Projects/Clockwise/Droid/obj/Debug/res/layout/module_holder.xml
 /Users/Seth/Projects/Clockwise/Droid/obj/Debug/R.cs.flag
 /Users/Seth/Projects/Clockwise/Droid/bin/Debug/com.epoch.Clockwise-Signed.apk
 /Users/Seth/Projects/Clockwise/Droid/obj/Debug/uploadflags.txt
@@ -48,4 +49,3 @@
 /Users/Seth/Projects/Clockwise/Droid/bin/Debug/Plugin.Settings.dll
 /Users/Seth/Projects/Clockwise/Droid/bin/Debug/Clockwise.dll
 /Users/Seth/Projects/Clockwise/Droid/bin/Debug/Clockwise.dll.mdb
-/Users/Seth/Projects/Clockwise/Droid/obj/Debug/res/drawable/launcher_icon.png

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="25px"
+    android:minHeight="25px"
+    android:layout_width="385dp"
+    android:layout_height="match_parent"
+    android:id="@+id/module1Holder">
+    <include
+        layout="@layout/module_display"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:id="@+id/module" />
+</RelativeLayout>

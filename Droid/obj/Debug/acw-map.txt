@@ -10,6 +10,10 @@ Clockwise.Droid.MainActivity/Toggle, Clockwise.Droid;md5008cb7354c6e5213432fa67e
 Clockwise.Droid.MainActivity+Toggle, Clockwise.Droid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md5008cb7354c6e5213432fa67ee425e7bc.MainActivity_Toggle
 Clockwise.Droid.MainActivity.Toggle;md5008cb7354c6e5213432fa67ee425e7bc.MainActivity_Toggle
 clockwise.droid.MainActivity_Toggle;md5008cb7354c6e5213432fa67ee425e7bc.MainActivity_Toggle
+Clockwise.Droid.MainActivity/ScrollListener, Clockwise.Droid;md5008cb7354c6e5213432fa67ee425e7bc.MainActivity_ScrollListener
+Clockwise.Droid.MainActivity+ScrollListener, Clockwise.Droid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md5008cb7354c6e5213432fa67ee425e7bc.MainActivity_ScrollListener
+Clockwise.Droid.MainActivity.ScrollListener;md5008cb7354c6e5213432fa67ee425e7bc.MainActivity_ScrollListener
+clockwise.droid.MainActivity_ScrollListener;md5008cb7354c6e5213432fa67ee425e7bc.MainActivity_ScrollListener
 Clockwise.Droid.AlarmReceiver, Clockwise.Droid;md5008cb7354c6e5213432fa67ee425e7bc.AlarmReceiver
 Clockwise.Droid.AlarmReceiver, Clockwise.Droid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md5008cb7354c6e5213432fa67ee425e7bc.AlarmReceiver
 Clockwise.Droid.AlarmReceiver;md5008cb7354c6e5213432fa67ee425e7bc.AlarmReceiver
