@@ -249,13 +249,20 @@ namespace Clockwise.Droid
 					RelativeLayout.LayoutParams moduleParams = new RelativeLayout.LayoutParams((int)(metrics.WidthPixels * .85), RelativeLayout.LayoutParams.MatchParent);
 					moduleParams.AddRule(LayoutRules.CenterHorizontal);
 					module.LayoutParameters = moduleParams;
+					module.Measure(RelativeLayout.LayoutParams.MatchParent, RelativeLayout.LayoutParams.MatchParent); 
 
 					TextView settingTitle = rl.FindViewById<TextView>(Resource.Id.setting_title);
+					ImageView settingImage = rl.FindViewById<ImageView>(Resource.Id.moduleImage);
 					settingTitle.Typeface = Typeface.CreateFromAsset(Resources.Assets, "HelveticaNeueLight.ttf");
 					settingTitle.TextSize = (int)((metrics.HeightPixels/metrics.Density) * .06);
 					RelativeLayout.LayoutParams titleParams = (RelativeLayout.LayoutParams)settingTitle.LayoutParameters;
 					titleParams.Width = (int)((metrics.WidthPixels * .85) / 2);
 					settingTitle.LayoutParameters = titleParams;
+
+					Console.WriteLine(module.MeasuredWidth + ", " + module.MeasuredHeight);
+					settingImage.LayoutParameters.Width = (int)(module.MeasuredHeight * .6);
+					settingImage.LayoutParameters.Height = (int)(module.MeasuredHeight *.6);
+
 
 					string type = m.Substring(0, m.IndexOf(':'));
 					switch (type)
@@ -272,6 +279,12 @@ namespace Clockwise.Droid
 						case "tdih":
 							settingTitle.Text = "This Day in History";
 							moduleLayout.AddView(rl);
+							break;
+						case "weather":
+							settingTitle.Text = "Weather";
+							settingImage.SetImageResource(Resource.Drawable.weather_icon);
+							moduleLayout.AddView(rl);
+
 							break;
 					}
 				}

@@ -40,6 +40,7 @@
 /Users/Seth/Projects/Clockwise/Droid/obj/Debug/res/drawable/on_toggle.png
 /Users/Seth/Projects/Clockwise/Droid/obj/Debug/res/mipmap-hdpi/icon.png
 /Users/Seth/Projects/Clockwise/Droid/obj/Debug/res/layout/module_holder.xml
+/Users/Seth/Projects/Clockwise/Droid/obj/Debug/res/layout/weather.xml
 /Users/Seth/Projects/Clockwise/Droid/obj/Debug/R.cs.flag
 /Users/Seth/Projects/Clockwise/Droid/bin/Debug/com.epoch.Clockwise-Signed.apk
 /Users/Seth/Projects/Clockwise/Droid/obj/Debug/uploadflags.txt
@@ -49,3 +50,4 @@
 /Users/Seth/Projects/Clockwise/Droid/bin/Debug/Plugin.Settings.dll
 /Users/Seth/Projects/Clockwise/Droid/bin/Debug/Clockwise.dll
 /Users/Seth/Projects/Clockwise/Droid/bin/Debug/Clockwise.dll.mdb
+/Users/Seth/Projects/Clockwise/Droid/obj/Debug/res/drawable/up_icon.png

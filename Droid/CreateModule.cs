@@ -27,6 +27,10 @@ namespace Clockwise.Droid
 				Finish();
 			};
 
+			//Dropdown setup
+			Weather.Setup(FindViewById<LinearLayout>(Resource.Id.weather_settings), 
+			              FindViewById<ImageView>(Resource.Id.addWeather), Application.Context);
+
 			//Toggle setup
 			ImageSwitcher factToggle = FindViewById<ImageSwitcher>(Resource.Id.factToggle);
 			ImageSwitcher quoteToggle = FindViewById<ImageSwitcher>(Resource.Id.quoteToggle);

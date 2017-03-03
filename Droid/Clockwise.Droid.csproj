@@ -68,6 +68,7 @@
     <Compile Include="AnimationHelper.cs" />
     <Compile Include="AnimationManager.cs" />
     <Compile Include="CreateModule.cs" />
+    <Compile Include="Weather.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -113,6 +114,8 @@
     <AndroidResource Include="Resources\drawable\on_toggle.png" />
     <AndroidResource Include="Resources\mipmap-hdpi\Icon.png" />
     <AndroidResource Include="Resources\layout\module_holder.xml" />
+    <AndroidResource Include="Resources\layout\weather.xml" />
+    <AndroidResource Include="Resources\drawable\up_icon.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />

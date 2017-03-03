@@ -34,3 +34,7 @@ Clockwise.Droid.Toggle, Clockwise.Droid;md5008cb7354c6e5213432fa67ee425e7bc.Togg
 Clockwise.Droid.Toggle, Clockwise.Droid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md5008cb7354c6e5213432fa67ee425e7bc.Toggle
 Clockwise.Droid.Toggle;md5008cb7354c6e5213432fa67ee425e7bc.Toggle
 clockwise.droid.Toggle;md5008cb7354c6e5213432fa67ee425e7bc.Toggle
+Clockwise.Droid.Weather/Toggle, Clockwise.Droid;md5008cb7354c6e5213432fa67ee425e7bc.Weather_Toggle
+Clockwise.Droid.Weather+Toggle, Clockwise.Droid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null;md5008cb7354c6e5213432fa67ee425e7bc.Weather_Toggle
+Clockwise.Droid.Weather.Toggle;md5008cb7354c6e5213432fa67ee425e7bc.Weather_Toggle
+clockwise.droid.Weather_Toggle;md5008cb7354c6e5213432fa67ee425e7bc.Weather_Toggle

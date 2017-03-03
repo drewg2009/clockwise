@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:minWidth="25px"
+    android:minHeight="25px"
+    android:background="#00000000"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/relativeLayout2"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp">
+        <TextView
+            android:text="Fahrenheit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fahrenheitText"
+            android:textColor="#ffffffff"
+            android:textSize="20dp"
+            android:paddingLeft="20dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true" />
+        <ImageSwitcher
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:id="@+id/fahrenheitToggle"
+            android:layout_marginRight="10dp" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/relativeLayout2"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp">
+        <TextView
+            android:text="Current Temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/currentTempText"
+            android:textColor="#ffffffff"
+            android:textSize="20dp"
+            android:paddingLeft="20dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true" />
+        <ImageSwitcher
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:id="@+id/currentTempToggle"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/relativeLayout2"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp">
+        <TextView
+            android:text="Max Temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/maxTempText"
+            android:textColor="#ffffffff"
+            android:textSize="20dp"
+            android:paddingLeft="20dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true" />
+        <ImageSwitcher
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:id="@+id/maxTempToggle"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/relativeLayout2"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp">
+        <TextView
+            android:text="Weather Description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/descriptionText"
+            android:textColor="#ffffffff"
+            android:textSize="20dp"
+            android:paddingLeft="20dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true" />
+        <ImageSwitcher
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:id="@+id/descriptionToggle"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/relativeLayout3"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingRight="30dp"
+        android:paddingLeft="30dp">
+        <include
+            layout="@layout/save_button"
+            android:id="@+id/save_button" />
+    </RelativeLayout>
+</LinearLayout>
