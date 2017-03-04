@@ -10,5 +10,6 @@
 @implementation ViewController
 
 @synthesize Button = _Button;
+@synthesize hoursPicker = _hoursPicker;
 
 @end

@@ -11,8 +11,11 @@
 
 @interface ViewController : UIViewController {
 	UIButton *_Button;
+	UIPickerView *_hoursPicker;
 }
 
 @property (nonatomic, retain) IBOutlet UIButton *Button;
+
+@property (nonatomic, retain) IBOutlet UIPickerView *hoursPicker;
 
 @end

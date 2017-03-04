@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "4677C7870000000000000000"
+               BlueprintIdentifier = "842167260000000000000000"
                BuildableName = "Clockwise.iOS.app"
                BlueprintName = "Clockwise.iOS"
                ReferencedContainer = "container:Clockwise.iOS.xcodeproj">
@@ -32,7 +32,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "4677C7870000000000000000"
+            BlueprintIdentifier = "842167260000000000000000"
             BuildableName = "Clockwise.iOS.app"
             BlueprintName = "Clockwise.iOS"
             ReferencedContainer = "container:Clockwise.iOS.xcodeproj">
@@ -55,7 +55,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "4677C7870000000000000000"
+            BlueprintIdentifier = "842167260000000000000000"
             BuildableName = "Clockwise.iOS.app"
             BlueprintName = "Clockwise.iOS"
             ReferencedContainer = "container:Clockwise.iOS.xcodeproj">
@@ -74,7 +74,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "4677C7870000000000000000"
+            BlueprintIdentifier = "842167260000000000000000"
             BuildableName = "Clockwise.iOS.app"
             BlueprintName = "Clockwise.iOS"
             ReferencedContainer = "container:Clockwise.iOS.xcodeproj">
