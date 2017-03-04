@@ -1,15 +1,15 @@
 ﻿using System;
-
+using System.Collections.Generic;
 using UIKit;
 
 namespace Clockwise.iOS
 {
 	public partial class ViewController : UIViewController
 	{
-		int count = 1;
 
 		public ViewController(IntPtr handle) : base(handle)
 		{
+
 		}
 
 		public override void ViewDidLoad()
