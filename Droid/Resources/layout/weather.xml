@@ -21,7 +21,6 @@
             android:id="@+id/fahrenheitText"
             android:textColor="#ffffffff"
             android:textSize="20dp"
-            android:paddingLeft="20dp"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true" />
         <ImageSwitcher
@@ -49,7 +48,6 @@
             android:id="@+id/currentTempText"
             android:textColor="#ffffffff"
             android:textSize="20dp"
-            android:paddingLeft="20dp"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true" />
         <ImageSwitcher
@@ -77,7 +75,6 @@
             android:id="@+id/maxTempText"
             android:textColor="#ffffffff"
             android:textSize="20dp"
-            android:paddingLeft="20dp"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true" />
         <ImageSwitcher
@@ -105,7 +102,6 @@
             android:id="@+id/descriptionText"
             android:textColor="#ffffffff"
             android:textSize="20dp"
-            android:paddingLeft="20dp"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true" />
         <ImageSwitcher
@@ -124,10 +120,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/relativeLayout3"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingRight="30dp"
-        android:paddingLeft="30dp">
+        android:paddingTop="10dp">
         <include
             layout="@layout/save_button"
             android:id="@+id/save_button" />

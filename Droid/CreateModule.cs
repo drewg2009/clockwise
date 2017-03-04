@@ -6,6 +6,7 @@ using System.Text;
 
 using Android.App;
 using Android.Content;
+using Android.Graphics;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
@@ -22,6 +23,25 @@ namespace Clockwise.Droid
 			base.OnCreate(savedInstanceState);
 			SetContentView(Resource.Layout.create_module);
 
+			Typeface boldFont = Typeface.CreateFromAsset(Resources.Assets, "HelveticaNeuBold.ttf");
+			Typeface lightFont = Typeface.CreateFromAsset(Resources.Assets, "HelveticaNeueLight.ttf");
+
+			//Set fonts
+			FindViewById<TextView>(Resource.Id.create_module_title).Typeface = lightFont;
+			FindViewById<TextView>(Resource.Id.single).Typeface = boldFont;
+			FindViewById<TextView>(Resource.Id.weather_desc).Typeface = lightFont;
+			FindViewById<TextView>(Resource.Id.custom).Typeface = boldFont;
+			FindViewById<TextView>(Resource.Id.news_desc).Typeface = lightFont;
+			FindViewById<TextView>(Resource.Id.reddit_desc).Typeface = lightFont;
+			FindViewById<TextView>(Resource.Id.twitter_desc).Typeface = lightFont;
+			FindViewById<TextView>(Resource.Id.countdown_desc).Typeface = lightFont;
+			FindViewById<TextView>(Resource.Id.traffic_desc).Typeface = lightFont;
+			FindViewById<TextView>(Resource.Id.reminders_desc).Typeface = lightFont;
+			FindViewById<TextView>(Resource.Id.toggle_text).Typeface = boldFont;
+			FindViewById<TextView>(Resource.Id.fact_desc).Typeface = lightFont;
+			FindViewById<TextView>(Resource.Id.quote_desc).Typeface = lightFont;
+			FindViewById<TextView>(Resource.Id.history_desc).Typeface = lightFont;
+
 			//ImageView cancel_button
 			FindViewById<ImageView>(Resource.Id.cancel_button).Click += delegate {
 				Finish();
@@ -30,6 +50,9 @@ namespace Clockwise.Droid
 			//Dropdown setup
 			Weather.Setup(FindViewById<LinearLayout>(Resource.Id.weather_settings), 
 			              FindViewById<ImageView>(Resource.Id.addWeather), Application.Context);
+
+			News.Setup(FindViewById<LinearLayout>(Resource.Id.news_settings),
+			           FindViewById<ImageView>(Resource.Id.addNews), Application.Context, string.Empty);
 
 			//Toggle setup
 			ImageSwitcher factToggle = FindViewById<ImageSwitcher>(Resource.Id.factToggle);

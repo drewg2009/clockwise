@@ -16,31 +16,34 @@ namespace Clockwise.Droid
 			AnimationManager am = new AnimationManager(false);
 			AnimationHelper settingsHelper = new AnimationHelper(v, am);
 			v.Measure(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent);
-			Console.WriteLine("meaured height1: " + v.MeasuredHeight);
 			v.Measure(RelativeLayout.LayoutParams.MatchParent, RelativeLayout.LayoutParams.MatchParent);
-			Console.WriteLine("meaured height2: " + v.MeasuredHeight);
 			int expandedHeight = v.MeasuredHeight;
-			addButton.Click += delegate {
-				if (!am.Animating)
-				{
-					if (v.LayoutParameters.Height == 0)
-					{
-						//Expand
-						int targetHeight = expandedHeight;
-						int duration = (int)(200);
-						settingsHelper.expand(duration, targetHeight);
-						addButton.SetImageResource(Resource.Drawable.up_icon);
-					}
-					else {
-						//Collapse
-						int targetHeight = 0;
-						int duration = (int)(200);
-						settingsHelper.collapse(duration, targetHeight);
-						addButton.SetImageResource(Resource.Drawable.plus);
 
+			if (addButton != null)
+			{
+				addButton.Click += delegate
+				{
+					if (!am.Animating)
+					{
+						if (v.LayoutParameters.Height == 0)
+						{
+							//Expand
+							int targetHeight = expandedHeight;
+							int duration = (int)(200);
+							settingsHelper.expand(duration, targetHeight);
+							addButton.SetImageResource(Resource.Drawable.up_icon);
+						}
+						else {
+							//Collapse
+							int targetHeight = 0;
+							int duration = (int)(200);
+							settingsHelper.collapse(duration, targetHeight);
+							addButton.SetImageResource(Resource.Drawable.plus);
+
+						}
 					}
-				}
-			};
+				};
+			}
 
 			TextView t1 = v.FindViewById<TextView>(Resource.Id.fahrenheitText);
 			TextView t2 = v.FindViewById<TextView>(Resource.Id.currentTempText);
@@ -106,10 +109,12 @@ namespace Clockwise.Droid
 					+ ((s3.ScaleX > 0) ? 0 : 1) + ":"
 					+ ((s4.ScaleX > 0) ? 0 : 1);
 
+
 				//Collapse
 				int targetHeight = 0;
 				int duration = (int)(200);
 				settingsHelper.collapse(duration, targetHeight);
+				addButton.SetImageResource(Resource.Drawable.plus);
 
 				Toast.MakeText(c, "Weather module saved.", ToastLength.Short).Show();
 			};

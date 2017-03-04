@@ -245,7 +245,7 @@ namespace Clockwise.Droid
 					RelativeLayout rl = (RelativeLayout)LayoutInflater.Inflate(Resource.Layout.module_holder, null);
 					rl.LayoutParameters = new LinearLayout.LayoutParams((int)(metrics.WidthPixels), LinearLayout.LayoutParams.MatchParent);
 
-					LinearLayout module = rl.FindViewById<LinearLayout>(Resource.Id.module);
+					RelativeLayout module = rl.FindViewById<RelativeLayout>(Resource.Id.module);
 					RelativeLayout.LayoutParams moduleParams = new RelativeLayout.LayoutParams((int)(metrics.WidthPixels * .85), RelativeLayout.LayoutParams.MatchParent);
 					moduleParams.AddRule(LayoutRules.CenterHorizontal);
 					module.LayoutParameters = moduleParams;

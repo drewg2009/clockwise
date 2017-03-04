@@ -25,7 +25,7 @@
         android:text="Create a Module"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView1"
+        android:id="@+id/create_module_title"
         android:textColor="#ffffffff"
         android:textSize="35dp"
         android:paddingLeft="50dp" />
@@ -46,10 +46,10 @@
                 android:text="Single"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView2"
+                android:id="@+id/single"
                 android:textSize="20dp"
                 android:textColor="#ffffffff"
-                android:textStyle="bold"
+                android:textStyle="normal"
                 android:paddingLeft="50dp"
                 android:paddingBottom="7dp"
                 android:paddingTop="7dp" />
@@ -57,7 +57,9 @@
                 android:layout_height="1dp"
                 android:layout_width="match_parent"
                 android:background="#ffffff"
-                android:layout_marginLeft="55dp" />
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp" />
             <RelativeLayout
                 android:minWidth="25px"
                 android:minHeight="25px"
@@ -76,9 +78,9 @@
                     android:text="Get the weather in your area"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView3"
+                    android:id="@+id/weather_desc"
                     android:textColor="#ffffffff"
-                    android:textSize="16dp"
+                    android:textSize="14dp"
                     android:layout_marginLeft="50dp"
                     android:layout_centerVertical="true" />
                 <ImageView
@@ -106,7 +108,7 @@
                 android:text="Custom"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/textView2"
+                android:id="@+id/custom"
                 android:textSize="20dp"
                 android:textColor="#ffffffff"
                 android:textStyle="bold"
@@ -118,7 +120,9 @@
                 android:layout_width="match_parent"
                 android:background="#ffffff"
                 android:layout_marginLeft="50dp"
-                android:id="@+id/view2" />
+                android:id="@+id/view2"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp" />
             <RelativeLayout
                 android:minWidth="25px"
                 android:minHeight="25px"
@@ -137,9 +141,9 @@
                     android:text="Get news by category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView3"
+                    android:id="@+id/news_desc"
                     android:textColor="#ffffffff"
-                    android:textSize="16dp"
+                    android:textSize="14dp"
                     android:layout_marginLeft="50dp"
                     android:layout_centerVertical="true" />
                 <ImageView
@@ -151,12 +155,20 @@
                     android:layout_marginRight="20dp"
                     android:layout_centerVertical="true" />
             </RelativeLayout>
+            <include
+                layout="@layout/news"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginLeft="50dp"
+                android:id="@+id/news_settings" />
             <View
                 android:layout_height="1dp"
                 android:layout_width="match_parent"
                 android:background="#ffffff"
                 android:layout_marginLeft="50dp"
-                android:id="@+id/view2" />
+                android:id="@+id/view2"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp" />
             <RelativeLayout
                 android:minWidth="25px"
                 android:minHeight="25px"
@@ -175,9 +187,9 @@
                     android:text="Get top Reddit posts by subreddit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView3"
+                    android:id="@+id/reddit_desc"
                     android:textColor="#ffffffff"
-                    android:textSize="16dp"
+                    android:textSize="14dp"
                     android:layout_marginLeft="50dp"
                     android:layout_centerVertical="true" />
                 <ImageView
@@ -194,7 +206,9 @@
                 android:layout_width="match_parent"
                 android:background="#ffffff"
                 android:layout_marginLeft="50dp"
-                android:id="@+id/view3" />
+                android:id="@+id/view3"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp" />
             <RelativeLayout
                 android:minWidth="25px"
                 android:minHeight="25px"
@@ -213,9 +227,9 @@
                     android:text="Get top Twitter posts by user"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView3"
+                    android:id="@+id/twitter_desc"
                     android:textColor="#ffffffff"
-                    android:textSize="16dp"
+                    android:textSize="14dp"
                     android:layout_marginLeft="50dp"
                     android:layout_centerVertical="true" />
                 <ImageView
@@ -232,7 +246,9 @@
                 android:layout_width="match_parent"
                 android:background="#ffffff"
                 android:layout_marginLeft="50dp"
-                android:id="@+id/view4" />
+                android:id="@+id/view4"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp" />
             <RelativeLayout
                 android:minWidth="25px"
                 android:minHeight="25px"
@@ -251,9 +267,9 @@
                     android:text="Countdown to an event"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView3"
+                    android:id="@+id/countdown_desc"
                     android:textColor="#ffffffff"
-                    android:textSize="16dp"
+                    android:textSize="14dp"
                     android:layout_marginLeft="50dp"
                     android:layout_centerVertical="true" />
                 <ImageView
@@ -270,7 +286,9 @@
                 android:layout_width="match_parent"
                 android:background="#ffffff"
                 android:layout_marginLeft="50dp"
-                android:id="@+id/view2" />
+                android:id="@+id/view2"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp" />
             <RelativeLayout
                 android:minWidth="25px"
                 android:minHeight="25px"
@@ -289,9 +307,9 @@
                     android:text="Set some reminders"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView3"
+                    android:id="@+id/reminders_desc"
                     android:textColor="#ffffffff"
-                    android:textSize="16dp"
+                    android:textSize="14dp"
                     android:layout_marginLeft="50dp"
                     android:layout_centerVertical="true" />
                 <ImageView
@@ -308,7 +326,9 @@
                 android:layout_width="match_parent"
                 android:background="#ffffff"
                 android:layout_marginLeft="50dp"
-                android:id="@+id/view2" />
+                android:id="@+id/view2"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp" />
             <RelativeLayout
                 android:minWidth="25px"
                 android:minHeight="25px"
@@ -335,9 +355,9 @@
                     android:text="Get travel time to a destination"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView3"
+                    android:id="@+id/traffic_desc"
                     android:textColor="#ffffffff"
-                    android:textSize="16dp"
+                    android:textSize="14dp"
                     android:layout_marginLeft="50dp"
                     android:layout_centerVertical="true" />
             </RelativeLayout>
@@ -346,12 +366,14 @@
                 android:layout_width="match_parent"
                 android:background="#ffffff"
                 android:layout_marginLeft="50dp"
-                android:id="@+id/view2" />
+                android:id="@+id/view2"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp" />
             <TextView
                 android:text="Toggle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/textView2"
+                android:id="@+id/toggle_text"
                 android:textSize="20dp"
                 android:textColor="#ffffffff"
                 android:textStyle="bold"
@@ -363,7 +385,9 @@
                 android:layout_width="match_parent"
                 android:background="#ffffff"
                 android:layout_marginLeft="50dp"
-                android:id="@+id/view2" />
+                android:id="@+id/view2"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp" />
             <RelativeLayout
                 android:minWidth="25px"
                 android:minHeight="25px"
@@ -382,16 +406,16 @@
                     android:text="Get the fact of the day"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView3"
+                    android:id="@+id/fact_desc"
                     android:textColor="#ffffffff"
-                    android:textSize="16dp"
+                    android:textSize="14dp"
                     android:layout_marginLeft="50dp"
                     android:layout_centerVertical="true" />
                 <ImageSwitcher
                     android:minWidth="25px"
                     android:minHeight="25px"
-                    android:layout_width="81dp"
-                    android:layout_height="39dp"
+                    android:layout_width="70dp"
+                    android:layout_height="35dp"
                     android:id="@+id/factToggle"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
@@ -402,7 +426,9 @@
                 android:layout_width="match_parent"
                 android:background="#ffffff"
                 android:layout_marginLeft="50dp"
-                android:id="@+id/view2" />
+                android:id="@+id/view2"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp" />
             <RelativeLayout
                 android:minWidth="25px"
                 android:minHeight="25px"
@@ -421,16 +447,16 @@
                     android:text="Get the quote of the day"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView3"
+                    android:id="@+id/quote_desc"
                     android:textColor="#ffffffff"
-                    android:textSize="16dp"
+                    android:textSize="14dp"
                     android:layout_marginLeft="50dp"
                     android:layout_centerVertical="true" />
                 <ImageSwitcher
                     android:minWidth="25px"
                     android:minHeight="25px"
-                    android:layout_width="81dp"
-                    android:layout_height="39dp"
+                    android:layout_width="70dp"
+                    android:layout_height="35dp"
                     android:id="@+id/quoteToggle"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
@@ -441,7 +467,9 @@
                 android:layout_width="match_parent"
                 android:background="#ffffff"
                 android:layout_marginLeft="50dp"
-                android:id="@+id/view2" />
+                android:id="@+id/view2"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp" />
             <RelativeLayout
                 android:minWidth="25px"
                 android:minHeight="25px"
@@ -460,16 +488,16 @@
                     android:text="This day in history"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView3"
+                    android:id="@+id/history_desc"
                     android:textColor="#ffffffff"
-                    android:textSize="16dp"
+                    android:textSize="14dp"
                     android:layout_marginLeft="50dp"
                     android:layout_centerVertical="true" />
                 <ImageSwitcher
                     android:minWidth="25px"
                     android:minHeight="25px"
-                    android:layout_width="81dp"
-                    android:layout_height="39dp"
+                    android:layout_width="70dp"
+                    android:layout_height="35dp"
                     android:id="@+id/tdihToggle"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
