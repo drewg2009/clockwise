@@ -46,6 +46,8 @@ namespace Clockwise.Droid
 			ImageSwitcher alarm_toggle = FindViewById<ImageSwitcher>(Resource.Id.alarm_toggle);
 			alarm_toggle.SetFactory(new Toggle());
 
+			int alarm_number = Intent.GetIntExtra("alarm_number", 0); //CHANGE
+
 			if (Settings.AlarmTime == string.Empty)
 			{
 				alarm_toggle.SetImageResource(Resource.Drawable.off_toggle);

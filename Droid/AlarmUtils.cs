@@ -7,34 +7,70 @@ using Android.OS;
 using Android.Widget;
 using Android.Content.PM;
 using Java.Util;
+using System.Collections.Generic;
+
 namespace Clockwise.Droid
 {
 	public class AlarmUtils
 	{
 		public static string ALARM_NAME = "CLOCKWISE";
 
-		private static PendingIntent pendingIntent = null;
-		private static PendingIntent notificationClickIntent = null;
+		private static List<PendingIntent> pendingIntents = new List<PendingIntent>();
+		private static List<PendingIntent> notificationClickIntents = new List<PendingIntent>();
 		private static AlarmManager am = null;
 
-		public static void Init(Context context)
+		public static void Init(Context context, int alarmIndex)
 		{
+			String[] currentAlarms = Settings.AlarmTime.Split('|');
 			ComponentName receiver = new ComponentName(context, Java.Lang.Class.FromType(typeof(AlarmReceiver)));
         	PackageManager pm = context.PackageManager;
 			pm.SetComponentEnabledSetting(receiver, ComponentEnabledState.Enabled, ComponentEnableOption.DontKillApp);
-			
+
 			Intent alarmIntent = new Intent(context, typeof(AlarmReceiver));
-			notificationClickIntent = PendingIntent.GetActivity(context, 0, new Intent(), 0);
-			pendingIntent = PendingIntent.GetBroadcast(context, 0, alarmIntent, PendingIntentFlags.UpdateCurrent);
-			am = (AlarmManager)Android.App.Application.Context.GetSystemService(Context.AlarmService);
+
+			if (currentAlarms.Length == alarmIndex)
+			{
+				notificationClickIntents.Add(PendingIntent.GetActivity(context, 0, new Intent(), 0));
+				pendingIntents.Add(PendingIntent.GetBroadcast(context, 0, alarmIntent, PendingIntentFlags.UpdateCurrent));
+
+			}
+			else {
+				notificationClickIntents[alarmIndex] = PendingIntent.GetActivity(context, 0, new Intent(), 0);
+				pendingIntents[alarmIndex] = PendingIntent.GetBroadcast(context, 0, alarmIntent, PendingIntentFlags.UpdateCurrent);
+			}
+
+			am = (AlarmManager)Application.Context.GetSystemService(Context.AlarmService);
 		}
 
-		public static void SetTime(Context context, int hour, int minute)
+		public static void SetTime(Context context, int hour, int minute, int alarmIndex)
 		{
-			if (am == null) Init(context);
-			Helpers.Settings.AlarmTime = hour + ":" + minute;
+			if (am == null) Init(context, alarmIndex);
+			String[] currentAlarms = Settings.AlarmTime.Split('|');
 
-			am.Cancel(pendingIntent);
+			//Create new alarm
+			if (alarmIndex == currentAlarms.Length)
+			{
+				string newAlarm = "" + alarmIndex + ":" + hour + ":" + minute;
+				string newAlarmSetting = "";
+				foreach (String s in currentAlarms)
+				{
+					newAlarmSetting += s + "|";
+				}
+				newAlarmSetting += newAlarm;
+				Settings.AlarmTime = newAlarmSetting;
+			}
+			//Change old alarm
+			else {
+				currentAlarms[alarmIndex] = "" + alarmIndex + ":" + hour + ":" + minute;
+				string newAlarmSetting = "";
+				foreach (String s in currentAlarms)
+				{
+					newAlarmSetting += s + "|";
+				}
+				Settings.AlarmTime = newAlarmSetting.TrimEnd('|');
+			}
+
+			am.Cancel(pendingIntents[alarmIndex]);
 
 			int repeatDays = Int32.Parse(Helpers.Settings.RepeatDays);
 			bool[] daySelection = new bool[7];
@@ -81,11 +117,11 @@ namespace Clockwise.Droid
 			calendar.TimeInMillis = calendar.TimeInMillis + offset;
 			if ((int)Build.VERSION.SdkInt >= 21)
 			{
-				AlarmManager.AlarmClockInfo info = new AlarmManager.AlarmClockInfo(calendar.TimeInMillis, notificationClickIntent);
-				am.SetAlarmClock(info, pendingIntent);
+				AlarmManager.AlarmClockInfo info = new AlarmManager.AlarmClockInfo(calendar.TimeInMillis, notificationClickIntents[alarmIndex]);
+				am.SetAlarmClock(info, pendingIntents[alarmIndex]);
 			}
 			else {
-				am.SetExact(AlarmType.RtcWakeup, calendar.TimeInMillis, notificationClickIntent);
+				am.SetExact(AlarmType.RtcWakeup, calendar.TimeInMillis, notificationClickIntents[alarmIndex]);
 			}
 
 			//Toast
@@ -94,11 +130,19 @@ namespace Clockwise.Droid
 			Toast.MakeText(context, toast, ToastLength.Long).Show();
 		}
 
-		public static void Cancel(Context context)
+		public static void Cancel(Context context, int alarmIndex)
 		{
-			Helpers.Settings.AlarmTime = string.Empty;
-			if (am == null) Init(context);
-			am.Cancel(pendingIntent);
+			//Helpers.Settings.AlarmTime = string.Empty;
+			String[] currentAlarms = Settings.AlarmTime.Split('|');
+			List<String> currentAlarmsList = new List<String>(currentAlarms);
+			currentAlarmsList.RemoveAt(alarmIndex);
+			string newAlarmSetting = "";
+			for (int i = 0; i < currentAlarmsList.Count; i++)
+			{
+				newAlarmSetting += "" + i + ":" + currentAlarmsList[i].Substring(currentAlarmsList[i].IndexOf(':')+1);
+			}
+			if (am == null) Init(context, alarmIndex);
+			am.Cancel(pendingIntents[alarmIndex]);
 		}
 
 		public static void PostNotification(Context context)
@@ -126,5 +170,6 @@ namespace Clockwise.Droid
 			NotificationManager nm = (NotificationManager) Android.App.Application.Context.GetSystemService("notification");
 			nm.Cancel(ALARM_NAME, 0);
 		}
+
 	}
 }
