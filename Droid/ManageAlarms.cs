@@ -93,37 +93,54 @@ namespace Clockwise.Droid
 				};
 
 			}
+			FindViewById<TextView>(Resource.Id.save_button).Typeface = fontBold;
 			FindViewById<TextView>(Resource.Id.save_button).Click += delegate {
-				String[] currentAlarms = Settings.AlarmTime.Split('|');
+				String[] currentAlarms = Settings.Alarms.Split('|');
 				//Turn alarm on
 				int hourSet = hourpicker.Value + ampmpicker.Value * 12;
 				if (hourSet == 12 && ampmpicker.Value == 0) hourSet = 0;
 				if (hourSet == 24) hourSet = 12;
 				Console.WriteLine("passing time: " + hourSet + ":" + minutepicker.Value);
 				AlarmUtils.SetTime(Android.App.Application.Context, hourSet, minutepicker.Value, 
-				                   Settings.AlarmTime == string.Empty ? 0 : currentAlarms.Length, repeatDaysResult, true);
+				                   Settings.Alarms == string.Empty ? 0 : currentAlarms.Length, repeatDaysResult, true);
 
 				//Save repeat days
 				Settings.RepeatDays += Settings.RepeatDays == string.Empty ? "" + repeatDaysResult : "|" + repeatDaysResult;
+
+				foreach (TextView tv in repeatDays)
+				{
+					tv.SetTextColor(Color.ParseColor("#CCCCCC"));
+					tv.Typeface = fontLight;
+				}
+
 				repeatDaysResult = 0;
 
 				//Add view
 				LinearLayout alarmViwer = (LinearLayout)FindViewById(Resource.Id.alarm_viewer);
-				RelativeLayout alarmRow = (RelativeLayout)LayoutInflater.Inflate(Resource.Layout.alarm_display, null);
+				LinearLayout alarmRow = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.alarm_display, null);
 
-
-				alarmRow.Tag = Settings.AlarmTime.Split('|').Length - 1;
-				alarmRow.Click += delegate {
+				alarmRow.Tag = Settings.Alarms.Split('|').Length - 1;
+				alarmRow.FindViewById<LinearLayout>(Resource.Id.edit_alarm_layout).Click += delegate {
 					Intent editAlarm = new Intent(Application.Context, typeof(MainActivity));
 					editAlarm.PutExtra("alarm_number", (int) alarmRow.Tag);
 					StartActivity(editAlarm);
 				};
 
 				var metrics = Resources.DisplayMetrics;
-
 				alarmRow.LayoutParameters = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent,
 				                                                          (int)(metrics.HeightPixels * .1));
 				TextView alarmTime = alarmRow.FindViewById<TextView>(Resource.Id.alarm_time);
+				ImageView alarmStatus = alarmRow.FindViewById<ImageView>(Resource.Id.alarm_status);
+				alarmStatus.SetImageResource(Resource.Drawable.alarm_on);
+
+				alarmRow.FindViewById<LinearLayout>(Resource.Id.delete_alarm_layout).Click += delegate {
+					Console.Write("deleting alarm");
+					if (Settings.IsAlarmOn((int)alarmRow.Tag))
+						AlarmUtils.Cancel(Application.Context, (int)alarmRow.Tag, false);
+					Settings.DeleteAlarm((int)alarmRow.Tag);
+					AddAlarms();
+				};
+
 				alarmTime.Typeface = fontLight;
 				alarmTime.Text = hourpicker.Value + ":" + minutepicker.Value.ToString("00") + " " + (ampmpicker.Value == 0 ? "am" : "pm");
 
@@ -140,19 +157,33 @@ namespace Clockwise.Droid
 		protected override void OnResume()
 		{
 			base.OnResume();
-			LinearLayout alarmViewer = FindViewById<LinearLayout>(Resource.Id.alarm_viewer);
-			while (alarmViewer.ChildCount > 0) alarmViewer.RemoveViewAt(0);
 			AddAlarms();
+
+			TextView[] repeatDays = new TextView[7];
+			repeatDays[0] = FindViewById<TextView>(Resource.Id.sundayInput);
+			repeatDays[1] = FindViewById<TextView>(Resource.Id.mondayInput);
+			repeatDays[2] = FindViewById<TextView>(Resource.Id.tuesdayInput);
+			repeatDays[3] = FindViewById<TextView>(Resource.Id.wednesdayInput);
+			repeatDays[4] = FindViewById<TextView>(Resource.Id.thursdayInput);
+			repeatDays[5] = FindViewById<TextView>(Resource.Id.fridayInput);
+			repeatDays[6] = FindViewById<TextView>(Resource.Id.saturdayInput);
+
+			foreach (TextView tv in repeatDays)
+			{
+				tv.SetTextColor(Color.ParseColor("#CCCCCC"));
+				tv.Typeface = Typeface.CreateFromAsset(Resources.Assets, "HelveticaNeueLight.ttf");
+			}
 		}
 
 		private void AddAlarms()
 		{
 			LinearLayout alarmViewer = FindViewById<LinearLayout>(Resource.Id.alarm_viewer);
-			string alarmSettings = Settings.AlarmTime;
+			while (alarmViewer.ChildCount > 0) alarmViewer.RemoveViewAt(0);
+			string alarmSettings = Settings.Alarms;
 			if (alarmSettings != string.Empty)
 			{
 				
-				string[] alarms = Settings.AlarmTime.Split('|');
+				string[] alarms = Settings.Alarms.Split('|');
 				for (int i = 0; i < alarms.Length; i++)
 				{
 					int hour = System.Int32.Parse(alarms[i].Split(':')[1]);
@@ -167,14 +198,26 @@ namespace Clockwise.Droid
 		private void AddAlarm(LinearLayout alarmViewer, int alarmIndex, int hour, int minute, int ampm)
 		{
 			//Add view
-			RelativeLayout alarmRow = (RelativeLayout)LayoutInflater.Inflate(Resource.Layout.alarm_display, null);
+			LinearLayout alarmRow = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.alarm_display, null);
 
 			alarmRow.Tag = alarmIndex;
-			alarmRow.Click += delegate
+
+			//Attaches editing action
+			alarmRow.FindViewById<LinearLayout>(Resource.Id.edit_alarm_layout).Click += delegate
 			{
 				Intent editAlarm = new Intent(Application.Context, typeof(MainActivity));
 				editAlarm.PutExtra("alarm_number", (int)alarmRow.Tag);
 				StartActivity(editAlarm);
+			};
+
+			//Attaches delete action
+			alarmRow.FindViewById<LinearLayout>(Resource.Id.delete_alarm_layout).Click += delegate
+			{
+				Console.Write("deleting alarm");
+				if (Settings.IsAlarmOn((int)alarmRow.Tag))
+					AlarmUtils.Cancel(Application.Context, (int)alarmRow.Tag, false);
+				Settings.DeleteAlarm((int)alarmRow.Tag);
+				AddAlarms();
 			};
 
 			var metrics = Resources.DisplayMetrics;
@@ -183,6 +226,11 @@ namespace Clockwise.Droid
 			TextView alarmTime = alarmRow.FindViewById<TextView>(Resource.Id.alarm_time);
 			alarmTime.Typeface = Typeface.CreateFromAsset(Resources.Assets, "HelveticaNeueLight.ttf");
 			alarmTime.Text = hour + ":" + minute.ToString("00") + " " + (ampm == 0 ? "am" : "pm");
+			//alarmTime.TextSize = metrics.HeightPixels
+
+			ImageView alarmStatus = alarmRow.FindViewById<ImageView>(Resource.Id.alarm_status);
+			if (Settings.IsAlarmOn(alarmIndex)) alarmStatus.SetImageResource(Resource.Drawable.alarm_on);
+
 
 			View gap = new View(Application.Context);
 			LinearLayout.LayoutParams gap_params = new LinearLayout.LayoutParams(

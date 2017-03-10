@@ -1,4 +1,5 @@
 // Helpers/Settings.cs
+using System;
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
 
@@ -21,8 +22,8 @@ namespace Clockwise.Helpers
 
     #region Setting Constants
 
-	private const string AlarmTimeKey = "alarm_time_key";
-	private static readonly string AlarmTimeDef = string.Empty;
+	private const string AlarmsKey = "alarms_key";
+	private static readonly string AlarmsDef = string.Empty;
 
 		private const string SongKey = "song_key";
 		private static readonly string SongDef = string.Empty;
@@ -72,13 +73,16 @@ namespace Clockwise.Helpers
 
 		private const string AndroidFileAccessKey = "android_file_access_key";
 		private static readonly string AndroidFileAccessDef = string.Empty;
-    #endregion
+
+		public enum AlarmStatus { ALARM_ON, ALARM_OFF };
+
+		#endregion
 
 
-    public static string AlarmTime
+		public static string Alarms
     {
-			get {return AppSettings.GetValueOrDefault<string>(AlarmTimeKey, AlarmTimeDef);}
-			set {AppSettings.AddOrUpdateValue<string>(AlarmTimeKey, value);}
+			get {return AppSettings.GetValueOrDefault<string>(AlarmsKey, AlarmsDef);}
+			set {AppSettings.AddOrUpdateValue<string>(AlarmsKey, value);}
 	}
 
 		public static string Song
@@ -175,6 +179,132 @@ namespace Clockwise.Helpers
 		{
 			get { return AppSettings.GetValueOrDefault<string>(AndroidFileAccessKey, AndroidFileAccessDef); }
 			set { AppSettings.AddOrUpdateValue<string>(AndroidFileAccessKey, value); }
+		}
+
+		public static bool IsAlarmOn(int index)
+		{
+			if (Alarms == string.Empty) return false;
+			else {
+				string[] alarmSettings = Alarms.Split('|')[index].Split(':');
+				return Int32.Parse(alarmSettings[4]) == (int) AlarmStatus.ALARM_ON;
+			}
+		}
+
+		public static int GetAlarmHour(int index)
+		{
+			if (Alarms == string.Empty) return -1;
+			else {
+				string[] alarmSettings = Alarms.Split('|')[index].Split(':');
+				return Int32.Parse(alarmSettings[1]);
+			}
+		}
+
+		public static void SetAlarmHour(int index, int hour)
+		{
+			string[] alarms = Alarms.Split('|');
+			string[] alarmSettings = alarms[index].Split(':');
+			alarmSettings[1] = "" + hour;
+			alarms[index] = alarmSettings[0] + ":"
+				+ alarmSettings[1] + ":"
+				+ alarmSettings[2] + ":"
+				+ alarmSettings[3] + ":"
+				+ alarmSettings[4];
+			string newSettings = string.Empty;
+			foreach (String s in alarms)
+			{
+				newSettings += s + "|";
+			}
+			Alarms = newSettings.TrimEnd('|');
+		}
+
+		public static void SetAlarmMinute(int index, int minute)
+		{
+			string[] alarms = Alarms.Split('|');
+			string[] alarmSettings = alarms[index].Split(':');
+			alarmSettings[2] = "" + minute;
+			alarms[index] = alarmSettings[0] + ":"
+				+ alarmSettings[1] + ":"
+				+ alarmSettings[2] + ":"
+				+ alarmSettings[3] + ":"
+				+ alarmSettings[4];
+			string newSettings = string.Empty;
+			foreach (String s in alarms)
+			{
+				newSettings += s + "|";
+			}
+			Alarms = newSettings.TrimEnd('|');
+		}
+
+		public static int GetAlarmMinute(int index)
+		{
+			if (Alarms == string.Empty) return -1;
+			else {
+				string[] alarmSettings = Alarms.Split('|')[index].Split(':');
+				return Int32.Parse(alarmSettings[2]);
+			}
+		}
+
+		public static int GetAlarmRepeatDays(int index)
+		{
+			if (Alarms == string.Empty) return -1;
+			else {
+				string[] alarmSettings = Alarms.Split('|')[index].Split(':');
+				return Int32.Parse(alarmSettings[3]);
+			}
+		}
+
+		public static void ToggleAlarm(int index, bool alarmOn)
+		{
+			string[] alarms = Alarms.Split('|');
+			string[] alarmSettings = alarms[index].Split(':');
+			alarmSettings[4] = "" + (alarmOn ? (int)AlarmStatus.ALARM_ON : (int)AlarmStatus.ALARM_OFF);
+			alarms[index] = alarmSettings[0] + ":" 
+				+ alarmSettings[1] + ":"
+				+ alarmSettings[2] + ":"
+				+ alarmSettings[3] + ":"
+				+ alarmSettings[4];
+			string newSettings = string.Empty;
+			foreach (String s in alarms)
+			{
+				newSettings += s + "|";
+			}
+			Alarms = newSettings.TrimEnd('|');
+		}
+
+		public static void SetRepeatDays(int index, int repeatDays)
+		{
+			string[] alarms = Alarms.Split('|');
+			string[] alarmSettings = alarms[index].Split(':');
+			alarmSettings[3] = "" + repeatDays;
+
+			alarms[index] = alarmSettings[0] + ":"
+				+ alarmSettings[1] + ":"
+				+ alarmSettings[2] + ":"
+				+ alarmSettings[3] + ":"
+				+ alarmSettings[4];
+			string newSettings = string.Empty;
+			foreach (String s in alarms)
+			{
+				newSettings += s + "|";
+			}
+			Alarms = newSettings.TrimEnd('|');
+		}
+
+
+
+		public static void DeleteAlarm(int index)
+		{
+			string newSetting = string.Empty;
+			string[] alarms = Alarms.Split('|');
+			for (int i = 0; i < alarms.Length; i++)
+			{
+				if (i != index)
+				{
+					newSetting += alarms[i] + "|";
+				}
+			}
+
+			if (newSetting != string.Empty) newSetting = newSetting.TrimEnd('|');
 		}
   }
 }

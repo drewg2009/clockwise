@@ -21,7 +21,7 @@ namespace Clockwise.Droid
 
 		public static void Init(Context context, bool addingAlarm)
 		{
-			String[] currentAlarms = Settings.AlarmTime.Split('|');
+			String[] currentAlarms = Settings.Alarms.Split('|');
 			ComponentName receiver = new ComponentName(context, Java.Lang.Class.FromType(typeof(AlarmReceiver)));
         	PackageManager pm = context.PackageManager;
 			pm.SetComponentEnabledSetting(receiver, ComponentEnabledState.Enabled, ComponentEnableOption.DontKillApp);
@@ -51,42 +51,45 @@ namespace Clockwise.Droid
 		public static void SetTime(Context context, int hour, int minute, int alarmIndex, int repeatDays, bool addingAlarm)
 		{
 			Init(context, addingAlarm);
-			String[] currentAlarms = Settings.AlarmTime.Split('|');
+			String[] currentAlarms = Settings.Alarms.Split('|');
 
 			//Create new alarm
-			if (Settings.AlarmTime == string.Empty)
+			Settings.AlarmStatus status = Settings.AlarmStatus.ALARM_ON;
+			if (Settings.Alarms == string.Empty)
 			{
-				Settings.AlarmTime = "" + alarmIndex + ":" + hour + ":" + minute;
+				Settings.Alarms = "" + alarmIndex + ":" + hour + ":" + minute + ":" + repeatDays + ":" + (int)status;
 			}
 			else if (alarmIndex == currentAlarms.Length)
 			{
 				Console.Write("creating alarm");
-				string newAlarm = "" + alarmIndex + ":" + hour + ":" + minute;
+				string newAlarm = "" + alarmIndex + ":" + hour + ":" + minute + ":" + repeatDays + ":" + (int)status;
 				string newAlarmSetting = "";
 				foreach (String s in currentAlarms)
 				{
 					newAlarmSetting += s + "|";
 				}
 				newAlarmSetting += newAlarm;
-				Settings.AlarmTime = newAlarmSetting;
+				Settings.Alarms = newAlarmSetting;
 			}
 			//Change old alarm
 			else {
 				Console.Write("editing alarm");
 
-				currentAlarms[alarmIndex] = "" + alarmIndex + ":" + hour + ":" + minute;
+				currentAlarms[alarmIndex] = "" + alarmIndex + ":" + hour + ":" + minute + ":" + repeatDays + ":" + (int)status;
 				string newAlarmSetting = "";
 				foreach (String s in currentAlarms)
 				{
 					newAlarmSetting += s + "|";
 				}
-				Settings.AlarmTime = newAlarmSetting.TrimEnd('|');
+				Settings.Alarms = newAlarmSetting.TrimEnd('|');
 			}
 
 			am.Cancel(pendingIntents[alarmIndex]);
 
 
+
 			bool[] daySelection = new bool[7];
+
 
 			//Load saved says into array
 			for (int j = 0; j < 7; j++)
@@ -94,11 +97,19 @@ namespace Clockwise.Droid
 				daySelection[j] = (repeatDays & (1 << j)) == (1 << j);
 			}
 
+
 			Calendar calendar = Calendar.Instance;
 			calendar.TimeInMillis = Java.Lang.JavaSystem.CurrentTimeMillis();
-				        
+
 			int currentDay = calendar.Get(CalendarField.DayOfWeek) - 1;
 			Console.WriteLine("currentDay: " + currentDay);
+
+			if (repeatDays == 0)
+			{
+				//Set to current day and day after
+				daySelection[currentDay] = true;
+				daySelection[currentDay == 6 ? 0 : currentDay + 1] = true;
+			}
 
 			int daysUntilNextAlarm = currentDay < 6 ? currentDay + 1 : 0;
 			while (daysUntilNextAlarm != currentDay && !daySelection[daysUntilNextAlarm])
@@ -146,7 +157,7 @@ namespace Clockwise.Droid
 		public static void Cancel(Context context, int alarmIndex, bool addingAlarm)
 		{
 			//Helpers.Settings.AlarmTime = string.Empty;
-			String[] currentAlarms = Settings.AlarmTime.Split('|');
+			String[] currentAlarms = Settings.Alarms.Split('|');
 			List<String> currentAlarmsList = new List<String>(currentAlarms);
 			currentAlarmsList.RemoveAt(alarmIndex);
 			string newAlarmSetting = "";

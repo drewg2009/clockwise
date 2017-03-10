@@ -24,6 +24,7 @@ namespace Clockwise.Droid
 
 			// Set our view from the "main" layout resource
 			SetContentView(Resource.Layout.Main);
+			int alarm_number = Intent.GetIntExtra("alarm_number", 0); //CHANGE
 
 			// Setup pickers
 			NumberPicker hourpicker = FindViewById<NumberPicker>(Resource.Id.hour);
@@ -43,63 +44,64 @@ namespace Clockwise.Droid
 			ampmpicker.MinValue = 0;
 			ampmpicker.SetDisplayedValues(new string[] { "am", "pm" });
 
+			hourpicker.ValueChanged += delegate {
+				Settings.SetAlarmHour(alarm_number, hourpicker.Value + ampmpicker.Value * 12);
+			};
+
+
+			minutepicker.ValueChanged += delegate
+			{
+				Settings.SetAlarmMinute(alarm_number, minutepicker.Value);
+			};
+
+			ampmpicker.ValueChanged += delegate
+			{
+				Settings.SetAlarmHour(alarm_number, hourpicker.Value + ampmpicker.Value * 12);
+			};
+
+
+
 			ImageSwitcher alarm_toggle = FindViewById<ImageSwitcher>(Resource.Id.alarm_toggle);
 			alarm_toggle.SetFactory(new Toggle());
 
-			int alarm_number = Intent.GetIntExtra("alarm_number", 0); //CHANGE
+			string[] alarmSettings = Settings.Alarms.Split('|')[alarm_number].Split(':');
 
-			if (Settings.AlarmTime == string.Empty)
+			//Load settings
+			if (Settings.IsAlarmOn(alarm_number))
 			{
-				alarm_toggle.SetImageResource(Resource.Drawable.off_toggle);
-
-				//SET CLOCK TO CURRENT TIME
-				System.DateTime currentTime = System.DateTime.Now;
-				int hour = currentTime.Hour;
-				int minute = currentTime.Minute;
-				bool am = hour < 12;
-
-				hourpicker.Value = (am ? hour : hour - 12);
-				minutepicker.Value = (minute);
-				ampmpicker.Value = (am ? 0 : 1);
+				alarm_toggle.SetImageResource(Resource.Drawable.on_toggle);
 			}
 			else {
-				alarm_toggle.SetImageResource(Resource.Drawable.on_toggle);
-				string alarmTime = Settings.AlarmTime.Split('|')[alarm_number];
-				int hour = System.Int32.Parse(alarmTime.Split(':')[1]);
-				int minute = System.Int32.Parse(alarmTime.Split(':')[2]);
-				bool am = hour < 12;
+				alarm_toggle.SetImageResource(Resource.Drawable.off_toggle);
 
-				hourpicker.Value = (am ? hour : hour - 12);
-				minutepicker.Value = (minute);
-				ampmpicker.Value = (am ? 0 : 1);
 			}
-			
 
-			//Animation animation = null;
-			//alarm_toggle.SetInAnimation(Android.App.Application.Context, Resource.Drawable.off_toggle);
-			//alarm_toggle.SetOutAnimation(Android.App.Application.Context, Resource.Drawable.on_toggle);
+			int hour = System.Int32.Parse(alarmSettings[1]);
+			int minute = System.Int32.Parse(alarmSettings[2]);
+			bool am = hour < 12;
+
+			hourpicker.Value = (am ? hour : hour - 12);
+			minutepicker.Value = (minute);
+			ampmpicker.Value = (am ? 0 : 1);
 
 			alarm_toggle.Click += delegate {
-				if (Settings.AlarmTime == string.Empty)
+				if (!Settings.IsAlarmOn(alarm_number)) //if alarm is off
 				{
-					if (repeatDaysResult != 0)
-					{
-						//Turn alarm on
-						int hourSet = hourpicker.Value + ampmpicker.Value * 12;
-						if (hourSet == 12 && ampmpicker.Value == 0) hourSet = 0;
-						if (hourSet == 24) hourSet = 12;
-						alarm_toggle.SetImageResource(Resource.Drawable.on_toggle);
-						alarm_toggle.Activated = true;
-						Console.WriteLine("passing time: " + hourSet + ":" + minutepicker.Value);
-						AlarmUtils.SetTime(Android.App.Application.Context, hourSet, minutepicker.Value, alarm_number, repeatDaysResult, false);
-					}
-					else {
-						Toast.MakeText(Application.Context, "Select a repeat day first", ToastLength.Long).Show();
-					}
+					//Turn alarm on
+					//int hourSet = hourpicker.Value + ampmpicker.Value * 12;
+					//if (hourSet == 12 && ampmpicker.Value == 0) hourSet = 0;
+					//if (hourSet == 24) hourSet = 12;
+					Settings.ToggleAlarm(alarm_number, true);
+					alarm_toggle.SetImageResource(Resource.Drawable.on_toggle);
+					alarm_toggle.Activated = true;
+					int hourSet = Settings.GetAlarmHour(alarm_number);
+					int minuteSet = Settings.GetAlarmMinute(alarm_number);
+					Console.WriteLine("passing time: " + hourSet + ":" + minuteSet);
+					AlarmUtils.SetTime(Android.App.Application.Context, hourSet, minuteSet, alarm_number, Settings.GetAlarmRepeatDays(alarm_number), false);
 				}
 				else {
 					//Turn alarm off
-					Settings.AlarmTime = string.Empty;
+					Settings.ToggleAlarm(alarm_number, false);
 					alarm_toggle.SetImageResource(Resource.Drawable.off_toggle);
 					alarm_toggle.Activated = false;
 					AlarmUtils.Cancel(Application.Context, alarm_number, false);
@@ -141,10 +143,16 @@ namespace Clockwise.Droid
 					}
 
 					repeatDaysResult = repeatDaysResult ^ temp;
-					Settings.RepeatDays = repeatDaysResult.ToString();
+					//Settings.RepeatDays = repeatDaysResult.ToString();
+					Settings.SetRepeatDays(alarm_number, repeatDaysResult);
+
+					//
+					//LOOK INTO
+					//
 					if (repeatDaysResult == 0 && alarm_toggle.Activated)
 					{
 						//Turn alarm off
+						Settings.ToggleAlarm(alarm_number, false);
 						alarm_toggle.SetImageResource(Resource.Drawable.off_toggle);
 						alarm_toggle.Activated = false;
 						AlarmUtils.Cancel(Application.Context, alarm_number, false);
@@ -154,7 +162,8 @@ namespace Clockwise.Droid
 			}
 
 			//Load saved days
-			int savedModule = Int32.Parse(Settings.RepeatDays.Split('|')[alarm_number]);
+			int savedModule = Settings.GetAlarmRepeatDays(alarm_number);
+
 			if (savedModule != 0)
 			{
 				repeatDaysResult = savedModule;
@@ -320,6 +329,14 @@ namespace Clockwise.Droid
 		}
 
 		public class ScrollListener : Java.Lang.Object, View.IOnDragListener
+		{
+			public bool OnDrag(View v, DragEvent e)
+			{
+				return true;
+			}
+		}
+
+		public class Hou : Java.Lang.Object, View.IOnDragListener
 		{
 			public bool OnDrag(View v, DragEvent e)
 			{

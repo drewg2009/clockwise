@@ -1,42 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:minWidth="25px"
     android:minHeight="25px"
     android:layout_width="match_parent"
     android:layout_height="75dp"
-    android:id="@+id/relativeLayout4"
-    android:background="#ffffffff">
-    <RelativeLayout
+    android:background="@drawable/alarm_display_bg"
+    android:weightSum="10">
+    <LinearLayout
         android:minWidth="25px"
         android:minHeight="25px"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ltime_layout">
-        <ImageView
-            android:src="@drawable/alarm_off"
-            android:id="@+id/alarm_status"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_centerVertical="true" />
-        <TextView
-            android:text="12:00 am"
-            android:id="@+id/alarm_time"
-            android:textSize="20dp"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="9"
+        android:id="@+id/edit_alarm_layout">
+        <RelativeLayout
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ltime_layout">
+            <ImageView
+                android:src="@drawable/alarm_off"
+                android:id="@+id/alarm_status"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_centerVertical="true" />
+            <TextView
+                android:text="12:00 am"
+                android:id="@+id/alarm_time"
+                android:textSize="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/alarm_status"
+                android:layout_alignParentBottom="true"
+                android:layout_centerVertical="true"
+                android:textColor="#ffbbbbbb" />
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:id="@+id/delete_alarm_layout"
+        android:background="#ff000000">
+        <RelativeLayout
+            android:minWidth="25px"
+            android:minHeight="25px"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/alarm_status"
-            android:layout_alignParentBottom="true"
-            android:layout_centerVertical="true"
-            android:textColor="#ffbbbbbb" />
-    </RelativeLayout>
-    <ImageView
-        android:src="@drawable/delete"
-        android:layout_width="10dp"
-        android:layout_height="10dp"
-        android:id="@+id/delete_button"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp" />
-</RelativeLayout>
+            android:id="@+id/relativeLayout6">
+            <ImageView
+                android:src="@drawable/delete"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:id="@+id/delete_button"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp" />
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>
