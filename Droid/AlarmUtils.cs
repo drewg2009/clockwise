@@ -19,37 +19,48 @@ namespace Clockwise.Droid
 		private static List<PendingIntent> notificationClickIntents = new List<PendingIntent>();
 		private static AlarmManager am = null;
 
-		public static void Init(Context context, int alarmIndex)
+		public static void Init(Context context, bool addingAlarm)
 		{
 			String[] currentAlarms = Settings.AlarmTime.Split('|');
 			ComponentName receiver = new ComponentName(context, Java.Lang.Class.FromType(typeof(AlarmReceiver)));
         	PackageManager pm = context.PackageManager;
 			pm.SetComponentEnabledSetting(receiver, ComponentEnabledState.Enabled, ComponentEnableOption.DontKillApp);
 
+			pendingIntents = new List<PendingIntent>();
+			notificationClickIntents = new List<PendingIntent>();
+
 			Intent alarmIntent = new Intent(context, typeof(AlarmReceiver));
 
-			if (currentAlarms.Length == alarmIndex)
+			for (int i = 0; i < currentAlarms.Length; i++)
 			{
-				notificationClickIntents.Add(PendingIntent.GetActivity(context, 0, new Intent(), 0));
-				pendingIntents.Add(PendingIntent.GetBroadcast(context, 0, alarmIntent, PendingIntentFlags.UpdateCurrent));
+				notificationClickIntents.Add(PendingIntent.GetActivity(context, i, new Intent(), 0));
+				pendingIntents.Add(PendingIntent.GetBroadcast(context, i, alarmIntent, PendingIntentFlags.UpdateCurrent));
 
 			}
-			else {
-				notificationClickIntents[alarmIndex] = PendingIntent.GetActivity(context, 0, new Intent(), 0);
-				pendingIntents[alarmIndex] = PendingIntent.GetBroadcast(context, 0, alarmIntent, PendingIntentFlags.UpdateCurrent);
+
+			if (addingAlarm)
+			{
+				notificationClickIntents.Add(PendingIntent.GetActivity(context, notificationClickIntents.Count, new Intent(), 0));
+				pendingIntents.Add(PendingIntent.GetBroadcast(context, pendingIntents.Count, alarmIntent, PendingIntentFlags.UpdateCurrent));
 			}
+
 
 			am = (AlarmManager)Application.Context.GetSystemService(Context.AlarmService);
 		}
 
-		public static void SetTime(Context context, int hour, int minute, int alarmIndex)
+		public static void SetTime(Context context, int hour, int minute, int alarmIndex, int repeatDays, bool addingAlarm)
 		{
-			if (am == null) Init(context, alarmIndex);
+			Init(context, addingAlarm);
 			String[] currentAlarms = Settings.AlarmTime.Split('|');
 
 			//Create new alarm
-			if (alarmIndex == currentAlarms.Length)
+			if (Settings.AlarmTime == string.Empty)
 			{
+				Settings.AlarmTime = "" + alarmIndex + ":" + hour + ":" + minute;
+			}
+			else if (alarmIndex == currentAlarms.Length)
+			{
+				Console.Write("creating alarm");
 				string newAlarm = "" + alarmIndex + ":" + hour + ":" + minute;
 				string newAlarmSetting = "";
 				foreach (String s in currentAlarms)
@@ -61,6 +72,8 @@ namespace Clockwise.Droid
 			}
 			//Change old alarm
 			else {
+				Console.Write("editing alarm");
+
 				currentAlarms[alarmIndex] = "" + alarmIndex + ":" + hour + ":" + minute;
 				string newAlarmSetting = "";
 				foreach (String s in currentAlarms)
@@ -72,7 +85,7 @@ namespace Clockwise.Droid
 
 			am.Cancel(pendingIntents[alarmIndex]);
 
-			int repeatDays = Int32.Parse(Helpers.Settings.RepeatDays);
+
 			bool[] daySelection = new bool[7];
 
 			//Load saved says into array
@@ -130,7 +143,7 @@ namespace Clockwise.Droid
 			Toast.MakeText(context, toast, ToastLength.Long).Show();
 		}
 
-		public static void Cancel(Context context, int alarmIndex)
+		public static void Cancel(Context context, int alarmIndex, bool addingAlarm)
 		{
 			//Helpers.Settings.AlarmTime = string.Empty;
 			String[] currentAlarms = Settings.AlarmTime.Split('|');
@@ -141,7 +154,7 @@ namespace Clockwise.Droid
 			{
 				newAlarmSetting += "" + i + ":" + currentAlarmsList[i].Substring(currentAlarmsList[i].IndexOf(':')+1);
 			}
-			if (am == null) Init(context, alarmIndex);
+			if (am == null) Init(context, addingAlarm);
 			am.Cancel(pendingIntents[alarmIndex]);
 		}
 

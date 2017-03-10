@@ -51,8 +51,8 @@ namespace Clockwise.Droid
 			Weather.Setup(FindViewById<LinearLayout>(Resource.Id.weather_settings), 
 			              FindViewById<ImageView>(Resource.Id.addWeather), Application.Context);
 
-			News.Setup(FindViewById<LinearLayout>(Resource.Id.news_settings),
-			           FindViewById<ImageView>(Resource.Id.addNews), Application.Context, string.Empty);
+			//News.Setup(FindViewById<LinearLayout>(Resource.Id.news_settings),
+			//           FindViewById<ImageView>(Resource.Id.addNews), Application.Context, string.Empty);
 
 			//Toggle setup
 			ImageSwitcher factToggle = FindViewById<ImageSwitcher>(Resource.Id.factToggle);

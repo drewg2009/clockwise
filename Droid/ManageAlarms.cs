@@ -15,7 +15,7 @@ using Clockwise.Helpers;
 
 namespace Clockwise.Droid
 {
-	[Activity(Label = "ManageAlarms")]
+	[Activity(Label = "Clockwise", MainLauncher = true, Icon = "@mipmap/icon")]
 	public class ManageAlarms : Activity
 	{
 		protected override void OnCreate(Bundle savedInstanceState)
@@ -100,21 +100,96 @@ namespace Clockwise.Droid
 				if (hourSet == 12 && ampmpicker.Value == 0) hourSet = 0;
 				if (hourSet == 24) hourSet = 12;
 				Console.WriteLine("passing time: " + hourSet + ":" + minutepicker.Value);
-				AlarmUtils.SetTime(Android.App.Application.Context, hourSet, minutepicker.Value, currentAlarms.Length);
+				AlarmUtils.SetTime(Android.App.Application.Context, hourSet, minutepicker.Value, 
+				                   Settings.AlarmTime == string.Empty ? 0 : currentAlarms.Length, repeatDaysResult, true);
+
+				//Save repeat days
+				Settings.RepeatDays += Settings.RepeatDays == string.Empty ? "" + repeatDaysResult : "|" + repeatDaysResult;
+				repeatDaysResult = 0;
 
 				//Add view
 				LinearLayout alarmViwer = (LinearLayout)FindViewById(Resource.Id.alarm_viewer);
-
 				RelativeLayout alarmRow = (RelativeLayout)LayoutInflater.Inflate(Resource.Layout.alarm_display, null);
+
+
+				alarmRow.Tag = Settings.AlarmTime.Split('|').Length - 1;
+				alarmRow.Click += delegate {
+					Intent editAlarm = new Intent(Application.Context, typeof(MainActivity));
+					editAlarm.PutExtra("alarm_number", (int) alarmRow.Tag);
+					StartActivity(editAlarm);
+				};
+
+				var metrics = Resources.DisplayMetrics;
+
+				alarmRow.LayoutParameters = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent,
+				                                                          (int)(metrics.HeightPixels * .1));
+				TextView alarmTime = alarmRow.FindViewById<TextView>(Resource.Id.alarm_time);
+				alarmTime.Typeface = fontLight;
+				alarmTime.Text = hourpicker.Value + ":" + minutepicker.Value.ToString("00") + " " + (ampmpicker.Value == 0 ? "am" : "pm");
 
 				View gap = new View(Application.Context);
 				LinearLayout.LayoutParams gap_params = new LinearLayout.LayoutParams(
-					LinearLayout.LayoutParams.MatchParent, 10);
+					LinearLayout.LayoutParams.MatchParent, (int)(10*metrics.Density));
 				gap.LayoutParameters = gap_params;
 				alarmViwer.AddView(gap);
 				alarmViwer.AddView(alarmRow);
 
 			};
+		}
+
+		protected override void OnResume()
+		{
+			base.OnResume();
+			LinearLayout alarmViewer = FindViewById<LinearLayout>(Resource.Id.alarm_viewer);
+			while (alarmViewer.ChildCount > 0) alarmViewer.RemoveViewAt(0);
+			AddAlarms();
+		}
+
+		private void AddAlarms()
+		{
+			LinearLayout alarmViewer = FindViewById<LinearLayout>(Resource.Id.alarm_viewer);
+			string alarmSettings = Settings.AlarmTime;
+			if (alarmSettings != string.Empty)
+			{
+				
+				string[] alarms = Settings.AlarmTime.Split('|');
+				for (int i = 0; i < alarms.Length; i++)
+				{
+					int hour = System.Int32.Parse(alarms[i].Split(':')[1]);
+					int minute = System.Int32.Parse(alarms[i].Split(':')[2]);
+					bool am = hour < 12;
+					hour = am ? hour : hour - 12;
+					AddAlarm(alarmViewer, i, hour, minute, am ? 0 : 1); 
+				}
+			}
+		}
+
+		private void AddAlarm(LinearLayout alarmViewer, int alarmIndex, int hour, int minute, int ampm)
+		{
+			//Add view
+			RelativeLayout alarmRow = (RelativeLayout)LayoutInflater.Inflate(Resource.Layout.alarm_display, null);
+
+			alarmRow.Tag = alarmIndex;
+			alarmRow.Click += delegate
+			{
+				Intent editAlarm = new Intent(Application.Context, typeof(MainActivity));
+				editAlarm.PutExtra("alarm_number", (int)alarmRow.Tag);
+				StartActivity(editAlarm);
+			};
+
+			var metrics = Resources.DisplayMetrics;
+			alarmRow.LayoutParameters = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent,
+																	  (int)(metrics.HeightPixels * .1));
+			TextView alarmTime = alarmRow.FindViewById<TextView>(Resource.Id.alarm_time);
+			alarmTime.Typeface = Typeface.CreateFromAsset(Resources.Assets, "HelveticaNeueLight.ttf");
+			alarmTime.Text = hour + ":" + minute.ToString("00") + " " + (ampm == 0 ? "am" : "pm");
+
+			View gap = new View(Application.Context);
+			LinearLayout.LayoutParams gap_params = new LinearLayout.LayoutParams(
+				LinearLayout.LayoutParams.MatchParent, (int)(10 * metrics.Density));
+			gap.LayoutParameters = gap_params;
+			alarmViewer.AddView(gap);
+			alarmViewer.AddView(alarmRow);
 		}
 	}
 }

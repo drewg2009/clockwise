@@ -244,12 +244,6 @@
             android:minHeight="25px"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/alarm_viewer">
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="10dp" />
-            <include
-                layout="@layout/alarm_display" />
-        </LinearLayout>
+            android:id="@+id/alarm_viewer" />
     </ScrollView>
 </LinearLayout>

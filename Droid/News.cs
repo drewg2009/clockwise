@@ -67,13 +67,13 @@ namespace Clockwise.Droid
 			saveButton.Click += delegate
 			{
 				string news_modules = Settings.News;
-				if (news_modules != string.Empty)
-				{
+				//if (news_modules != string.Empty)
+				//{
 					
-				}
-				else {
-					Settings.News = "news:" + 
-				}
+				//}
+				//else {
+				//	//Settings.News = "news:" + 
+				//}
 				if (addButton != null)
 				{
 					//Collapse

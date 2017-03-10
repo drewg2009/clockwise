@@ -13,7 +13,7 @@ using Clockwise.Helpers;
 
 namespace Clockwise.Droid
 {
-	[Activity(Label = "Clockwise", MainLauncher = true, Icon = "@mipmap/icon")]
+	[Activity(Label = "Clockwise")]
 	public class MainActivity : Activity
 	{
 		bool alarmOn = true;
@@ -64,9 +64,9 @@ namespace Clockwise.Droid
 			}
 			else {
 				alarm_toggle.SetImageResource(Resource.Drawable.on_toggle);
-				string alarmTime = Settings.AlarmTime;
-				int hour = System.Int32.Parse(alarmTime.Split(':')[0]);
-				int minute = System.Int32.Parse(alarmTime.Split(':')[1]);
+				string alarmTime = Settings.AlarmTime.Split('|')[alarm_number];
+				int hour = System.Int32.Parse(alarmTime.Split(':')[1]);
+				int minute = System.Int32.Parse(alarmTime.Split(':')[2]);
 				bool am = hour < 12;
 
 				hourpicker.Value = (am ? hour : hour - 12);
@@ -91,7 +91,7 @@ namespace Clockwise.Droid
 						alarm_toggle.SetImageResource(Resource.Drawable.on_toggle);
 						alarm_toggle.Activated = true;
 						Console.WriteLine("passing time: " + hourSet + ":" + minutepicker.Value);
-						AlarmUtils.SetTime(Android.App.Application.Context, hourSet, minutepicker.Value);
+						AlarmUtils.SetTime(Android.App.Application.Context, hourSet, minutepicker.Value, alarm_number, repeatDaysResult, false);
 					}
 					else {
 						Toast.MakeText(Application.Context, "Select a repeat day first", ToastLength.Long).Show();
@@ -102,7 +102,7 @@ namespace Clockwise.Droid
 					Settings.AlarmTime = string.Empty;
 					alarm_toggle.SetImageResource(Resource.Drawable.off_toggle);
 					alarm_toggle.Activated = false;
-					AlarmUtils.Cancel(Application.Context);
+					AlarmUtils.Cancel(Application.Context, alarm_number, false);
 				}
 			};
 
@@ -147,14 +147,14 @@ namespace Clockwise.Droid
 						//Turn alarm off
 						alarm_toggle.SetImageResource(Resource.Drawable.off_toggle);
 						alarm_toggle.Activated = false;
-						AlarmUtils.Cancel(Application.Context);
+						AlarmUtils.Cancel(Application.Context, alarm_number, false);
 					}
 				};
 
 			}
 
 			//Load saved days
-			int savedModule = Int32.Parse(Settings.RepeatDays);
+			int savedModule = Int32.Parse(Settings.RepeatDays.Split('|')[alarm_number]);
 			if (savedModule != 0)
 			{
 				repeatDaysResult = savedModule;
@@ -174,6 +174,7 @@ namespace Clockwise.Droid
 			ImageView settingsBtn = FindViewById<ImageView>(Resource.Id.settings);
 			AnimationManager settingsAnimationManager = new AnimationManager(false);
 			AnimationHelper settingsHelper = new AnimationHelper(settings_row, settingsAnimationManager);
+
 			settingsBtn.Click += delegate
 			{
 				int initialHeight = clock_settings_layout.Height;
