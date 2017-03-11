@@ -118,11 +118,13 @@ namespace Clockwise.Droid
 				//Add view
 				LinearLayout alarmViwer = (LinearLayout)FindViewById(Resource.Id.alarm_viewer);
 				LinearLayout alarmRow = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.alarm_display, null);
+				LinearLayout editLayout = alarmRow.FindViewById<LinearLayout>(Resource.Id.edit_alarm_layout);
+				LinearLayout deleteLayout = alarmRow.FindViewById<LinearLayout>(Resource.Id.delete_alarm_layout);
 
-				alarmRow.Tag = Settings.Alarms.Split('|').Length - 1;
-				alarmRow.FindViewById<LinearLayout>(Resource.Id.edit_alarm_layout).Click += delegate {
+				editLayout.Tag = Settings.Alarms.Split('|').Length - 1;
+				editLayout.Click += delegate {
 					Intent editAlarm = new Intent(Application.Context, typeof(MainActivity));
-					editAlarm.PutExtra("alarm_number", (int) alarmRow.Tag);
+					editAlarm.PutExtra("alarm_number", (int) editLayout.Tag);
 					StartActivity(editAlarm);
 				};
 
@@ -133,11 +135,12 @@ namespace Clockwise.Droid
 				ImageView alarmStatus = alarmRow.FindViewById<ImageView>(Resource.Id.alarm_status);
 				alarmStatus.SetImageResource(Resource.Drawable.alarm_on);
 
-				alarmRow.FindViewById<LinearLayout>(Resource.Id.delete_alarm_layout).Click += delegate {
+				deleteLayout.Click += delegate {
 					Console.Write("deleting alarm");
 					if (Settings.IsAlarmOn((int)alarmRow.Tag))
-						AlarmUtils.Cancel(Application.Context, (int)alarmRow.Tag, false);
-					Settings.DeleteAlarm((int)alarmRow.Tag);
+						AlarmUtils.Cancel(Application.Context, (int)editLayout.Tag, false);
+					Settings.DeleteAlarm((int)editLayout.Tag);
+					Console.Write("New alarms: " + Settings.Alarms);
 					AddAlarms();
 				};
 
@@ -177,9 +180,11 @@ namespace Clockwise.Droid
 
 		private void AddAlarms()
 		{
+			Console.Write("New alarms: " + Settings.Alarms);
 			LinearLayout alarmViewer = FindViewById<LinearLayout>(Resource.Id.alarm_viewer);
 			while (alarmViewer.ChildCount > 0) alarmViewer.RemoveViewAt(0);
 			string alarmSettings = Settings.Alarms;
+
 			if (alarmSettings != string.Empty)
 			{
 				
@@ -199,24 +204,26 @@ namespace Clockwise.Droid
 		{
 			//Add view
 			LinearLayout alarmRow = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.alarm_display, null);
-
-			alarmRow.Tag = alarmIndex;
+			LinearLayout editLayout = alarmRow.FindViewById<LinearLayout>(Resource.Id.edit_alarm_layout);
+			LinearLayout deleteLayout = alarmRow.FindViewById<LinearLayout>(Resource.Id.delete_alarm_layout);
+			editLayout.Tag = alarmIndex;
 
 			//Attaches editing action
-			alarmRow.FindViewById<LinearLayout>(Resource.Id.edit_alarm_layout).Click += delegate
+			editLayout.Click += delegate
 			{
 				Intent editAlarm = new Intent(Application.Context, typeof(MainActivity));
-				editAlarm.PutExtra("alarm_number", (int)alarmRow.Tag);
+				editAlarm.PutExtra("alarm_number", (int)editLayout.Tag);
 				StartActivity(editAlarm);
 			};
 
 			//Attaches delete action
-			alarmRow.FindViewById<LinearLayout>(Resource.Id.delete_alarm_layout).Click += delegate
+			deleteLayout.Click += delegate
 			{
 				Console.Write("deleting alarm");
-				if (Settings.IsAlarmOn((int)alarmRow.Tag))
-					AlarmUtils.Cancel(Application.Context, (int)alarmRow.Tag, false);
-				Settings.DeleteAlarm((int)alarmRow.Tag);
+				if (Settings.IsAlarmOn((int)editLayout.Tag))
+					AlarmUtils.Cancel(Application.Context, (int)editLayout.Tag, false);
+				Settings.DeleteAlarm((int)editLayout.Tag);
+				Console.Write("New alarms: " + Settings.Alarms);
 				AddAlarms();
 			};
 
@@ -225,7 +232,7 @@ namespace Clockwise.Droid
 																	  (int)(metrics.HeightPixels * .1));
 			TextView alarmTime = alarmRow.FindViewById<TextView>(Resource.Id.alarm_time);
 			alarmTime.Typeface = Typeface.CreateFromAsset(Resources.Assets, "HelveticaNeueLight.ttf");
-			alarmTime.Text = hour + ":" + minute.ToString("00") + " " + (ampm == 0 ? "am" : "pm");
+			alarmTime.Text = hour + ":" + minute.ToString("00") + (ampm == 0 ? " am" : " pm");
 			//alarmTime.TextSize = metrics.HeightPixels
 
 			ImageView alarmStatus = alarmRow.FindViewById<ImageView>(Resource.Id.alarm_status);

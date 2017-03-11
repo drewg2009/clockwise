@@ -44,7 +44,8 @@
                     <NumberPicker
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:id="@+id/hour" />
+                        android:id="@+id/hour"
+                        android:contextClickable="false" />
                     <NumberPicker
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"

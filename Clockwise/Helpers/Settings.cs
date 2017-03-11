@@ -305,6 +305,7 @@ namespace Clockwise.Helpers
 			}
 
 			if (newSetting != string.Empty) newSetting = newSetting.TrimEnd('|');
+			Alarms = newSetting;
 		}
   }
 }

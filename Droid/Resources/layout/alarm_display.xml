@@ -45,8 +45,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:id="@+id/delete_alarm_layout"
-        android:background="#ff000000">
+        android:id="@+id/delete_alarm_layout">
         <RelativeLayout
             android:minWidth="25px"
             android:minHeight="25px"
@@ -55,8 +54,8 @@
             android:id="@+id/relativeLayout6">
             <ImageView
                 android:src="@drawable/delete"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
                 android:id="@+id/delete_button"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
