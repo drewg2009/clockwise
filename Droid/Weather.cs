@@ -9,7 +9,7 @@ namespace Clockwise.Droid
 {
 	public class Weather
 	{
-		public static void Setup(View v, ImageView addButton, Context c)
+		public static void Setup(int index, View v, ImageView addButton, Context c)
 		{
 			Typeface font = Typeface.CreateFromAsset(c.Resources.Assets, "HelveticaNeueLight.ttf");
 
@@ -71,8 +71,8 @@ namespace Clockwise.Droid
 			s4.SetImageResource(Resource.Drawable.setting_toggle);
 
 
-			string weatherSettings = Settings.Weather;
-			if (weatherSettings != string.Empty)
+			string weatherSettings = Settings.Weather.Split('|')[index];
+			if (weatherSettings != Settings.EMPTY_MODULE)
 			{
 				string[] settings = weatherSettings.Split(':');
 				s1.ScaleX = settings[1] == "1" ? -1 : 1;
@@ -103,11 +103,11 @@ namespace Clockwise.Droid
 			LinearLayout saveButton = v.FindViewById<LinearLayout>(Resource.Id.save_button);
 			saveButton.FindViewById<TextView>(Resource.Id.save_text).Typeface = font;
 			saveButton.Click += delegate {
-				Settings.Weather = "weather:"
-					+ ((s1.ScaleX > 0) ? 0 : 1) + ":"
-					+ ((s2.ScaleX > 0) ? 0 : 1) + ":"
-					+ ((s3.ScaleX > 0) ? 0 : 1) + ":"
-					+ ((s4.ScaleX > 0) ? 0 : 1);
+				Settings.EditWeather(index,
+					(s1.ScaleX > 0),
+					(s2.ScaleX > 0),
+					(s3.ScaleX > 0),
+					(s4.ScaleX > 0));
 
 
 				//Collapse

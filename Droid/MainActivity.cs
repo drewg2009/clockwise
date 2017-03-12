@@ -10,13 +10,13 @@ using Android.Views.Animations;
 using Android.Animation;
 using System;
 using Clockwise.Helpers;
+using Android.Content;
 
 namespace Clockwise.Droid
 {
 	[Activity(Label = "Clockwise")]
 	public class MainActivity : Activity
 	{
-		bool alarmOn = true;
 		private int repeatDaysResult = 0;
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
@@ -73,7 +73,6 @@ namespace Clockwise.Droid
 			}
 			else {
 				alarm_toggle.SetImageResource(Resource.Drawable.off_toggle);
-
 			}
 
 			int hour = System.Int32.Parse(alarmSettings[1]);
@@ -209,7 +208,9 @@ namespace Clockwise.Droid
 
 			ImageView addModuleBtn = FindViewById<ImageView>(Resource.Id.add_module_button);
 			addModuleBtn.Click += delegate {
-				StartActivity(typeof(CreateModule));
+				Intent creatModule = new Intent(Application.Context, typeof(CreateModule));
+				creatModule.PutExtra("alarm_index", alarm_number);
+				StartActivity(creatModule);
 			};
 
 			var metrics = Resources.DisplayMetrics;
@@ -244,9 +245,9 @@ namespace Clockwise.Droid
 			};
 		}
 
-		private void addModules()
+		private void RefreshModules(int index)
 		{
-			string[] modules = ModuleHelper.GetActiveModules();
+			string[] modules = Settings.GetActiveModules(index);
 			LinearLayout moduleLayout = FindViewById<LinearLayout>(Resource.Id.module_layout);
 			var metrics = Resources.DisplayMetrics;
 
@@ -308,7 +309,7 @@ namespace Clockwise.Droid
 			base.OnResume();
 			LinearLayout moduleLayout = FindViewById<LinearLayout>(Resource.Id.module_layout);
 			while(moduleLayout.ChildCount > 0) moduleLayout.RemoveViewAt(0);
-			addModules();
+			RefreshModules(Intent.GetIntExtra("alarm_number", 0));
 		}
 
 		public class TwoDigitFormatter : Java.Lang.Object, NumberPicker.IFormatter

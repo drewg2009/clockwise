@@ -47,8 +47,10 @@ namespace Clockwise.Droid
 				Finish();
 			};
 
+			int alarmIndex = Intent.GetIntExtra("alarm_index", 0);
+
 			//Dropdown setup
-			Weather.Setup(FindViewById<LinearLayout>(Resource.Id.weather_settings), 
+			Weather.Setup(alarmIndex, FindViewById<LinearLayout>(Resource.Id.weather_settings), 
 			              FindViewById<ImageView>(Resource.Id.addWeather), Application.Context);
 
 			News.Setup(FindViewById<LinearLayout>(Resource.Id.news_settings),
@@ -68,31 +70,31 @@ namespace Clockwise.Droid
 			tdihToggle.SetImageResource(Resource.Drawable.setting_toggle);
 
 
-			if (Settings.Fact != string.Empty)
+			if (Settings.GetFact(alarmIndex))
 				factToggle.ScaleX = -1;
 
-			if (Settings.Quote != string.Empty)
+			if (Settings.GetQuote(alarmIndex))
 				quoteToggle.ScaleX = -1;
 
-			if (Settings.TDIH != string.Empty)
+			if (Settings.GetTDIH(alarmIndex))
 				tdihToggle.ScaleX = -1;
 
 			factToggle.Click += delegate
 			{
-				Settings.Fact = Settings.Fact == string.Empty ? "fact:" : string.Empty;
-				factToggle.ScaleX = Settings.Fact == string.Empty ? 1 : -1;
+				factToggle.ScaleX *= -1;
+				Settings.EditFact(alarmIndex, factToggle.ScaleX < 0);
 			};
 
 			quoteToggle.Click += delegate
 			{
-				Settings.Quote = Settings.Quote == string.Empty ? "quote:" : string.Empty;
-				quoteToggle.ScaleX = Settings.Quote == string.Empty ? 1 : -1;
+				quoteToggle.ScaleX *= -1;
+				Settings.EditQuote(alarmIndex, quoteToggle.ScaleX < 0);
 			};
 
 			tdihToggle.Click += delegate
 			{
-				Settings.TDIH = Settings.TDIH == string.Empty ? "tdih:" : string.Empty;
-				tdihToggle.ScaleX = Settings.TDIH == string.Empty ? 1 : -1;
+				tdihToggle.ScaleX *= -1;
+				Settings.EditTDIH(alarmIndex, tdihToggle.ScaleX < 0);
 			};
 		}
 	}

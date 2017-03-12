@@ -120,7 +120,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/relativeLayout3"
-        android:paddingTop="10dp">
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
         <include
             layout="@layout/save_button"
             android:id="@+id/save_button" />

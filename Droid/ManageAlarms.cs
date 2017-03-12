@@ -160,7 +160,7 @@ namespace Clockwise.Droid
 		protected override void OnResume()
 		{
 			base.OnResume();
-			AddAlarms();
+			RefreshAlarms();
 
 			TextView[] repeatDays = new TextView[7];
 			repeatDays[0] = FindViewById<TextView>(Resource.Id.sundayInput);
@@ -178,7 +178,7 @@ namespace Clockwise.Droid
 			}
 		}
 
-		private void AddAlarms()
+		private void RefreshAlarms()
 		{
 			Console.Write("New alarms: " + Settings.Alarms);
 			LinearLayout alarmViewer = FindViewById<LinearLayout>(Resource.Id.alarm_viewer);
@@ -211,6 +211,7 @@ namespace Clockwise.Droid
 			//Attaches editing action
 			editLayout.Click += delegate
 			{
+				
 				Intent editAlarm = new Intent(Application.Context, typeof(MainActivity));
 				editAlarm.PutExtra("alarm_number", (int)editLayout.Tag);
 				StartActivity(editAlarm);
@@ -224,7 +225,7 @@ namespace Clockwise.Droid
 					AlarmUtils.Cancel(Application.Context, (int)editLayout.Tag, false);
 				Settings.DeleteAlarm((int)editLayout.Tag);
 				Console.Write("New alarms: " + Settings.Alarms);
-				AddAlarms();
+				RefreshAlarms();
 			};
 
 			var metrics = Resources.DisplayMetrics;

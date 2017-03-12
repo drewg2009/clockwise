@@ -51,52 +51,18 @@ namespace Clockwise.Droid
 		public static void SetTime(Context context, int hour, int minute, int alarmIndex, int repeatDays, bool addingAlarm)
 		{
 			Init(context, addingAlarm);
-			String[] currentAlarms = Settings.Alarms.Split('|');
 
 			//Create new alarm
-			Settings.AlarmStatus status = Settings.AlarmStatus.ALARM_ON;
-			if (Settings.Alarms == string.Empty)
-			{
-				Settings.Alarms = "" + alarmIndex + ":" + hour + ":" + minute + ":" + repeatDays + ":" + (int)status;
-			}
-			else if (alarmIndex == currentAlarms.Length)
-			{
-				Console.Write("creating alarm");
-				string newAlarm = "" + alarmIndex + ":" + hour + ":" + minute + ":" + repeatDays + ":" + (int)status;
-				string newAlarmSetting = "";
-				foreach (String s in currentAlarms)
-				{
-					newAlarmSetting += s + "|";
-				}
-				newAlarmSetting += newAlarm;
-				Settings.Alarms = newAlarmSetting;
-			}
-			//Change old alarm
-			else {
-				Console.Write("editing alarm");
-
-				currentAlarms[alarmIndex] = "" + alarmIndex + ":" + hour + ":" + minute + ":" + repeatDays + ":" + (int)status;
-				string newAlarmSetting = "";
-				foreach (String s in currentAlarms)
-				{
-					newAlarmSetting += s + "|";
-				}
-				Settings.Alarms = newAlarmSetting.TrimEnd('|');
-			}
-
+			Settings.EditAlarm(alarmIndex, hour, minute, repeatDays);
 			am.Cancel(pendingIntents[alarmIndex]);
 
-
-
 			bool[] daySelection = new bool[7];
-
 
 			//Load saved says into array
 			for (int j = 0; j < 7; j++)
 			{
 				daySelection[j] = (repeatDays & (1 << j)) == (1 << j);
 			}
-
 
 			Calendar calendar = Calendar.Instance;
 			calendar.TimeInMillis = Java.Lang.JavaSystem.CurrentTimeMillis();

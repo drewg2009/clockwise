@@ -1,5 +1,6 @@
 // Helpers/Settings.cs
 using System;
+using System.Collections.Generic;
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
 
@@ -35,9 +36,8 @@ namespace Clockwise.Helpers
 		private static readonly string RepeatDaysDef = "0";
 
 		private const string ModuleOrderKey = "module_order_key";
-		private static readonly string ModuleOrderDef = 
-			"notifications|weather|news|reddit|twitter|countdown|reminders|traffic|fact|quote|tdih";
-		
+		private static readonly string ModuleOrderDef = string.Empty;
+			
 		private const string SnoozeKey = "snooze_key";
 		private static readonly string SnoozeDef = string.Empty;
 
@@ -74,7 +74,13 @@ namespace Clockwise.Helpers
 		private const string AndroidFileAccessKey = "android_file_access_key";
 		private static readonly string AndroidFileAccessDef = string.Empty;
 
+		private static string DefaultModuleOrder = 
+			"notifications:weather:news:reddit:twitter:countdown:reminders:traffic:fact:quote:tdih";
 		public enum AlarmStatus { ALARM_ON, ALARM_OFF };
+
+		public enum Modules {WEATHER, REDDIT, TWITTER, NEWS, COUNTDOWN, REMINDERS, TRAFFIC, FACT, QUOTE, TDIH};
+
+		public static string EMPTY_MODULE = "null";
 
 		#endregion
 
@@ -290,6 +296,173 @@ namespace Clockwise.Helpers
 			Alarms = newSettings.TrimEnd('|');
 		}
 
+		public static void EditAlarm(int index, int hour, int minute, int repeatDays)
+		{
+			String[] currentAlarms = Settings.Alarms.Split('|');
+
+			//Create new alarm
+			AlarmStatus status = AlarmStatus.ALARM_ON;
+			if (Alarms == string.Empty)
+			{
+				Alarms = "" + index + ":" + hour + ":" + minute + ":" + repeatDays + ":" + (int)status;
+				ModuleOrder = DefaultModuleOrder;
+				AddModules();
+			}
+			else if (index == currentAlarms.Length)
+			{
+				string newAlarm = "" + index + ":" + hour + ":" + minute + ":" + repeatDays + ":" + (int)status;
+				Alarms += "|" + newAlarm;
+				ModuleOrder += "|" + DefaultModuleOrder;
+				AddModules();
+			}
+			//Change old alarm
+			else {
+				currentAlarms[index] = "" + index + ":" + hour + ":" + minute + ":" + repeatDays + ":" + (int)status;
+				string newAlarmSetting = "";
+				foreach (String s in currentAlarms)
+				{
+					newAlarmSetting += s + "|";
+				}
+				Alarms = newAlarmSetting.TrimEnd('|');
+			}
+		}
+
+		public static void AddModules()
+		{
+			Weather += (Weather == string.Empty) ? EMPTY_MODULE : "|" + EMPTY_MODULE;
+			News += (News == string.Empty) ? EMPTY_MODULE : "|" + EMPTY_MODULE;
+			Reddit += (Reddit == string.Empty) ? EMPTY_MODULE : "|" + EMPTY_MODULE;
+			Twitter += (Twitter == string.Empty) ? EMPTY_MODULE : "|" + EMPTY_MODULE;
+			Traffic += (Traffic == string.Empty) ? EMPTY_MODULE : "|" + EMPTY_MODULE;
+			Countdown += (Countdown == string.Empty) ? EMPTY_MODULE : "|" + EMPTY_MODULE;
+			Reminders += (Reminders == string.Empty) ? EMPTY_MODULE : "|" + EMPTY_MODULE;
+			Quote += (Quote == string.Empty) ? EMPTY_MODULE : "|" + EMPTY_MODULE;
+			Fact += (Fact == string.Empty) ? EMPTY_MODULE : "|" + EMPTY_MODULE;
+			TDIH += (TDIH == string.Empty) ? EMPTY_MODULE : "|" + EMPTY_MODULE;
+		}
+
+		public static void RemoveModules(int index)
+		{
+			//Weather
+			{
+				string newWeatherSetting = string.Empty;
+				string[] weathers = Weather.Split('|');
+				for (int i = 0; i < weathers.Length; i++)
+					if (i != index)
+						newWeatherSetting += weathers[i] + "|";
+
+				if (newWeatherSetting != string.Empty) newWeatherSetting = newWeatherSetting.TrimEnd('|');
+				Weather = newWeatherSetting;
+			}
+
+			//News
+			{
+				string newNewsSetting = string.Empty;
+				string[] news = News.Split('|');
+				for (int i = 0; i < news.Length; i++)
+					if (i != index)
+						newNewsSetting += news[i] + "|";
+
+				if (newNewsSetting != string.Empty) newNewsSetting = newNewsSetting.TrimEnd('|');
+				News = newNewsSetting;
+			}
+
+			//Reddit
+			{
+				string newRedditSetting = string.Empty;
+				string[] reddits = Reddit.Split('|');
+				for (int i = 0; i < reddits.Length; i++)
+					if (i != index)
+						newRedditSetting += reddits[i] + "|";
+
+				if (newRedditSetting != string.Empty) newRedditSetting = newRedditSetting.TrimEnd('|');
+				Reddit = newRedditSetting;
+			}
+
+			//Twitter
+			{
+				string newTwitterSettings = string.Empty;
+				string[] twitters = Twitter.Split('|');
+				for (int i = 0; i < twitters.Length; i++)
+					if (i != index)
+						newTwitterSettings += twitters[i] + "|";
+
+				if (newTwitterSettings != string.Empty) newTwitterSettings = newTwitterSettings.TrimEnd('|');
+				Twitter = newTwitterSettings;
+			}
+
+			//Traffic
+			{
+				string newTrafficSettings = string.Empty;
+				string[] traffics = Traffic.Split('|');
+				for (int i = 0; i < traffics.Length; i++)
+					if (i != index)
+						newTrafficSettings += traffics[i] + "|";
+
+				if (newTrafficSettings != string.Empty) newTrafficSettings = newTrafficSettings.TrimEnd('|');
+				Traffic = newTrafficSettings;
+			}
+
+			//Countdown
+			{
+				string newCountdownSettings = string.Empty;
+				string[] countdowns = Countdown.Split('|');
+				for (int i = 0; i < countdowns.Length; i++)
+					if (i != index)
+						newCountdownSettings += countdowns[i] + "|";
+
+				if (newCountdownSettings != string.Empty) newCountdownSettings = newCountdownSettings.TrimEnd('|');
+				Countdown = newCountdownSettings;
+			}
+
+			//Reminders
+			{
+				string newRemindersSettings = string.Empty;
+				string[] reminders = Reminders.Split('|');
+				for (int i = 0; i < reminders.Length; i++)
+					if (i != index)
+						newRemindersSettings += reminders[i] + "|";
+
+				if (newRemindersSettings != string.Empty) newRemindersSettings = newRemindersSettings.TrimEnd('|');
+				Reminders = newRemindersSettings;
+			}
+
+			//Fact
+			{
+				string newFactSettings = string.Empty;
+				string[] facts = Fact.Split('|');
+				for (int i = 0; i < facts.Length; i++)
+					if (i != index)
+						newFactSettings += facts[i] + "|";
+
+				if (newFactSettings != string.Empty) newFactSettings = newFactSettings.TrimEnd('|');
+				Fact = newFactSettings;
+			}
+
+			//Quote
+			{
+				string newQuoteSettings = string.Empty;
+				string[] quotes = Quote.Split('|');
+				for (int i = 0; i < quotes.Length; i++)
+					if (i != index)
+						newQuoteSettings += quotes[i] + "|";
+
+				if (newQuoteSettings != string.Empty) newQuoteSettings = newQuoteSettings.TrimEnd('|');
+				Quote = newQuoteSettings;
+			}
+
+			//History
+			{
+				string newTDIHSettings = string.Empty;
+				string[] TDIHs = TDIH.Split('|');
+				for (int i = 0; i < TDIHs.Length; i++)
+					if (i != index)
+						newTDIHSettings += TDIHs[i] + "|";
+
+				if (newTDIHSettings != string.Empty) newTDIHSettings = newTDIHSettings.TrimEnd('|');
+				TDIH = newTDIHSettings;
+			}
+		}
 
 
 		public static void DeleteAlarm(int index)
@@ -306,6 +479,272 @@ namespace Clockwise.Helpers
 
 			if (newSetting != string.Empty) newSetting = newSetting.TrimEnd('|');
 			Alarms = newSetting;
+			RemoveModules(index);
+		}
+
+		public static void EditWeather(int index, bool description, bool currentTemp, bool maxTemp, bool celsius)
+		{
+			String[] weathers = Weather.Split('|');
+			weathers[index] = "weather:"
+				+ ((description) ? 0 : 1) + ":"
+				+ ((currentTemp) ? 0 : 1) + ":"
+				+ ((maxTemp) ? 0 : 1) + ":"
+				+ ((celsius) ? 0 : 1);
+			
+			string newWeatherSetting = "";
+			foreach (String s in weathers)
+				newWeatherSetting += s + "|";
+			Weather = newWeatherSetting.TrimEnd('|');
+		}
+
+		public static void EditNews(int index, string category, int count)
+		{
+			String[] news = News.Split('|');
+			news[index] = "news:" + category + ":" + count;
+
+			string newNewsSetting = "";
+			foreach (String s in news)
+				newNewsSetting += s + "|";
+			News = newNewsSetting.TrimEnd('|');
+		}
+
+		public static void EditTwitter(int index, string username, int count)
+		{
+			String[] twitters = Twitter.Split('|');
+			twitters[index] = "twitter:" + username + ":" + count;
+
+			string newTwitterSetting = "";
+			foreach (String s in twitters)
+				newTwitterSetting += s + "|";
+			Twitter = newTwitterSetting.TrimEnd('|');
+		}
+
+		public static void EditCountdown(int index, string eventName, string date)
+		{
+			String[] countdowns = Countdown.Split('|');
+			countdowns[index] = "countdown:" + eventName + ":" + date;
+
+			string newCountdownSetting = "";
+			foreach (String s in countdowns)
+				newCountdownSetting += s + "|";
+			Countdown = newCountdownSetting.TrimEnd('|');
+		}
+
+		public static void EditReminders(int index, string listName, string list)
+		{
+			String[] reminders = Reminders.Split('|');
+			reminders[index] = "reminder:" + listName + ":" + list;
+
+			string newRemindersSetting = "";
+			foreach (String s in reminders)
+				newRemindersSetting += s + "|";
+			Reminders = newRemindersSetting.TrimEnd('|');
+		}
+
+		public static void EditTraffic(int index, string destName, string destUrl)
+		{
+			String[] traffics = Traffic.Split('|');
+			traffics[index] = "traffic:" + destName + ":" + destUrl;
+
+			string newTrafficSetting = "";
+			foreach (String s in traffics)
+				newTrafficSetting += s + "|";
+			Traffic = newTrafficSetting.TrimEnd('|');
+		}
+
+		public static void EditFact(int index, bool on)
+		{
+			String[] facts = Fact.Split('|');
+			facts[index] = on ? "fact:" : EMPTY_MODULE;
+
+			string newFactSetting = "";
+			foreach (String s in facts)
+				newFactSetting += s + "|";
+			Fact = newFactSetting.TrimEnd('|');
+		}
+
+		public static void EditQuote(int index, bool on)
+		{
+			String[] quotes = Quote.Split('|');
+			quotes[index] = on ? "quote:" : EMPTY_MODULE;
+
+			string newQuoteSetting = "";
+			foreach (String s in quotes)
+				newQuoteSetting += s + "|";
+			Quote = newQuoteSetting.TrimEnd('|');
+		}
+
+		public static void EditTDIH(int index, bool on)
+		{
+			String[] TDIHs = TDIH.Split('|');
+			TDIHs[index] = on ? "tdih:" : EMPTY_MODULE;
+
+			string newTDIHSetting = "";
+			foreach (String s in TDIHs)
+				newTDIHSetting += s + "|";
+			TDIH = newTDIHSetting.TrimEnd('|');
+		}
+
+		public static bool GetFact(int index)
+		{
+			string Fact2 = Fact;
+			string[] temp = Fact2.Split('|');
+			string fact = temp[index];
+			return fact != EMPTY_MODULE;
+		}
+
+		public static bool GetQuote(int index)
+		{
+			string quote = Quote.Split('|')[index];
+			return quote != EMPTY_MODULE;
+		}
+
+		public static bool GetTDIH(int index)
+		{
+			string tdih = TDIH.Split('|')[index];
+			return tdih != EMPTY_MODULE;
+		}
+
+		public static void DeleteModule(Modules type, int index)
+		{
+			string[] modules;
+			switch (type)
+			{
+				case Modules.WEATHER:
+					modules = Weather.Split('|');
+					break;
+				case Modules.REDDIT:
+					modules = Reddit.Split('|');
+					break;
+				case Modules.TWITTER:
+					modules = Twitter.Split('|');
+					break;
+				case Modules.COUNTDOWN:
+					modules = Countdown.Split('|');
+					break;
+				case Modules.REMINDERS:
+					modules = Reminders.Split('|');
+					break;
+				case Modules.TRAFFIC:
+					modules = Traffic.Split('|');
+					break;
+				case Modules.NEWS:
+					modules = News.Split('|');
+					break;
+				case Modules.FACT:
+					modules = Fact.Split('|');
+					break;
+				case Modules.QUOTE:
+					modules = Quote.Split('|');
+					break;
+				default:
+					modules = TDIH.Split('|');
+					break;
+			}
+
+			//Remove
+			if (type == Modules.FACT || type == Modules.QUOTE || type == Modules.TDIH)
+			{
+				modules[index] = "0";
+			}
+			else {
+				modules[index] = EMPTY_MODULE;
+			}
+			string newSetting = "";
+			foreach (String s in modules)
+				newSetting += s + "|";
+
+			switch (type)
+			{
+				case Modules.WEATHER:
+					Weather = newSetting.TrimEnd('|');
+					break;
+				case Modules.REDDIT:
+					Reddit = newSetting.TrimEnd('|');
+					break;
+				case Modules.TWITTER:
+					Twitter = newSetting.TrimEnd('|');
+					break;
+				case Modules.COUNTDOWN:
+					Countdown = newSetting.TrimEnd('|');
+					break;
+				case Modules.REMINDERS:
+					Reminders = newSetting.TrimEnd('|');
+					break;
+				case Modules.TRAFFIC:
+					Traffic = newSetting.TrimEnd('|');
+					break;
+				case Modules.NEWS:
+					News = newSetting.TrimEnd('|');
+					break;
+				case Modules.FACT:
+					Fact = newSetting.TrimEnd('|');
+					break;
+				case Modules.QUOTE:
+					Quote = newSetting.TrimEnd('|');
+					break;
+				default:
+					TDIH = newSetting.TrimEnd('|');
+					break;
+			}
+		}
+
+		public static void EditModuleOrder(int index, string newOrder)
+		{
+			String[] moduleOrders = ModuleOrder.Split('|');
+			moduleOrders[index] = newOrder;
+
+			string newModuleOrder = "";
+			foreach (String s in moduleOrders)
+				newModuleOrder += s + "|";
+			ModuleOrder = newModuleOrder.TrimEnd('|');
+		}
+
+		public static string[] GetActiveModules(int index)
+		{
+			string moduleOrder = ModuleOrder.Split('|')[index];
+			string[] order = moduleOrder.Split(':');
+			List<string> final = new List<string>();
+			foreach (string m in order)
+			{
+				string setting = EMPTY_MODULE;
+				switch (m)
+				{
+					case "weather":
+						setting = Weather.Split('|')[index];
+						break;
+					case "reddit":
+						setting = Reddit.Split('|')[index];
+						break;
+					case "news":
+						setting = News.Split('|')[index];
+						break;
+					case "twitter":
+						setting = Twitter.Split('|')[index];
+						break;
+					case "traffic":
+						setting = Traffic.Split('|')[index];
+						break;
+					case "countdown":
+						setting = Countdown.Split('|')[index];
+						break;
+					case "reminders":
+						setting = Reminders.Split('|')[index];
+						break;
+					case "fact":
+						setting = Fact.Split('|')[index];
+						break;
+					case "quote":
+						setting = Quote.Split('|')[index];
+						break;
+					case "tdih":
+						setting = TDIH.Split('|')[index];
+						break;
+				}
+				if (setting != EMPTY_MODULE)
+					final.Add(setting);
+			}
+			return final.ToArray();
 		}
   }
 }
