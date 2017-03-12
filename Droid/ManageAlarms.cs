@@ -141,7 +141,7 @@ namespace Clockwise.Droid
 						AlarmUtils.Cancel(Application.Context, (int)editLayout.Tag, false);
 					Settings.DeleteAlarm((int)editLayout.Tag);
 					Console.Write("New alarms: " + Settings.Alarms);
-					AddAlarms();
+					RefreshAlarms();
 				};
 
 				alarmTime.Typeface = fontLight;

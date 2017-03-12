@@ -9,30 +9,25 @@ using Clockwise.Helpers;
 
 namespace Clockwise.Droid
 {
-	public class News
+	public class Reddit
 	{
-		static Spinner spinner;
 		static EditText amountInput;
+		static EditText subredditInput;
+
 		public static void Setup(int index, int subindex, View v, ImageView addButton, Activity activity)
 		{
 			Typeface font = Typeface.CreateFromAsset(activity.ApplicationContext.Resources.Assets, "HelveticaNeueLight.ttf");
-			v.FindViewById<TextView>(Resource.Id.categoryText).Typeface = font;
+			v.FindViewById<TextView>(Resource.Id.subredditText).Typeface = font;
 			v.FindViewById<TextView>(Resource.Id.amountText).Typeface = font;
 
-			spinner = v.FindViewById<Spinner>(Resource.Id.newsCategorySpinner);
-			spinner.OnItemSelectedListener = null;
 			amountInput = v.FindViewById<EditText>(Resource.Id.amountInput);
+			subredditInput = v.FindViewById<EditText>(Resource.Id.subredditInput);
 
 			if (subindex >= 0)
 			{
-				string savedModule = Settings.GetNews(index, subindex);
-				string numPosts = savedModule.Substring(0, savedModule.IndexOf(':'));
-				string category = savedModule.Substring(savedModule.IndexOf(':') + 1);
-				string[] categories = activity.ApplicationContext.Resources.GetStringArray(Resource.Array.news_categories_array);
-				for (int i = 0; !categories[i].Equals(category); i++)
-					spinner.SetSelection(i + 1);
-
-				amountInput.Text = numPosts;
+				string savedModule = Settings.GetReddit(index, subindex);
+				subredditInput.Text = savedModule.Substring(0, savedModule.IndexOf(':'));
+				amountInput.Text = savedModule.Substring(savedModule.IndexOf(':') + 1);
 			}
 
 			AnimationManager am = new AnimationManager(false);
@@ -42,7 +37,8 @@ namespace Clockwise.Droid
 
 			if (addButton != null)
 			{
-				addButton.Click += delegate {
+				addButton.Click += delegate
+				{
 					if (!am.Animating)
 					{
 						if (v.LayoutParameters.Height == 0)
@@ -72,12 +68,11 @@ namespace Clockwise.Droid
 				if (int.Parse(amountInput.Text) > 0 && int.Parse(amountInput.Text) <= 10)
 				{
 					if (subindex < 0)
-						Settings.AddNews(index, spinner.SelectedItem.ToString(), int.Parse(amountInput.Text));
+						Settings.AddReddit(index, subredditInput.Text, int.Parse(amountInput.Text));
 					else
-						Settings.EditNews(index, subindex, spinner.SelectedItem.ToString(), int.Parse(amountInput.Text));
-
+						Settings.EditReddit(index, subindex, subredditInput.Text, int.Parse(amountInput.Text));
 					//Clear
-					spinner.SetSelection(0);
+					subredditInput.Text = string.Empty;
 					amountInput.Text = string.Empty;
 
 					if (addButton != null)
@@ -96,31 +91,13 @@ namespace Clockwise.Droid
 						imm.HideSoftInputFromWindow(view.WindowToken, 0);
 					}
 
-					Toast.MakeText(activity.ApplicationContext, "News module saved.", ToastLength.Short).Show();
+					Toast.MakeText(activity.ApplicationContext, "Reddit module saved.", ToastLength.Short).Show();
 				}
 				else {
-					Toast.MakeText(activity.ApplicationContext, "Amount must be between 1 and 10 posts.", ToastLength.Long).Show();
+					Toast.MakeText(activity.ApplicationContext, "Select between 1 and 10 posts.", ToastLength.Long).Show();
 				}
 			};
 		}
 
-		public static void clearSettings(View v)
-		{
-			amountInput.Text = string.Empty;
-			spinner.SetSelection(0);
-		}
-
-		public class SpinnerLister : Java.Lang.Object , AdapterView.IOnItemSelectedListener
-		{
-			public void OnItemSelected(AdapterView av, View v, int i, long l)
-			{
-				spinner.SetSelection(i);
-			}
-
-			public void OnNothingSelected(AdapterView adapterView)
-			{
-
-			}
-		}
 	}
 }

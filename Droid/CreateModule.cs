@@ -53,8 +53,14 @@ namespace Clockwise.Droid
 			Weather.Setup(alarmIndex, FindViewById<LinearLayout>(Resource.Id.weather_settings), 
 			              FindViewById<ImageView>(Resource.Id.addWeather), Application.Context);
 
-			News.Setup(FindViewById<LinearLayout>(Resource.Id.news_settings),
-			           FindViewById<ImageView>(Resource.Id.addNews), Application.Context, string.Empty);
+			News.Setup(alarmIndex, -1, FindViewById<LinearLayout>(Resource.Id.news_settings),
+			           FindViewById<ImageView>(Resource.Id.addNews), this);
+
+			Reddit.Setup(alarmIndex, -1, FindViewById<LinearLayout>(Resource.Id.reddit_settings),
+			             FindViewById<ImageView>(Resource.Id.addReddit), this);
+
+			Twitter.Setup(alarmIndex, -1, FindViewById<LinearLayout>(Resource.Id.twitter_settings),
+			              FindViewById<ImageView>(Resource.Id.addTwitter), this);
 
 			//Toggle setup
 			ImageSwitcher factToggle = FindViewById<ImageSwitcher>(Resource.Id.factToggle);

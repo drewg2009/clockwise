@@ -103,23 +103,26 @@ namespace Clockwise.Droid
 			LinearLayout saveButton = v.FindViewById<LinearLayout>(Resource.Id.save_button);
 			saveButton.FindViewById<TextView>(Resource.Id.save_text).Typeface = font;
 			saveButton.Click += delegate {
-				Settings.EditWeather(index,
-					(s1.ScaleX > 0),
-					(s2.ScaleX > 0),
-					(s3.ScaleX > 0),
-					(s4.ScaleX > 0));
+				if (s1.ScaleX < 0 || s2.ScaleX < 0 || s3.ScaleX < 0)
+				{
+					Settings.EditWeather(index,
+						(s1.ScaleX < 0),
+						(s2.ScaleX < 0),
+						(s3.ScaleX < 0),
+						(s4.ScaleX < 0));
 
+					//Collapse
+					int targetHeight = 0;
+					int duration = (int)(200);
+					settingsHelper.collapse(duration, targetHeight);
+					addButton.SetImageResource(Resource.Drawable.plus);
 
-				//Collapse
-				int targetHeight = 0;
-				int duration = (int)(200);
-				settingsHelper.collapse(duration, targetHeight);
-				addButton.SetImageResource(Resource.Drawable.plus);
-
-				Toast.MakeText(c, "Weather module saved.", ToastLength.Short).Show();
+					Toast.MakeText(c, "Weather module saved.", ToastLength.Short).Show();
+				}
+				else {
+					Toast.MakeText(c, "Please turn on at least one setting", ToastLength.Long).Show();
+				}
 			};
-
-
 		}
 
 		public class Toggle : Java.Lang.Object, ViewSwitcher.IViewFactory

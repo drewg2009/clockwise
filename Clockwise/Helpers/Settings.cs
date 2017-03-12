@@ -497,59 +497,94 @@ namespace Clockwise.Helpers
 			Weather = newWeatherSetting.TrimEnd('|');
 		}
 
-		public static void EditNews(int index, string category, int count)
+		public static void AddNews(int index, string category, int count)
 		{
 			String[] news = News.Split('|');
-			news[index] = "news:" + category + ":" + count;
+			if (news[index] == EMPTY_MODULE)
+				news[index] = "news:" + category + ":" + count;
+			else
+				news[index] += "," + category + ":" + count;
 
-			string newNewsSetting = "";
+			string newSetting = string.Empty;
 			foreach (String s in news)
-				newNewsSetting += s + "|";
-			News = newNewsSetting.TrimEnd('|');
+				newSetting += s + "|";
+
+			News = newSetting.TrimEnd('|');
 		}
 
-		public static void EditTwitter(int index, string username, int count)
+		public static void AddTwitter(int index, string username, int count)
 		{
 			String[] twitters = Twitter.Split('|');
-			twitters[index] = "twitter:" + username + ":" + count;
+			if (twitters[index] == EMPTY_MODULE)
+				twitters[index] = "twitter:" + username + ":" + count;
+			else
+				twitters[index] += "," + username + ":" + count;
 
-			string newTwitterSetting = "";
+			string newSetting = string.Empty;
 			foreach (String s in twitters)
-				newTwitterSetting += s + "|";
-			Twitter = newTwitterSetting.TrimEnd('|');
+				newSetting += s + "|";
+
+			Twitter = newSetting.TrimEnd('|');
 		}
 
-		public static void EditCountdown(int index, string eventName, string date)
+		public static void AddReddit(int index, string subreddit, int count)
+		{
+			String[] reddits = Reddit.Split('|');
+			if (reddits[index] == EMPTY_MODULE)
+				reddits[index] = "reddit:" + subreddit + ":" + count;
+			else 
+				reddits[index] += "," + subreddit + ":" + count;
+
+			string newSetting = string.Empty;
+			foreach (String s in reddits)
+				newSetting += s + "|";
+
+			Reddit = newSetting.TrimEnd('|');
+		}
+
+		public static void AddCountdown(int index, string eventName, string date)
 		{
 			String[] countdowns = Countdown.Split('|');
-			countdowns[index] = "countdown:" + eventName + ":" + date;
+			if (countdowns[index] == EMPTY_MODULE)
+				countdowns[index] = "countdown:" + eventName + ":" + date;
+			else
+				countdowns[index] += "," + eventName + ":" + date;
 
-			string newCountdownSetting = "";
+			string newSetting = string.Empty;
 			foreach (String s in countdowns)
-				newCountdownSetting += s + "|";
-			Countdown = newCountdownSetting.TrimEnd('|');
+				newSetting += s + "|";
+
+			Countdown = newSetting.TrimEnd('|');
 		}
 
-		public static void EditReminders(int index, string listName, string list)
+		public static void AddReminders(int index, string listName, string list)
 		{
 			String[] reminders = Reminders.Split('|');
-			reminders[index] = "reminder:" + listName + ":" + list;
+			if (reminders[index] == EMPTY_MODULE)
+				reminders[index] = "reminders:" + listName + ":" + list;
+			else
+				reminders[index] += "," + listName + ":" + list;
 
-			string newRemindersSetting = "";
+			string newSetting = string.Empty;
 			foreach (String s in reminders)
-				newRemindersSetting += s + "|";
-			Reminders = newRemindersSetting.TrimEnd('|');
+				newSetting += s + "|";
+
+			Reminders = newSetting.TrimEnd('|');
 		}
 
-		public static void EditTraffic(int index, string destName, string destUrl)
+		public static void AddTraffic(int index, string destName, string destUrl)
 		{
 			String[] traffics = Traffic.Split('|');
-			traffics[index] = "traffic:" + destName + ":" + destUrl;
+			if (traffics[index] == EMPTY_MODULE)
+				traffics[index] = "traffic:" + destName + ":" + destUrl;
+			else
+				traffics[index] += "," + destName + ":" + destUrl;
 
-			string newTrafficSetting = "";
+			string newSetting = string.Empty;
 			foreach (String s in traffics)
-				newTrafficSetting += s + "|";
-			Traffic = newTrafficSetting.TrimEnd('|');
+				newSetting += s + "|";
+
+			Traffic = newSetting.TrimEnd('|');
 		}
 
 		public static void EditFact(int index, bool on)
@@ -585,11 +620,129 @@ namespace Clockwise.Helpers
 			TDIH = newTDIHSetting.TrimEnd('|');
 		}
 
+		public static void EditReddit(int index, int subindex, string subreddit, int count)
+		{
+			string[] reddits = Reddit.Split('|');
+			string thisReddit = reddits[index]; //reddit:subreddit:count,subreddit:count, ...
+			List<string> moduleList = new List<string>(thisReddit.Substring(thisReddit.IndexOf(':') + 1).Split(','));
+			moduleList[subindex] = subreddit + "," + count;
+
+			string newList = string.Empty;
+			foreach (String s in moduleList)
+				newList += s + ",";
+
+			reddits[index] = "reddit:" + newList.TrimEnd(',');
+
+			string newSetting = string.Empty;
+			foreach (String s in reddits)
+				newSetting += s + "|";
+
+			Reddit = newSetting.TrimEnd('|');
+		}
+
+		public static void EditTwitter(int index, int subindex, string username, int count)
+		{
+			string[] twitters = Twitter.Split('|');
+			string thisTwitter = twitters[index]; //twitter:subreddit:count,subreddit:count, ...
+			List<string> moduleList = new List<string>(thisTwitter.Substring(thisTwitter.IndexOf(':') + 1).Split(','));
+			moduleList[subindex] = username + "," + count;
+
+			string newList = string.Empty;
+			foreach (String s in moduleList)
+				newList += s + ",";
+
+			twitters[index] = "twitter:" + newList.TrimEnd(',');
+
+			string newSetting = string.Empty;
+			foreach (String s in twitters)
+				newSetting += s + "|";
+
+			Twitter = newSetting.TrimEnd('|');
+		}
+
+		public static void EditCountdown(int index, int subindex, string eventName, string date)
+		{
+			string[] countdowns = Twitter.Split('|');
+			string thisCountdown = countdowns[index]; //countdown:subreddit:count,subreddit:count, ...
+			List<string> moduleList = new List<string>(thisCountdown.Substring(thisCountdown.IndexOf(':') + 1).Split(','));
+			moduleList[subindex] = eventName + "," + date;
+
+			string newList = string.Empty;
+			foreach (String s in moduleList)
+				newList += s + ",";
+
+			countdowns[index] = "countdown:" + newList.TrimEnd(',');
+
+			string newSetting = string.Empty;
+			foreach (String s in countdowns)
+				newSetting += s + "|";
+
+			Countdown = newSetting.TrimEnd('|');
+		}
+
+		public static void EditTraffic(int index, int subindex, string dest, string destUrl)
+		{
+			string[] traffics = Traffic.Split('|');
+			string thisTraffic = traffics[index]; //traffic:subreddit:count,subreddit:count, ...
+			List<string> moduleList = new List<string>(thisTraffic.Substring(thisTraffic.IndexOf(':') + 1).Split(','));
+			moduleList[subindex] = dest + "," + destUrl;
+
+			string newList = string.Empty;
+			foreach (String s in moduleList)
+				newList += s + ",";
+
+			traffics[index] = "traffic:" + newList.TrimEnd(',');
+
+			string newSetting = string.Empty;
+			foreach (String s in traffics)
+				newSetting += s + "|";
+
+			Traffic = newSetting.TrimEnd('|');
+		}
+
+		public static void EditReminders(int index, int subindex, string listName, string list)
+		{
+			string[] reminders = Twitter.Split('|');
+			string thisReminders = reminders[index]; //reminders:subreddit:count,subreddit:count, ...
+			List<string> moduleList = new List<string>(thisReminders.Substring(thisReminders.IndexOf(':') + 1).Split(','));
+			moduleList[subindex] = listName + "," + list;
+
+			string newList = string.Empty;
+			foreach (String s in moduleList)
+				newList += s + ",";
+
+			reminders[index] = "reminders:" + newList.TrimEnd(',');
+
+			string newSetting = string.Empty;
+			foreach (String s in reminders)
+				newSetting += s + "|";
+
+			Reminders = newSetting.TrimEnd('|');
+		}
+
+		public static void EditNews(int index, int subindex, string category, int count)
+		{
+			string[] news = Twitter.Split('|');
+			string thisNews = news[index]; //twitter:subreddit:count,subreddit:count, ...
+			List<string> moduleList = new List<string>(thisNews.Substring(thisNews.IndexOf(':') + 1).Split(','));
+			moduleList[subindex] = category + "," + count;
+
+			string newList = string.Empty;
+			foreach (String s in moduleList)
+				newList += s + ",";
+
+			news[index] = "news:" + newList.TrimEnd(',');
+
+			string newSetting = string.Empty;
+			foreach (String s in news)
+				newSetting += s + "|";
+
+			News = newSetting.TrimEnd('|');
+		}
+
 		public static bool GetFact(int index)
 		{
-			string Fact2 = Fact;
-			string[] temp = Fact2.Split('|');
-			string fact = temp[index];
+			string fact = Fact.Split('|')[index];
 			return fact != EMPTY_MODULE;
 		}
 
@@ -604,6 +757,236 @@ namespace Clockwise.Helpers
 			string tdih = TDIH.Split('|')[index];
 			return tdih != EMPTY_MODULE;
 		}
+
+		public static string GetWeather(int index)
+		{
+			return Weather.Split('|')[index];
+		}
+
+		public static string GetNews(int index)
+		{
+			return News.Split('|')[index];
+		}
+
+		public static string GetTwitter(int index)
+		{
+			return Twitter.Split('|')[index];
+		}
+
+		public static string GetCountdown(int index)
+		{
+			return Countdown.Split('|')[index];
+		}
+
+		public static string GetTraffic(int index)
+		{
+			return Traffic.Split('|')[index];
+		}
+
+		public static string GetReminders(int index)
+		{
+			return Reminders.Split('|')[index];
+		}
+
+		public static string GetReddit(int index)
+		{
+			return Reddit.Split('|')[index];
+		}
+
+		//------
+		public static string GetNews(int index, int subindex)
+		{
+			string thisNews = News.Split('|')[index];
+			string[] moduleList = thisNews.Substring(thisNews.IndexOf(':')+1).Split(',');
+			return moduleList[subindex];
+		}
+
+		public static string GetTwitter(int index, int subindex)
+		{
+			string thisTwitter = Twitter.Split('|')[index];
+			string[] moduleList = thisTwitter.Substring(thisTwitter.IndexOf(':') + 1).Split(',');
+			return moduleList[subindex];
+		}
+
+		public static string GetCountdown(int index, int subindex)
+		{
+			string thisCountdown = Countdown.Split('|')[index];
+			string[] moduleList = thisCountdown.Substring(thisCountdown.IndexOf(':') + 1).Split(',');
+			return moduleList[subindex];
+		}
+
+		public static string GetTraffic(int index, int subindex)
+		{
+			string thisCountdown = Countdown.Split('|')[index];
+			string[] moduleList = thisCountdown.Substring(thisCountdown.IndexOf(':') + 1).Split(',');
+			return moduleList[subindex];
+		}
+
+		public static string GetReminders(int index, int subindex)
+		{
+			string thisReminders = Reminders.Split('|')[index];
+			string[] moduleList = thisReminders.Substring(thisReminders.IndexOf(':') + 1).Split(',');
+			return moduleList[subindex];
+		}
+
+		public static string GetReddit(int index, int subindex)
+		{
+			string thisReddit = Reddit.Split('|')[index];
+			string[] moduleList = thisReddit.Substring(thisReddit.IndexOf(':') + 1).Split(',');
+			return moduleList[subindex];
+		}
+		//------
+
+		public static void DeleteWeather(int index)
+		{
+			string[] weathers = Weather.Split('|');
+			weathers[index] = EMPTY_MODULE;
+
+			string newSetting = string.Empty;
+			foreach (String s in weathers)
+				newSetting += s + "|";
+
+			Weather = newSetting.TrimEnd('|');
+		}
+
+		public static void DeleteReddit(int index, int subindex)
+		{
+			string[] reddits = Reddit.Split('|');
+			string thisReddit = reddits[index]; //reddit:subreddit:count,subreddit:count, ...
+			List<string> moduleList = new List<string>(thisReddit.Substring(thisReddit.IndexOf(':') + 1).Split(','));
+			moduleList.RemoveAt(subindex);
+
+			string newList = string.Empty;
+			foreach (String s in moduleList)
+				newList += s + ",";
+
+			if (newList != string.Empty)
+				reddits[index] = "reddit:" + newList.TrimEnd(',');
+			else 
+				reddits[index] = EMPTY_MODULE;
+
+			string newSetting = string.Empty;
+			foreach (String s in reddits)
+				newSetting += s + "|";
+
+			Reddit = newSetting.TrimEnd('|');
+		}
+
+		public static void DeleteTwitter(int index, int subindex)
+		{
+			string[] twitters = Twitter.Split('|');
+			string thisTwitter = twitters[index]; //twitter:subreddit:count,subreddit:count, ...
+			List<string> moduleList = new List<string>(thisTwitter.Substring(thisTwitter.IndexOf(':') + 1).Split(','));
+			moduleList.RemoveAt(subindex);
+
+			string newList = string.Empty;
+			foreach (String s in moduleList)
+				newList += s + ",";
+
+			if (newList != string.Empty)
+				twitters[index] = "twitter:" + newList.TrimEnd(',');
+			else
+				twitters[index] = EMPTY_MODULE;
+
+			string newSetting = string.Empty;
+			foreach (String s in twitters)
+				newSetting += s + "|";
+
+			Twitter = newSetting.TrimEnd('|');
+		}
+
+		public static void DeleteCountdown(int index, int subindex)
+		{
+			string[] countdowns = Twitter.Split('|');
+			string thisCountdown = countdowns[index]; //countdown:subreddit:count,subreddit:count, ...
+			List<string> moduleList = new List<string>(thisCountdown.Substring(thisCountdown.IndexOf(':') + 1).Split(','));
+			moduleList.RemoveAt(subindex);
+
+			string newList = string.Empty;
+			foreach (String s in moduleList)
+				newList += s + ",";
+
+			if (newList != string.Empty)
+				countdowns[index] = "countdown:" + newList.TrimEnd(',');
+			else
+				countdowns[index] = EMPTY_MODULE;
+
+			string newSetting = string.Empty;
+			foreach (String s in countdowns)
+				newSetting += s + "|";
+
+			Countdown = newSetting.TrimEnd('|');
+		}
+
+		public static void DeleteTraffic(int index, int subindex)
+		{
+			string[] traffics = Traffic.Split('|');
+			string thisTraffic = traffics[index]; //traffic:subreddit:count,subreddit:count, ...
+			List<string> moduleList = new List<string>(thisTraffic.Substring(thisTraffic.IndexOf(':') + 1).Split(','));
+			moduleList.RemoveAt(subindex);
+
+			string newList = string.Empty;
+			foreach (String s in moduleList)
+				newList += s + ",";
+
+			if (newList != string.Empty)
+				traffics[index] = "traffic:" + newList.TrimEnd(',');
+			else
+				traffics[index] = EMPTY_MODULE;
+
+			string newSetting = string.Empty;
+			foreach (String s in traffics)
+				newSetting += s + "|";
+
+			Traffic = newSetting.TrimEnd('|');
+		}
+
+		public static void DeleteReminders(int index, int subindex)
+		{
+			string[] reminders = Twitter.Split('|');
+			string thisReminders = reminders[index]; //reminders:subreddit:count,subreddit:count, ...
+			List<string> moduleList = new List<string>(thisReminders.Substring(thisReminders.IndexOf(':') + 1).Split(','));
+			moduleList.RemoveAt(subindex);
+
+			string newList = string.Empty;
+			foreach (String s in moduleList)
+				newList += s + ",";
+
+			if (newList != string.Empty)
+				reminders[index] = "reminders:" + newList.TrimEnd(',');
+			else
+				reminders[index] = EMPTY_MODULE;
+
+			string newSetting = string.Empty;
+			foreach (String s in reminders)
+				newSetting += s + "|";
+
+			Reminders = newSetting.TrimEnd('|');
+		}
+
+		public static void DeleteNews(int index, int subindex)
+		{
+			string[] news = Twitter.Split('|');
+			string thisNews = news[index]; //twitter:subreddit:count,subreddit:count, ...
+			List<string> moduleList = new List<string>(thisNews.Substring(thisNews.IndexOf(':') + 1).Split(','));
+			moduleList.RemoveAt(subindex);
+
+			string newList = string.Empty;
+			foreach (String s in moduleList)
+				newList += s + ",";
+
+			if (newList != string.Empty)
+				news[index] = "news:" + newList.TrimEnd(',');
+			else
+				news[index] = EMPTY_MODULE;
+
+			string newSetting = string.Empty;
+			foreach (String s in news)
+				newSetting += s + "|";
+
+			News = newSetting.TrimEnd('|');
+		}
+
 
 		public static void DeleteModule(Modules type, int index)
 		{

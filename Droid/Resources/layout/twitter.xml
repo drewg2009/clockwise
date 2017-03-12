@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:minWidth="25px"
+    android:minHeight="25px"
+    android:background="#00000000"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/relativeLayout2"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp">
+        <TextView
+            android:text="Category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/usernameText"
+            android:textColor="#ffffffff"
+            android:textSize="20dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true" />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/usernameInput"
+            android:hint="i.e. nasa"
+            android:textSize="15sp"
+            android:textAlignment="center"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="30dp"
+            android:drawableTint="#ffffffff"
+            android:backgroundTint="#ffffff"
+            android:textColorHint="#ffffff"
+            android:textColor="#ffffff" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/relativeLayout2"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp">
+        <TextView
+            android:text="Amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/amountText"
+            android:textColor="#ffffffff"
+            android:textSize="20dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true" />
+        <EditText
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/amountInput"
+            android:layout_weight="1"
+            android:hint="3"
+            android:textSize="15sp"
+            android:textAlignment="center"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="30dp"
+            android:drawableTint="#ffffffff"
+            android:backgroundTint="#ffffff"
+            android:textColor="#ffffff" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/relativeLayout3"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+        <include
+            layout="@layout/save_button"
+            android:id="@+id/save_button" />
+    </RelativeLayout>
+</LinearLayout>

@@ -42,6 +42,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/linearLayout1">
+            <LinearLayout
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:layout_width="0px"
+                android:layout_height="0px"
+                android:id="@+id/dummy">
+                <requestFocus />
+            </LinearLayout>
             <TextView
                 android:text="Single"
                 android:layout_width="match_parent"
@@ -201,6 +209,12 @@
                     android:layout_marginRight="20dp"
                     android:layout_centerVertical="true" />
             </RelativeLayout>
+            <include
+                layout="@layout/reddit"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginLeft="50dp"
+                android:id="@+id/reddit_settings" />
             <View
                 android:layout_height="1dp"
                 android:layout_width="match_parent"
@@ -241,6 +255,12 @@
                     android:layout_marginRight="20dp"
                     android:layout_centerVertical="true" />
             </RelativeLayout>
+            <include
+                layout="@layout/twitter"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginLeft="50dp"
+                android:id="@+id/twitter_settings" />
             <View
                 android:layout_height="1dp"
                 android:layout_width="match_parent"

@@ -255,53 +255,89 @@ namespace Clockwise.Droid
 			{
 				if (m != string.Empty)
 				{
-					RelativeLayout rl = (RelativeLayout)LayoutInflater.Inflate(Resource.Layout.module_holder, null);
-					rl.LayoutParameters = new LinearLayout.LayoutParams((int)(metrics.WidthPixels), LinearLayout.LayoutParams.MatchParent);
-
-					RelativeLayout module = rl.FindViewById<RelativeLayout>(Resource.Id.module);
-					RelativeLayout.LayoutParams moduleParams = new RelativeLayout.LayoutParams((int)(metrics.WidthPixels * .85), RelativeLayout.LayoutParams.MatchParent);
-					moduleParams.AddRule(LayoutRules.CenterHorizontal);
-					module.LayoutParameters = moduleParams;
-					module.Measure(RelativeLayout.LayoutParams.MatchParent, RelativeLayout.LayoutParams.MatchParent); 
-
-					TextView settingTitle = rl.FindViewById<TextView>(Resource.Id.setting_title);
-					ImageView settingImage = rl.FindViewById<ImageView>(Resource.Id.moduleImage);
-					settingTitle.Typeface = Typeface.CreateFromAsset(Resources.Assets, "HelveticaNeueLight.ttf");
-					settingTitle.TextSize = (int)((metrics.HeightPixels/metrics.Density) * .06);
-					RelativeLayout.LayoutParams titleParams = (RelativeLayout.LayoutParams)settingTitle.LayoutParameters;
-					titleParams.Width = (int)((metrics.WidthPixels * .85) / 2);
-					settingTitle.LayoutParameters = titleParams;
-
-					Console.WriteLine(module.MeasuredWidth + ", " + module.MeasuredHeight);
-					settingImage.LayoutParameters.Width = (int)(module.MeasuredHeight * .6);
-					settingImage.LayoutParameters.Height = (int)(module.MeasuredHeight *.6);
-
-
 					string type = m.Substring(0, m.IndexOf(':'));
+					//RelativeLayout rl = null;
 					switch (type)
 					{
 						case "fact":
-							settingTitle.Text = "Fun Fact";
-							moduleLayout.AddView(rl);
+							moduleLayout.AddView(CreateModuleDisplay(type, "Fun Fact"));
 							break;
 						case "quote":
-							settingTitle.Text = "Quote of the Day";
-
-							moduleLayout.AddView(rl);
+							moduleLayout.AddView(CreateModuleDisplay(type, "Quote of the Day"));
 							break;
 						case "tdih":
-							settingTitle.Text = "This Day in History";
-							moduleLayout.AddView(rl);
+							moduleLayout.AddView(CreateModuleDisplay(type, "This Day in History"));
 							break;
 						case "weather":
-							settingTitle.Text = "Weather";
-							settingImage.SetImageResource(Resource.Drawable.weather_icon);
-							moduleLayout.AddView(rl);
-
+							moduleLayout.AddView(CreateModuleDisplay(type, "Weather"));
 							break;
+						case "news":
+						case "reddit":
+						case "twitter":
+							{ //news:cat:count,cat:count, ...
+								string[] moduleList = m.Substring(m.IndexOf(':') + 1).Split(',');
+								foreach (string s in moduleList)
+								{
+									string[] settings = s.Split(':');
+									moduleLayout.AddView(CreateModuleDisplay(type, settings[0]));
+								}
+								break;
+							}
+
 					}
+
 				}
 			}
+		}
+
+		private RelativeLayout CreateModuleDisplay(string type, string title)
+		{
+			var metrics = Resources.DisplayMetrics;
+			RelativeLayout rl = (RelativeLayout)LayoutInflater.Inflate(Resource.Layout.module_holder, null);
+			rl.LayoutParameters = new LinearLayout.LayoutParams((int)(metrics.WidthPixels), LinearLayout.LayoutParams.MatchParent);
+
+			RelativeLayout module = rl.FindViewById<RelativeLayout>(Resource.Id.module);
+			RelativeLayout.LayoutParams moduleParams = new RelativeLayout.LayoutParams((int)(metrics.WidthPixels * .85), RelativeLayout.LayoutParams.MatchParent);
+			moduleParams.AddRule(LayoutRules.CenterHorizontal);
+			module.LayoutParameters = moduleParams;
+			module.Measure(RelativeLayout.LayoutParams.MatchParent, RelativeLayout.LayoutParams.MatchParent);
+
+			TextView settingTitle = rl.FindViewById<TextView>(Resource.Id.setting_title);
+			ImageView settingImage = rl.FindViewById<ImageView>(Resource.Id.moduleImage);
+			settingTitle.Typeface = Typeface.CreateFromAsset(Resources.Assets, "HelveticaNeueLight.ttf");
+			settingTitle.TextSize = (int)((metrics.HeightPixels / metrics.Density) * .06);
+			//RelativeLayout.LayoutParams titleParams = (RelativeLayout.LayoutParams)settingTitle.LayoutParameters;
+			//titleParams.Width = 
+			settingTitle.LayoutParameters.Width = RelativeLayout.LayoutParams.MatchParent;
+
+			settingImage.LayoutParameters.Width = (int)(module.MeasuredHeight * .6);
+			settingImage.LayoutParameters.Height = (int)(module.MeasuredHeight * .6);
+
+			settingTitle.Text = title;
+
+			switch (type)
+			{
+				case "fact":
+					break;
+				case "quote":
+					break;
+				case "tdih":
+					break;
+				case "weather":
+					settingImage.SetImageResource(Resource.Drawable.weather_icon);
+					break;
+				case "news":
+					settingImage.SetImageResource(Resource.Drawable.news_icon);
+					break;
+				case "reddit":
+					settingImage.SetImageResource(Resource.Drawable.reddit_icon);
+					break;
+				case "twitter":
+					settingImage.SetImageResource(Resource.Drawable.twitter_icon);
+					break;
+			}
+
+			return rl;
 		}
 
 		protected override void OnResume()
