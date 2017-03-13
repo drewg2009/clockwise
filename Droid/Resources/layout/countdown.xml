@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:minWidth="25px"
+    android:minHeight="25px"
+    android:background="#00000000"
+    android:orientation="vertical">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:id="@+id/nameInputLine">
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="20dp"
+            android:text="Event name:"
+            android:textColor="#ffffffff"
+            android:id="@+id/eventNameText" />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="(i.e. My Birthday)"
+            android:textAlignment="center"
+            android:id="@+id/eventNameInput"
+            android:layout_weight="1"
+            android:textSize="15dp"
+            android:textColor="#ffffffff" />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:paddingLeft="10dp">
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="20dp"
+            android:text="Event date:"
+            android:textColor="#ffffffff"
+            android:id="@+id/eventDateText" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:id="@+id/eventDateInput"
+            android:hint="Select date here"
+            android:textSize="15dp"
+            android:textColor="#ffffffff"
+            android:focusableInTouchMode="false" />
+    </LinearLayout>
+<!--<RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sample output: &quot;There are 10 days until {event name}.&quot;"
+            android:id="@+id/sampleOutput"
+            android:padding="10dp"
+            android:layout_alignParentRight="true"
+            android:textColor="#ffffffff" />
+    </RelativeLayout>-->
+    <RelativeLayout
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/relativeLayout3"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+        <include
+            layout="@layout/save_button"
+            android:id="@+id/save_button" />
+    </RelativeLayout>
+</LinearLayout>

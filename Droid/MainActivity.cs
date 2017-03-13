@@ -274,18 +274,17 @@ namespace Clockwise.Droid
 						case "news":
 						case "reddit":
 						case "twitter":
-							{ //news:cat:count,cat:count, ...
-								string[] moduleList = m.Substring(m.IndexOf(':') + 1).Split(',');
-								foreach (string s in moduleList)
-								{
-									string[] settings = s.Split(':');
-									moduleLayout.AddView(CreateModuleDisplay(type, settings[0]));
-								}
-								break;
+						case "countdown":
+						{ //news:cat:count,cat:count, ...
+							string[] moduleList = m.Substring(m.IndexOf(':') + 1).Split(',');
+							foreach (string s in moduleList)
+							{
+								string[] settings = s.Split(':');
+								moduleLayout.AddView(CreateModuleDisplay(type, settings[0]));
 							}
-
+							break;
+						}
 					}
-
 				}
 			}
 		}

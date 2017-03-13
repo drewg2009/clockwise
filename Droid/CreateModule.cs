@@ -62,6 +62,9 @@ namespace Clockwise.Droid
 			Twitter.Setup(alarmIndex, -1, FindViewById<LinearLayout>(Resource.Id.twitter_settings),
 			              FindViewById<ImageView>(Resource.Id.addTwitter), this);
 
+			Countdown.Setup(alarmIndex, -1, FindViewById<LinearLayout>(Resource.Id.countdown_settings),
+			                FindViewById<ImageView>(Resource.Id.addCountdown), this);
+			
 			//Toggle setup
 			ImageSwitcher factToggle = FindViewById<ImageSwitcher>(Resource.Id.factToggle);
 			ImageSwitcher quoteToggle = FindViewById<ImageSwitcher>(Resource.Id.quoteToggle);
