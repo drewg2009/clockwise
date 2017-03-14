@@ -95,8 +95,8 @@ namespace Clockwise.Droid
 					alarm_toggle.Activated = true;
 					int hourSet = Settings.GetAlarmHour(alarm_number);
 					int minuteSet = Settings.GetAlarmMinute(alarm_number);
-					Console.WriteLine("passing time: " + hourSet + ":" + minuteSet);
-					AlarmUtils.SetTime(Android.App.Application.Context, hourSet, minuteSet, alarm_number, Settings.GetAlarmRepeatDays(alarm_number), false);
+					int snoozeSet = Settings.GetAlarmSnooze(alarm_number);
+					AlarmUtils.SetTime(Application.Context, hourSet, minuteSet, alarm_number, Settings.GetAlarmRepeatDays(alarm_number), snoozeSet, false);
 				}
 				else {
 					//Turn alarm off

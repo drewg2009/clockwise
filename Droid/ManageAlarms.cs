@@ -18,6 +18,7 @@ namespace Clockwise.Droid
 	[Activity(Label = "Clockwise", MainLauncher = true, Icon = "@mipmap/icon")]
 	public class ManageAlarms : Activity
 	{
+		public static ManageAlarms instance = null;
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
@@ -102,7 +103,7 @@ namespace Clockwise.Droid
 				if (hourSet == 24) hourSet = 12;
 				Console.WriteLine("passing time: " + hourSet + ":" + minutepicker.Value);
 				AlarmUtils.SetTime(Android.App.Application.Context, hourSet, minutepicker.Value, 
-				                   Settings.Alarms == string.Empty ? 0 : currentAlarms.Length, repeatDaysResult, true);
+				                   Settings.Alarms == string.Empty ? 0 : currentAlarms.Length, repeatDaysResult, 5, true);
 
 				//Save repeat days
 				Settings.RepeatDays += Settings.RepeatDays == string.Empty ? "" + repeatDaysResult : "|" + repeatDaysResult;
@@ -176,9 +177,17 @@ namespace Clockwise.Droid
 				tv.SetTextColor(Color.ParseColor("#CCCCCC"));
 				tv.Typeface = Typeface.CreateFromAsset(Resources.Assets, "HelveticaNeueLight.ttf");
 			}
+
+			instance = this;
 		}
 
-		private void RefreshAlarms()
+		protected override void OnPause()
+		{
+			base.OnPause();
+			instance = null;
+		}
+
+		public void RefreshAlarms()
 		{
 			Console.Write("New alarms: " + Settings.Alarms);
 			LinearLayout alarmViewer = FindViewById<LinearLayout>(Resource.Id.alarm_viewer);

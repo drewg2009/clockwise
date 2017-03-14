@@ -13,34 +13,36 @@ namespace Clockwise.Droid
 {
 	public class AlarmUtils
 	{
-		public static string ALARM_NAME = "CLOCKWISE";
+		public static string ALARM_NAME = "Clockwise";
 
 		private static List<PendingIntent> pendingIntents = new List<PendingIntent>();
 		private static List<PendingIntent> notificationClickIntents = new List<PendingIntent>();
 		private static AlarmManager am = null;
-
+		private static PackageManager pm;
 		public static void Init(Context context, bool addingAlarm)
 		{
 			String[] currentAlarms = Settings.Alarms.Split('|');
 			ComponentName receiver = new ComponentName(context, Java.Lang.Class.FromType(typeof(AlarmReceiver)));
-        	PackageManager pm = context.PackageManager;
+        	pm = context.PackageManager;
 			pm.SetComponentEnabledSetting(receiver, ComponentEnabledState.Enabled, ComponentEnableOption.DontKillApp);
 
 			pendingIntents = new List<PendingIntent>();
 			notificationClickIntents = new List<PendingIntent>();
 
-			Intent alarmIntent = new Intent(context, typeof(AlarmReceiver));
 
 			for (int i = 0; i < currentAlarms.Length; i++)
 			{
 				notificationClickIntents.Add(PendingIntent.GetActivity(context, i, new Intent(), 0));
+				Intent alarmIntent = new Intent(context, typeof(AlarmReceiver));
+				alarmIntent.PutExtra("alarm_index", pendingIntents.Count);
 				pendingIntents.Add(PendingIntent.GetBroadcast(context, i, alarmIntent, PendingIntentFlags.UpdateCurrent));
-
 			}
 
 			if (addingAlarm)
 			{
 				notificationClickIntents.Add(PendingIntent.GetActivity(context, notificationClickIntents.Count, new Intent(), 0));
+				Intent alarmIntent = new Intent(context, typeof(AlarmReceiver));
+				alarmIntent.PutExtra("alarm_index", pendingIntents.Count);
 				pendingIntents.Add(PendingIntent.GetBroadcast(context, pendingIntents.Count, alarmIntent, PendingIntentFlags.UpdateCurrent));
 			}
 
@@ -48,12 +50,11 @@ namespace Clockwise.Droid
 			am = (AlarmManager)Application.Context.GetSystemService(Context.AlarmService);
 		}
 
-		public static void SetTime(Context context, int hour, int minute, int alarmIndex, int repeatDays, bool addingAlarm)
+		public static void SetTime(Context context, int hour, int minute, int alarmIndex, int repeatDays, int snooze, bool addingAlarm)
 		{
 			Init(context, addingAlarm);
 
-			//Create new alarm
-			Settings.EditAlarm(alarmIndex, hour, minute, repeatDays);
+			Settings.EditAlarm(alarmIndex, hour, minute, repeatDays, snooze);
 			am.Cancel(pendingIntents[alarmIndex]);
 
 			bool[] daySelection = new bool[7];
@@ -120,6 +121,22 @@ namespace Clockwise.Droid
 			Toast.MakeText(context, toast, ToastLength.Long).Show();
 		}
 
+		public static void Snooze(int index)
+		{
+			int interval = 1000 * 60 * Settings.GetAlarmSnooze(index);
+			Calendar calendar = Calendar.Instance;
+			calendar.TimeInMillis = Java.Lang.JavaSystem.CurrentTimeMillis() + interval;
+
+			if ((int)Build.VERSION.SdkInt >= 21)
+			{
+				AlarmManager.AlarmClockInfo info = new AlarmManager.AlarmClockInfo(calendar.TimeInMillis, notificationClickIntents[index]);
+				am.SetAlarmClock(info, pendingIntents[index]);
+			}
+			else {
+				am.SetExact(AlarmType.RtcWakeup, calendar.TimeInMillis, notificationClickIntents[index]);
+			}
+		}
+
 		public static void Cancel(Context context, int alarmIndex, bool addingAlarm)
 		{
 			//Helpers.Settings.AlarmTime = string.Empty;
@@ -135,30 +152,65 @@ namespace Clockwise.Droid
 			am.Cancel(pendingIntents[alarmIndex]);
 		}
 
-		public static void PostNotification(Context context)
+		public static void PostNotification(Context context, int alarm_index)
 		{
-			//Intent speechIntent = new Intent(context, null);
+			context.StopService(new Intent(context, typeof(SpeechService)));
 
-			//Intent snoozeIntent = new Intent(context, null);
-			//Intent closeIntent = new Intent(context, null);
+			Intent speechIntent = new Intent(context, typeof(SpeechService));
+			Intent snoozeIntent = new Intent(context, typeof(SnoozeService));
+			Intent closeIntent = new Intent(context, typeof(CloseService));
+			speechIntent.PutExtra("alarm_index", alarm_index);
+			snoozeIntent.PutExtra("alarm_index", alarm_index);
+			closeIntent.PutExtra("alarm_index", alarm_index);
+
+			PendingIntent piSpeech = PendingIntent.GetService(context, alarm_index, speechIntent, PendingIntentFlags.UpdateCurrent);
+			PendingIntent piSnooze = PendingIntent.GetService(context, alarm_index, snoozeIntent, PendingIntentFlags.UpdateCurrent);
+			PendingIntent piClose = PendingIntent.GetService(context, alarm_index, closeIntent, PendingIntentFlags.UpdateCurrent);
 
 			Notification.Builder builder = new Notification.Builder(context)
 				.SetLargeIcon(BitmapFactory.DecodeResource(context.Resources, Resource.Drawable.circle_high_res))
 				.SetSmallIcon(Resource.Drawable.ic_alarm_white_48dp)
-				.SetContentTitle("Clockwise")
+				.SetContentTitle("Clockwise: " + alarm_index)
 				.SetDefaults(NotificationDefaults.All)
 				.SetPriority((int)NotificationPriority.Max)
 				.SetStyle(new Notification.BigTextStyle().BigText("Click Play to hear your modules."));
 
+			//Add actions
+			if ((int)Build.VERSION.SdkInt >= 23)
+			{
+				Notification.Action playAction = new Notification.Action.Builder(null, "Play", piSpeech).Build();
+				Notification.Action snoozeAction = new Notification.Action.Builder(null, "Snooze", piSnooze).Build();
+				Notification.Action closeAction = new Notification.Action.Builder(null, "Close", piClose).Build();
+
+				builder.AddAction(playAction)
+						.AddAction(snoozeAction)
+						.AddAction(closeAction);
+
+			}
+			else if ((int)Build.VERSION.SdkInt >= 20)
+			{ //api 20-22
+				builder.AddAction(new Notification.Action.Builder(0, "Play", piSpeech).Build())
+						.AddAction(new Notification.Action.Builder(0, "Snooze", piSnooze).Build())
+						.AddAction(new Notification.Action.Builder(0, "Close", piClose).Build());
+			}
+			else { //for api 19
+				builder.AddAction(0, "Play", piSpeech)
+						.AddAction(0, "Snooze", piSnooze)
+						.AddAction(0, "Close", piClose);
+			}
+
 			Notification notification = builder.Build();
+			notification.Flags |= NotificationFlags.NoClear | NotificationFlags.OngoingEvent;
+
 			NotificationManager nm = (NotificationManager)Application.Context.GetSystemService(Context.NotificationService);
-			nm.Notify("ClockWise", 0, notification);
+			nm.Notify("Clockwise", alarm_index, notification);
+
 		}
 
-		public static void ClearNotification()
+		public static void ClearNotification(int alarm_index)
 		{
-			NotificationManager nm = (NotificationManager) Android.App.Application.Context.GetSystemService("notification");
-			nm.Cancel(ALARM_NAME, 0);
+			NotificationManager nm = (NotificationManager) Application.Context.GetSystemService(Context.NotificationService);
+			nm.Cancel(ALARM_NAME, alarm_index);
 		}
 
 	}
