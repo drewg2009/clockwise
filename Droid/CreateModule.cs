@@ -64,6 +64,9 @@ namespace Clockwise.Droid
 
 			Countdown.Setup(alarmIndex, -1, FindViewById<LinearLayout>(Resource.Id.countdown_settings),
 			                FindViewById<ImageView>(Resource.Id.addCountdown), this);
+
+			Reminders.Setup(alarmIndex, -1, FindViewById<LinearLayout>(Resource.Id.reminders_settings),
+			                FindViewById<ImageView>(Resource.Id.addReminders), this);
 			
 			//Toggle setup
 			ImageSwitcher factToggle = FindViewById<ImageSwitcher>(Resource.Id.factToggle);

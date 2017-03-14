@@ -81,15 +81,15 @@ namespace Clockwise.Helpers
 		public enum Modules {WEATHER, REDDIT, TWITTER, NEWS, COUNTDOWN, REMINDERS, TRAFFIC, FACT, QUOTE, TDIH};
 
 		public static string EMPTY_MODULE = "null";
-
+		public static string SEPARATERS = ":/;";
 		#endregion
 
 
 		public static string Alarms
-    {
+    	{
 			get {return AppSettings.GetValueOrDefault<string>(AlarmsKey, AlarmsDef);}
 			set {AppSettings.AddOrUpdateValue<string>(AlarmsKey, value);}
-	}
+		}
 
 		public static string Song
 		{

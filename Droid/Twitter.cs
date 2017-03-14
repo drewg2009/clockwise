@@ -55,6 +55,9 @@ namespace Clockwise.Droid
 							settingsHelper.collapse(duration, targetHeight);
 							addButton.SetImageResource(Resource.Drawable.plus);
 
+							//Clear
+							usernameInput.Text = string.Empty;
+							amountInput.Text = string.Empty;
 						}
 					}
 				};
@@ -70,9 +73,6 @@ namespace Clockwise.Droid
 						Settings.AddTwitter(index, usernameInput.Text, int.Parse(amountInput.Text));
 					else
 						Settings.EditTwitter(index, subindex, usernameInput.Text, int.Parse(amountInput.Text));
-					//Clear
-					usernameInput.Text = string.Empty;
-					amountInput.Text = string.Empty;
 
 					if (addButton != null)
 					{
@@ -81,6 +81,10 @@ namespace Clockwise.Droid
 						int duration = (int)(200);
 						settingsHelper.collapse(duration, targetHeight);
 						addButton.SetImageResource(Resource.Drawable.plus);
+
+						//Clear
+						usernameInput.Text = string.Empty;
+						amountInput.Text = string.Empty;
 					}
 
 					View view = activity.CurrentFocus;

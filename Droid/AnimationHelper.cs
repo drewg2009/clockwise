@@ -3,6 +3,8 @@ using Android.Views;
 using Android.Animation;
 using Android.Views.Animations;
 using Clockwise.Droid;
+using Android.Widget;
+
 namespace Clockwise.Droid
 {
 	public class AnimationHelper
@@ -13,12 +15,14 @@ namespace Clockwise.Droid
 		private void OnAnimationEnd(object sender, EventArgs e)
 		{
 			manager.Animating = false;
+			if(v.LayoutParameters.Height != 0)
+				v.LayoutParameters.Height = LinearLayout.LayoutParams.WrapContent;
 		}
 
-		private class UpdateLister : Java.Lang.Object, ValueAnimator.IAnimatorUpdateListener
+		private class UpdateListener : Java.Lang.Object, ValueAnimator.IAnimatorUpdateListener
 		{
 			View v;
-			public UpdateLister(View v)
+			public UpdateListener(View v)
 			{
 				this.v = v;
 			}
@@ -41,7 +45,7 @@ namespace Clockwise.Droid
 			int prevHeight = v.Height;
 			v.Visibility = ViewStates.Visible;
 			ValueAnimator valueAnimator = ValueAnimator.OfInt(prevHeight, targetHeight);
-			valueAnimator.AddUpdateListener(new UpdateLister(v));
+			valueAnimator.AddUpdateListener(new UpdateListener(v));
 					valueAnimator.AnimationEnd += OnAnimationEnd;
 			valueAnimator.SetInterpolator(new DecelerateInterpolator());
 			valueAnimator.SetDuration(duration);
@@ -56,7 +60,7 @@ namespace Clockwise.Droid
 			int prevHeight = v.Height;
 			ValueAnimator valueAnimator = ValueAnimator.OfInt(prevHeight, targetHeight);
 			valueAnimator.SetInterpolator(new DecelerateInterpolator());
-			valueAnimator.AddUpdateListener(new UpdateLister(v));
+			valueAnimator.AddUpdateListener(new UpdateListener(v));
 			valueAnimator.AnimationEnd += OnAnimationEnd;
     		valueAnimator.SetInterpolator(new DecelerateInterpolator());
     		valueAnimator.SetDuration(duration);

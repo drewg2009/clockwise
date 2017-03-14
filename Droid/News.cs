@@ -60,6 +60,9 @@ namespace Clockwise.Droid
 							settingsHelper.collapse(duration, targetHeight);
 							addButton.SetImageResource(Resource.Drawable.plus);
 
+							//Clear
+							spinner.SetSelection(0);
+							amountInput.Text = string.Empty;
 						}
 					}
 				};
@@ -76,10 +79,6 @@ namespace Clockwise.Droid
 					else
 						Settings.EditNews(index, subindex, spinner.SelectedItem.ToString(), int.Parse(amountInput.Text));
 
-					//Clear
-					spinner.SetSelection(0);
-					amountInput.Text = string.Empty;
-
 					if (addButton != null)
 					{
 						//Collapse
@@ -87,6 +86,10 @@ namespace Clockwise.Droid
 						int duration = (int)(200);
 						settingsHelper.collapse(duration, targetHeight);
 						addButton.SetImageResource(Resource.Drawable.plus);
+
+						//Clear
+						spinner.SetSelection(0);
+						amountInput.Text = string.Empty;
 					}
 
 					View view = activity.CurrentFocus;

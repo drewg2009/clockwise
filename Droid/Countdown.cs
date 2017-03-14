@@ -21,22 +21,43 @@ namespace Clockwise.Droid
 			activity = a;
 			Typeface font = Typeface.CreateFromAsset(activity.ApplicationContext.Resources.Assets, "HelveticaNeueLight.ttf");
 			v.FindViewById<TextView>(Resource.Id.eventNameText).Typeface = font;
-			v.FindViewById<TextView>(Resource.Id.eventDateInput).Typeface = font;
+			v.FindViewById<TextView>(Resource.Id.eventDateText).Typeface = font;
 
 			eventNameInput = v.FindViewById<EditText>(Resource.Id.eventNameInput);
 			eventDateInput = v.FindViewById<EditText>(Resource.Id.eventDateInput);
+
+			if (subindex >= 0)
+			{
+				string[] savedModuleSettings = Settings.GetCountdown(index, subindex).Split(':');
+				eventNameInput.Text = savedModuleSettings[0];
+				eventDateInput.Text = savedModuleSettings[1];
+			}
+
 			eventDateInput.InputType = InputTypes.Null;
 			eventDateInput.Click += delegate {
 				Calendar calendar = Calendar.Instance;
 				calendar.TimeInMillis = Java.Lang.JavaSystem.CurrentTimeMillis();
+				int year = calendar.Get(CalendarField.Year);
+				int month = calendar.Get(CalendarField.Month);
+				int day = calendar.Get(CalendarField.DayOfMonth);
+
+				if (eventDateInput.Text != string.Empty)
+				{
+					string[] date = eventDateInput.Text.Split('/');
+					month = int.Parse(date[0]) - 1;
+					day = int.Parse(date[1]);
+					year = int.Parse(date[2]);
+				}
+
 				DatePickerDialog dateWindow = new DatePickerDialog(activity, (object sender2, DatePickerDialog.DateSetEventArgs e2) =>
 				{
 					calendar.Set(e2.Year, e2.MonthOfYear, e2.DayOfMonth);
 					Date selectedDate = new Date(calendar.Time.Time);
-					Date currentDate = new Date(Java.Lang.JavaSystem.CurrentTimeMillis());
-					currentDate.Hours = 0;
-					currentDate.Minutes = 0;
-					currentDate.Seconds = 0;
+					calendar.TimeInMillis = Java.Lang.JavaSystem.CurrentTimeMillis();
+					calendar.Set(CalendarField.HourOfDay, 0);
+					calendar.Set(CalendarField.Minute, 0);
+					calendar.Set(CalendarField.Second, 0);
+					Date currentDate = new Date(calendar.Time.Time);
 					currentDate.Time = currentDate.Time + (1000 * 60 * 60 * 24) - 1;
 
 					if (selectedDate.After(currentDate))
@@ -44,7 +65,7 @@ namespace Clockwise.Droid
 					else
 						Toast.MakeText(activity.ApplicationContext, "Please selected a date after today", ToastLength.Long).Show();
 
-				}, calendar.Get(CalendarField.Year), calendar.Get(CalendarField.Month), calendar.Get(CalendarField.DayOfMonth));
+				}, year, month, day);
 				dateWindow.Window.SetType(WindowManagerTypes.ApplicationPanel);
 				//set min date to current date/time
 				dateWindow.DatePicker.MinDate = calendar.TimeInMillis - 1000;

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="5dp">
+    <TextView
+        android:id="@+id/reminderCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="count"
+        android:textSize="15dp"
+        android:textColor="#ffffff"
+        android:layout_marginLeft="15dp" />
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/reminderInput"
+        android:textAlignment="center"
+        android:textSize="15dp"
+        android:layout_weight="1"
+        android:textColor="#ffffff"
+        android:backgroundTint="#8e8e8e" />
+    <ImageView
+        android:id="@+id/reminderDeleteButton"
+        android:layout_width="30dp"
+        android:layout_height="30dp" />
+</LinearLayout>

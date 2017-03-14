@@ -275,6 +275,7 @@ namespace Clockwise.Droid
 						case "reddit":
 						case "twitter":
 						case "countdown":
+						case "reminders":
 						{ //news:cat:count,cat:count, ...
 							string[] moduleList = m.Substring(m.IndexOf(':') + 1).Split(',');
 							foreach (string s in moduleList)
@@ -333,6 +334,9 @@ namespace Clockwise.Droid
 					break;
 				case "twitter":
 					settingImage.SetImageResource(Resource.Drawable.twitter_icon);
+					break;
+				case "reminders":
+					settingImage.SetImageResource(Resource.Drawable.todo_icon);
 					break;
 			}
 

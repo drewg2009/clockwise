@@ -55,7 +55,9 @@ namespace Clockwise.Droid
 							int duration = (int)(200);
 							settingsHelper.collapse(duration, targetHeight);
 							addButton.SetImageResource(Resource.Drawable.plus);
-
+							//Clear
+							subredditInput.Text = string.Empty;
+							amountInput.Text = string.Empty;
 						}
 					}
 				};
@@ -71,9 +73,7 @@ namespace Clockwise.Droid
 						Settings.AddReddit(index, subredditInput.Text, int.Parse(amountInput.Text));
 					else
 						Settings.EditReddit(index, subindex, subredditInput.Text, int.Parse(amountInput.Text));
-					//Clear
-					subredditInput.Text = string.Empty;
-					amountInput.Text = string.Empty;
+					
 
 					if (addButton != null)
 					{
@@ -82,6 +82,9 @@ namespace Clockwise.Droid
 						int duration = (int)(200);
 						settingsHelper.collapse(duration, targetHeight);
 						addButton.SetImageResource(Resource.Drawable.plus);
+						//Clear
+						subredditInput.Text = string.Empty;
+						amountInput.Text = string.Empty;
 					}
 
 					View view = activity.CurrentFocus;
