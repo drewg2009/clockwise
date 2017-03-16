@@ -18,12 +18,18 @@ namespace Clockwise.Droid
 	public class MainActivity : Activity
 	{
 		private int repeatDaysResult = 0;
+		RelativeLayout settingsContainer;
+		LinearLayout snoozeRow;
+		LinearLayout buttonRow;
+		Typeface fontLight;
+		View parent;
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
-
+			fontLight = Typeface.CreateFromAsset(Resources.Assets, "HelveticaNeueLight.ttf");
 			// Set our view from the "main" layout resource
 			SetContentView(Resource.Layout.Main);
+			parent = FindViewById<LinearLayout>(Resource.Id.set_alarm_window);
 			int alarm_number = Intent.GetIntExtra("alarm_number", 0); //CHANGE
 
 			// Setup pickers
@@ -178,30 +184,41 @@ namespace Clockwise.Droid
 
 			//Settings expansion
 			RelativeLayout clock_settings_layout = FindViewById<RelativeLayout>(Resource.Id.clock_settings);
-			LinearLayout settings_row = FindViewById<LinearLayout>(Resource.Id.settings_row);
+			settingsContainer = FindViewById<RelativeLayout>(Resource.Id.settings_container);
+			snoozeRow = FindViewById<LinearLayout>(Resource.Id.snooze_row);
+			buttonRow = FindViewById<LinearLayout>(Resource.Id.settings_row);
 			ImageView settingsBtn = FindViewById<ImageView>(Resource.Id.settings);
 			AnimationManager settingsAnimationManager = new AnimationManager(false);
-			AnimationHelper settingsHelper = new AnimationHelper(settings_row, settingsAnimationManager);
+			AnimationHelper settingsHelper = new AnimationHelper(settingsContainer, settingsAnimationManager);
 
 			settingsBtn.Click += delegate
 			{
-				int initialHeight = clock_settings_layout.Height;
-				System.Console.WriteLine("clock height: " + initialHeight);
-
 				if (!settingsAnimationManager.Animating)
 				{
-					if (settings_row.LayoutParameters.Height == 0)
+					if (settingsContainer.LayoutParameters.Height == 0)
 					{
 						//Expand
-						int targetHeight = (int)(80 * settings_row.Context.Resources.DisplayMetrics.Density);
-						int duration = (int)(200);
-						settingsHelper.expand(duration, targetHeight);
+						int targetHeight = (int)(80 * settingsContainer.Context.Resources.DisplayMetrics.Density);
+						settingsHelper.expand((int)(200), targetHeight);
 					}
 					else {
 						//Collapse
-						int targetHeight = 0;
-						int duration = (int)(200);
-						settingsHelper.collapse(duration, targetHeight);
+						settingsHelper.collapse((int)(200), 0);
+
+						if (buttonRow.Alpha < .5f)
+						{
+							//Fade in settings
+							buttonRow.Enabled = true;
+							buttonRow.Clickable = true;
+							AnimationHelper buttonHolderFade = new AnimationHelper(buttonRow, null);
+
+							//Fade out snooze
+							snoozeRow.Enabled = false;
+							snoozeRow.Clickable = false;
+							AnimationHelper snoozeRowFade = new AnimationHelper(snoozeRow, null);
+							buttonHolderFade.Fade(100, 1.0f);
+							snoozeRowFade.Fade(100, 0f);
+						}
 					}
 				}
 			};
@@ -230,7 +247,48 @@ namespace Clockwise.Droid
 			//Pulldown
 			ImageView pulldown = FindViewById<ImageView>(Resource.Id.pulldown);
 			RelativeLayout.LayoutParams pulldownParams = (RelativeLayout.LayoutParams)pulldown.LayoutParameters;
-			pulldownParams.AddRule(LayoutRules.Below, Resource.Id.settings_row);
+			pulldownParams.AddRule(LayoutRules.Below, Resource.Id.settings_container);
+
+			//Snooze
+			FindViewById<ImageView>(Resource.Id.snooze).Click += delegate {
+				Console.WriteLine("clicked snooze");
+				if (buttonRow.Alpha > .5f)
+				{
+					Console.WriteLine("fading in");
+					//Fade in snooze
+					buttonRow.Enabled = false;
+					buttonRow.Clickable = false;
+
+					AnimationHelper buttonHolderFade = new AnimationHelper(buttonRow, null);
+					snoozeRow.Enabled = true;
+					snoozeRow.Clickable = true;
+
+					AnimationHelper snoozeRowFade = new AnimationHelper(snoozeRow, null);
+					buttonHolderFade.Fade(100, 0f);
+					snoozeRowFade.Fade(100, 1.0f);
+				}
+			};
+
+			SeekBar snoozeBar = FindViewById<SeekBar>(Resource.Id.snoozeBar);
+			TextView snoozeOutput = FindViewById<TextView>(Resource.Id.snoozeOutput);
+			snoozeOutput.Typeface = fontLight;
+			string[] snoozeValues = Resources.GetStringArray(Resource.Array.snooze_values);
+			snoozeBar.Max = snoozeValues.Length-1;
+			snoozeBar.ProgressChanged += delegate
+			{
+				Console.WriteLine("seek: " + snoozeBar.Progress);
+				snoozeOutput.Text = snoozeValues[snoozeBar.Progress];
+				Settings.SetAlarmSnooze(alarm_number, int.Parse(snoozeValues[snoozeBar.Progress]));
+			};
+
+			int snoozeVal = Settings.GetAlarmSnooze(alarm_number);
+			for (int i = 0; i < snoozeValues.Length; i++)
+			{
+				if (int.Parse(snoozeValues[i]) == snoozeVal)
+				{
+					snoozeBar.Progress = i;
+				}
+			}
 
 			//Scrollview
 			HorizontalScrollView scrollView = FindViewById<HorizontalScrollView>(Resource.Id.module_scroller);
@@ -260,16 +318,16 @@ namespace Clockwise.Droid
 					switch (type)
 					{
 						case "fact":
-							moduleLayout.AddView(CreateModuleDisplay(type, "Fun Fact"));
+							moduleLayout.AddView(CreateModuleDisplay(type, "Fun Fact", index));
 							break;
 						case "quote":
-							moduleLayout.AddView(CreateModuleDisplay(type, "Quote of the Day"));
+							moduleLayout.AddView(CreateModuleDisplay(type, "Quote of the Day", index));
 							break;
 						case "tdih":
-							moduleLayout.AddView(CreateModuleDisplay(type, "This Day in History"));
+							moduleLayout.AddView(CreateModuleDisplay(type, "This Day in History", index));
 							break;
 						case "weather":
-							moduleLayout.AddView(CreateModuleDisplay(type, "Weather"));
+							moduleLayout.AddView(CreateModuleDisplay(type, "Weather", index));
 							break;
 						case "news":
 						case "reddit":
@@ -281,7 +339,7 @@ namespace Clockwise.Droid
 							foreach (string s in moduleList)
 							{
 								string[] settings = s.Split(':');
-								moduleLayout.AddView(CreateModuleDisplay(type, settings[0]));
+									moduleLayout.AddView(CreateModuleDisplay(type, settings[0], index));
 							}
 							break;
 						}
@@ -290,7 +348,7 @@ namespace Clockwise.Droid
 			}
 		}
 
-		private RelativeLayout CreateModuleDisplay(string type, string title)
+		private RelativeLayout CreateModuleDisplay(string type, string title, int index)
 		{
 			var metrics = Resources.DisplayMetrics;
 			RelativeLayout rl = (RelativeLayout)LayoutInflater.Inflate(Resource.Layout.module_holder, null);
@@ -304,16 +362,24 @@ namespace Clockwise.Droid
 
 			TextView settingTitle = rl.FindViewById<TextView>(Resource.Id.setting_title);
 			ImageView settingImage = rl.FindViewById<ImageView>(Resource.Id.moduleImage);
+			ImageView navButton = rl.FindViewById<ImageView>(Resource.Id.navButton);
+
 			settingTitle.Typeface = Typeface.CreateFromAsset(Resources.Assets, "HelveticaNeueLight.ttf");
 			settingTitle.TextSize = (int)((metrics.HeightPixels / metrics.Density) * .06);
 			//RelativeLayout.LayoutParams titleParams = (RelativeLayout.LayoutParams)settingTitle.LayoutParameters;
 			//titleParams.Width = 
 			settingTitle.LayoutParameters.Width = RelativeLayout.LayoutParams.MatchParent;
 
-			settingImage.LayoutParameters.Width = (int)(module.MeasuredHeight * .6);
-			settingImage.LayoutParameters.Height = (int)(module.MeasuredHeight * .6);
+			parent.Measure(LinearLayout.LayoutParams.WrapContent, LinearLayout.LayoutParams.WrapContent);
+
+			navButton.LayoutParameters.Width = (int)((double)parent.MeasuredHeight*.14);
+			navButton.LayoutParameters.Height = (int)((double)parent.MeasuredHeight * .14);
 
 			settingTitle.Text = title;
+
+			//Add Editing
+			RelativeLayout displayRow = module.FindViewById<RelativeLayout>(Resource.Id.display_row);
+			LinearLayout editor = null;
 
 			switch (type)
 			{
@@ -325,22 +391,85 @@ namespace Clockwise.Droid
 					break;
 				case "weather":
 					settingImage.SetImageResource(Resource.Drawable.weather_icon);
+					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.weather, null);
+					Weather.Setup(index, editor, null, ApplicationContext);
 					break;
 				case "news":
 					settingImage.SetImageResource(Resource.Drawable.news_icon);
+					//editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.news, null);
 					break;
 				case "reddit":
 					settingImage.SetImageResource(Resource.Drawable.reddit_icon);
+					//editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.reddit, null);
 					break;
 				case "twitter":
 					settingImage.SetImageResource(Resource.Drawable.twitter_icon);
+					//editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.twitter, null);
 					break;
 				case "reminders":
 					settingImage.SetImageResource(Resource.Drawable.todo_icon);
 					break;
 			}
 
+			settingImage.LayoutParameters.Width = (int)((double)parent.MeasuredHeight * .4);
+			settingImage.LayoutParameters.Height = (int)((double)parent.MeasuredHeight * .4);
+
+			if (editor != null)
+			{
+				FrameLayout.LayoutParams editorParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MatchParent,
+				                                                                     ViewGroup.LayoutParams.WrapContent);
+				editorParams.LeftMargin = (int)(10*metrics.Density); //HOW THE FUCK DO YOU SET MARGINS CUS THIS AINT WORKING
+				editorParams.RightMargin = (int)(10*metrics.Density);
+				editor.LayoutParameters = editorParams;
+				editor.Alpha = 0;
+				editor.Visibility = ViewStates.Invisible;
+
+				displayRow.AddView(editor);
+			}
+
+			navButton.Click += delegate {
+				if (editor.Alpha < .5f)
+				{
+					//buttonRow.Enabled = true;
+					//buttonRow.Clickable = true;
+					AnimationHelper editorFade = new AnimationHelper(editor, null);
+					AnimationHelper imageFade = new AnimationHelper(settingImage, null);
+					editorFade.Fade(200, 1f);
+					imageFade.Fade(200, 0f);
+					navButton.SetImageResource(Resource.Drawable.back_button);
+				}
+				else {
+					AnimationHelper editorFade = new AnimationHelper(editor, null);
+					AnimationHelper imageFade = new AnimationHelper(settingImage, null);
+					editorFade.Fade(200, 0f);
+					imageFade.Fade(200, 1f);
+					navButton.SetImageResource(Resource.Drawable.edit_button);
+				}
+			};
+
 			return rl;
+		}
+
+		public override void OnBackPressed()
+		{
+			if (buttonRow.Alpha < .5f)
+			{
+				Console.WriteLine("fading out");
+				//Fade in settings
+				buttonRow.Enabled = true;
+				buttonRow.Clickable = true;
+				AnimationHelper buttonHolderFade = new AnimationHelper(buttonRow, null);
+
+				//Fade out snooze
+				snoozeRow.Enabled = false;
+				snoozeRow.Clickable = false;
+				AnimationHelper snoozeRowFade = new AnimationHelper(snoozeRow, null);
+				buttonHolderFade.Fade(100, 1.0f);
+				snoozeRowFade.Fade(100, 0f);
+			}
+			else {
+				base.OnBackPressed();
+			}
 		}
 
 		protected override void OnResume()
@@ -383,6 +512,14 @@ namespace Clockwise.Droid
 				return true;
 			}
 		}
+
+		//public class Hou : Java.Lang.Object, View.IOnDragListener
+		//{
+		//	public bool OnDrag(View v, DragEvent e)
+		//	{
+		//		return true;
+		//	}
+		//}
 				
 		public override async void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
 		{

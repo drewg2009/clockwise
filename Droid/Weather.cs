@@ -75,10 +75,10 @@ namespace Clockwise.Droid
 			if (weatherSettings != Settings.EMPTY_MODULE)
 			{
 				string[] settings = weatherSettings.Split(':');
-				s1.ScaleX = settings[1] == "1" ? -1 : 1;
-				s2.ScaleX = settings[2] == "1" ? -1 : 1;
-				s3.ScaleX = settings[3] == "1" ? -1 : 1;
-				s4.ScaleX = settings[4] == "1" ? -1 : 1;
+				s1.ScaleX = settings[1] == "1" ? 1 : -1;
+				s2.ScaleX = settings[2] == "1" ? 1 : -1;
+				s3.ScaleX = settings[3] == "1" ? 1 : -1;
+				s4.ScaleX = settings[4] == "1" ? 1 : -1;
 			}
 
 			s1.Click += delegate {
@@ -111,11 +111,14 @@ namespace Clockwise.Droid
 						(s3.ScaleX < 0),
 						(s4.ScaleX < 0));
 
-					//Collapse
-					int targetHeight = 0;
-					int duration = (int)(200);
-					settingsHelper.collapse(duration, targetHeight);
-					addButton.SetImageResource(Resource.Drawable.plus);
+					if (addButton != null)
+					{
+						//Collapse
+						int targetHeight = 0;
+						int duration = (int)(200);
+						settingsHelper.collapse(duration, targetHeight);
+						addButton.SetImageResource(Resource.Drawable.plus);
+					}
 
 					Toast.MakeText(c, "Weather module saved.", ToastLength.Short).Show();
 				}

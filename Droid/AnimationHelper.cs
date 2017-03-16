@@ -12,23 +12,44 @@ namespace Clockwise.Droid
 		AnimationManager manager;
 		View v;
 
-		private void OnAnimationEnd(object sender, EventArgs e)
+		private void OnHeightAnimationEnd(object sender, EventArgs e)
 		{
 			manager.Animating = false;
-			if(v.LayoutParameters.Height != 0)
-				v.LayoutParameters.Height = LinearLayout.LayoutParams.WrapContent;
+			//if(v.LayoutParameters.Height != 0)
+			//	v.LayoutParameters.Height = RelativeLayout.LayoutParams.WrapContent;
 		}
 
-		private class UpdateListener : Java.Lang.Object, ValueAnimator.IAnimatorUpdateListener
+		private void OnAlphaAnimationEnd(object sender, EventArgs e)
+		{
+			//manager.Animating = false;
+			v.Visibility = (v.Alpha < 0.5f) ?
+					ViewStates.Invisible : ViewStates.Visible;
+		}
+
+		private class HeightUpdateListener : Java.Lang.Object, ValueAnimator.IAnimatorUpdateListener
 		{
 			View v;
-			public UpdateListener(View v)
+			public HeightUpdateListener(View v)
 			{
 				this.v = v;
 			}
 			public void OnAnimationUpdate(ValueAnimator animation)
 			{
 				v.LayoutParameters.Height = (int)animation.AnimatedValue;
+				v.RequestLayout();
+			}
+		}
+
+		private class AlphaUpdateListener : Java.Lang.Object, ValueAnimator.IAnimatorUpdateListener
+		{
+			View v;
+			public AlphaUpdateListener(View v)
+			{
+				this.v = v;
+			}
+			public void OnAnimationUpdate(ValueAnimator animation)
+			{
+				v.Alpha = (float)animation.AnimatedValue;
 				v.RequestLayout();
 			}
 		}
@@ -45,8 +66,8 @@ namespace Clockwise.Droid
 			int prevHeight = v.Height;
 			v.Visibility = ViewStates.Visible;
 			ValueAnimator valueAnimator = ValueAnimator.OfInt(prevHeight, targetHeight);
-			valueAnimator.AddUpdateListener(new UpdateListener(v));
-					valueAnimator.AnimationEnd += OnAnimationEnd;
+			valueAnimator.AddUpdateListener(new HeightUpdateListener(v));
+					valueAnimator.AnimationEnd += OnHeightAnimationEnd;
 			valueAnimator.SetInterpolator(new DecelerateInterpolator());
 			valueAnimator.SetDuration(duration);
 		    valueAnimator.Start();
@@ -60,11 +81,24 @@ namespace Clockwise.Droid
 			int prevHeight = v.Height;
 			ValueAnimator valueAnimator = ValueAnimator.OfInt(prevHeight, targetHeight);
 			valueAnimator.SetInterpolator(new DecelerateInterpolator());
-			valueAnimator.AddUpdateListener(new UpdateListener(v));
-			valueAnimator.AnimationEnd += OnAnimationEnd;
+			valueAnimator.AddUpdateListener(new HeightUpdateListener(v));
+			valueAnimator.AnimationEnd += OnHeightAnimationEnd;
     		valueAnimator.SetInterpolator(new DecelerateInterpolator());
     		valueAnimator.SetDuration(duration);
     		valueAnimator.Start();
+		}
+
+		public void Fade(int duration, float targetAlpha)
+		{
+			//manager.Animating = true;
+			float prevAlpha = v.Alpha;
+			ValueAnimator valueAnimator = ValueAnimator.OfFloat(prevAlpha, targetAlpha);
+			valueAnimator.SetInterpolator(new DecelerateInterpolator());
+			valueAnimator.AddUpdateListener(new AlphaUpdateListener(v));
+			valueAnimator.AnimationEnd += OnAlphaAnimationEnd;
+			valueAnimator.SetInterpolator(new DecelerateInterpolator());
+			valueAnimator.SetDuration(duration);
+			valueAnimator.Start();
 		}
 	}
 }

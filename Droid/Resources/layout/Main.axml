@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:minWidth="25px"
     android:minHeight="25px"
-    android:background="#ffe8e8e8">
+    android:background="#ffe8e8e8"
+    android:id="@+id/set_alarm_window">
     <RelativeLayout
         android:minWidth="25px"
         android:minHeight="25px"
@@ -193,7 +194,133 @@
                 </LinearLayout>
             </RelativeLayout>
         </RelativeLayout>
-        <LinearLayout
+        <RelativeLayout
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/settings_container"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_below="@id/clock_settings"
+            android:background="#ffffffff">
+            <LinearLayout xmlns:tools="http://schemas.android.com/tools"
+                android:orientation="horizontal"
+                android:minWidth="25px"
+                android:minHeight="25px"
+                android:layout_width="match_parent"
+                android:id="@+id/snooze_row"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="#ffffffff"
+                android:layout_below="@id/clock_settings"
+                android:layout_height="wrap_content"
+                android:paddingTop="40dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:enabled="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:clickable="false"
+                android:alpha="0">
+                <SeekBar
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/snoozeBar"
+                    android:layout_weight="1" />
+                <TextView
+                    android:text="Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/snoozeOutput"
+                    android:textSize="20dp"
+                    android:layout_marginLeft="5dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:minWidth="25px"
+                android:minHeight="25px"
+                android:layout_width="match_parent"
+                android:id="@+id/settings_row"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_below="@id/clock_settings"
+                android:layout_height="wrap_content"
+                android:paddingTop="40dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:enabled="true">
+                <ImageView
+                    android:src="@drawable/settings_tone"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/tone"
+                    android:layout_weight="1" />
+                <ImageView
+                    android:src="@drawable/settings_snooze"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/snooze"
+                    android:layout_weight="1" />
+                <ImageView
+                    android:src="@drawable/settings_speech"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/speech"
+                    android:layout_weight="1" />
+                <ImageView
+                    android:src="@drawable/settings_order"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/moduleOrder"
+                    android:layout_weight="1" />
+                <ImageView
+                    android:src="@drawable/settings_about"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/about"
+                    android:layout_weight="1" />
+            <!--<LinearLayout
+                    android:orientation="horizontal"
+                    android:minWidth="25px"
+                    android:minHeight="25px"
+                    android:layout_width="match_parent"
+                    android:id="@+id/buttonHolder"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:src="@drawable/settings_tone"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:id="@+id/tone"
+                        android:layout_weight="1" />
+                    <ImageView
+                        android:src="@drawable/settings_snooze"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:id="@+id/snooze"
+                        android:layout_weight="1" />
+                    <ImageView
+                        android:src="@drawable/settings_speech"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:id="@+id/speech"
+                        android:layout_weight="1" />
+                    <ImageView
+                        android:src="@drawable/settings_order"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:id="@+id/moduleOrder"
+                        android:layout_weight="1" />
+                    <ImageView
+                        android:src="@drawable/settings_about"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:id="@+id/about"
+                        android:layout_weight="1" />
+                </LinearLayout>-->
+            </LinearLayout>
+        </RelativeLayout>
+    <!--<LinearLayout
             android:orientation="horizontal"
             android:minWidth="25px"
             android:minHeight="25px"
@@ -206,38 +333,80 @@
             android:layout_height="0dp"
             android:paddingTop="40dp"
             android:paddingLeft="5dp"
-            android:paddingRight="5dp">
-            <ImageView
-                android:src="@drawable/settings_tone"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:id="@+id/imageView1"
+            android:paddingRight="5dp"
+            android:enabled="true">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:minWidth="25px"
+                android:minHeight="25px"
+                android:layout_width="match_parent"
+                android:id="@+id/buttonHolder"
+                android:layout_height="wrap_content"
+                android:alpha="1">
+                <ImageView
+                    android:src="@drawable/settings_tone"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/tone"
+                    android:layout_weight="1" />
+                <ImageView
+                    android:src="@drawable/settings_snooze"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/snooze"
+                    android:layout_weight="1" />
+                <ImageView
+                    android:src="@drawable/settings_speech"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/speech"
+                    android:layout_weight="1" />
+                <ImageView
+                    android:src="@drawable/settings_order"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/moduleOrder"
+                    android:layout_weight="1" />
+                <ImageView
+                    android:src="@drawable/settings_about"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/about"
+                    android:layout_weight="1" />
+            </LinearLayout>
+        </LinearLayout>-->
+    <!--<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+            android:orientation="horizontal"
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="match_parent"
+            android:id="@+id/snooze_row"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="#ffffffff"
+            android:layout_below="@id/clock_settings"
+            android:layout_height="0dp"
+            android:paddingTop="40dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:enabled="false"
+            android:alpha="0"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:clickable="false">
+            <SeekBar
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:id="@+id/snoozeBar"
                 android:layout_weight="1" />
-            <ImageView
-                android:src="@drawable/settings_snooze"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:id="@+id/imageView1"
-                android:layout_weight="1" />
-            <ImageView
-                android:src="@drawable/settings_speech"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:id="@+id/imageView1"
-                android:layout_weight="1" />
-            <ImageView
-                android:src="@drawable/settings_order"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:id="@+id/imageView1"
-                android:layout_weight="1" />
-            <ImageView
-                android:src="@drawable/settings_about"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:id="@+id/imageView1"
-                android:layout_weight="1" />
-        </LinearLayout>
+            <TextView
+                android:text="Text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/snoozeOutput"
+                android:textSize="20dp"
+                android:layout_marginLeft="5dp" />
+        </LinearLayout>-->
         <ImageView
             android:src="@drawable/pulldown"
             android:id="@+id/pulldown"
@@ -245,7 +414,7 @@
             android:adjustViewBounds="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/settings_row"
+            android:layout_below="@id/settings_container"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp" />
         <ImageView
@@ -254,7 +423,7 @@
             android:id="@+id/add_module_button"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
-            android:layout_above="@id/settings_row"
+            android:layout_above="@id/settings_container"
             android:layout_alignParentLeft="false"
             android:layout_alignParentTop="false"
             android:layout_alignParentRight="false"
@@ -271,7 +440,7 @@
             android:id="@+id/settings"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
-            android:layout_above="@id/settings_row"
+            android:layout_above="@id/settings_container"
             android:layout_alignParentRight="true"
             android:layout_marginRight="35dp"
             android:layout_marginBottom="-10dp" />
@@ -282,7 +451,7 @@
             android:id="@+id/alarm_toggle"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
-            android:layout_above="@id/settings_row"
+            android:layout_above="@id/settings_container"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="20dp"
             android:layout_marginBottom="-20dp"

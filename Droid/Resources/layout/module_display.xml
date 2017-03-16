@@ -4,57 +4,63 @@
     android:minHeight="25px"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/relativeLayout4">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    android:id="@+id/relativeLayout4"
+    android:background="@drawable/gradient_bg">
+    <RelativeLayout
         android:minWidth="25px"
         android:minHeight="25px"
-        android:background="@drawable/gradient_bg"
-        android:orientation="vertical">
-        <RelativeLayout
-            android:minWidth="25px"
-            android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/title_row">
+        <TextView
+            android:text="Module Title"
+            android:id="@+id/setting_title"
+            android:textSize="35dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffffff"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="right" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/display_row"
+        android:layout_below="@id/title_row">
+        <ImageView
+            android:src="@android:drawable/ic_menu_gallery"
+            android:id="@+id/moduleImage"
+            android:layout_marginLeft="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    <!--<include xmlns:tools="http://schemas.android.com/tools"
+            layout="@layout/weather"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/relativeLayout1">
-            <TextView
-                android:text="Module Title"
-                android:id="@+id/setting_title"
-                android:textSize="35dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#ffffffff"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                android:gravity="right" />
-        </RelativeLayout>
-        <RelativeLayout
-            android:minWidth="25px"
-            android:minHeight="25px"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/relativeLayout2">
-            <ImageView
-                android:src="@android:drawable/ic_menu_gallery"
-                android:id="@+id/moduleImage"
-                android:layout_width="250dp"
-                android:layout_height="250dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginBottom="20dp" />
-        </RelativeLayout>
-        <RelativeLayout
-            android:minWidth="25px"
-            android:minHeight="25px"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/relativeLayout3" />
-        <RelativeLayout
-            android:minWidth="25px"
-            android:minHeight="25px"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/relativeLayout4" />
-    </LinearLayout>
+            android:layout_marginRight="10dp"
+            android:alpha="0"
+            tools:visibility="invisible"
+            android:id="@+id/weather_settings" />-->
+    </RelativeLayout>
+    <RelativeLayout
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/navigate_row"
+        android:layout_below="@id/display_row">
+        <ImageView
+            android:src="@drawable/edit_button"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/navButton"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:paddingBottom="20dp"
+            android:paddingRight="20dp" />
+    </RelativeLayout>
 </RelativeLayout>
