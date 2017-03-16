@@ -74,7 +74,8 @@ namespace Clockwise.Droid
 					if (player == null)
 					{
 						AudioManager audioManager = (AudioManager)context.GetSystemService(Context.AudioService);
-						player = MediaPlayer.Create(context, RingtoneManager.GetDefaultUri(RingtoneType.Ringtone));
+						player = MediaPlayer.Create(context, RingtoneManager.GetDefaultUri(RingtoneType.Alarm));
+						//player = MediaPlayer.Create(context, AlarmManager.GetDefaultUri(RingtoneType.Ringtone));
 
 						try
 						{
@@ -99,7 +100,7 @@ namespace Clockwise.Droid
 				if (player == null)
 				{
 					AudioManager audioManager = (AudioManager)context.GetSystemService(Context.AudioService);
-					player = MediaPlayer.Create(context, RingtoneManager.GetDefaultUri(RingtoneType.Ringtone));
+					player = MediaPlayer.Create(context, RingtoneManager.GetDefaultUri(RingtoneType.Alarm));
 
 					try
 					{

@@ -12,6 +12,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Clockwise.Helpers;
+using Android.Content.PM;
 
 namespace Clockwise.Droid
 {
@@ -19,6 +20,8 @@ namespace Clockwise.Droid
 	public class ManageAlarms : Activity
 	{
 		public static ManageAlarms instance = null;
+		public static SongManager sm = null;
+		public static List<Song> songList = null;
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
@@ -179,6 +182,20 @@ namespace Clockwise.Droid
 			}
 
 			instance = this;
+			if (CheckSelfPermission(
+				Android.Manifest.Permission.ReadExternalStorage)
+				!= Permission.Granted)
+			{
+				RequestPermissions(
+						new String[] { Android.Manifest.Permission.ReadExternalStorage },
+						1);
+			}
+			else {
+				sm = SongManager.getInstance(this);
+				songList = sm.getSongList();
+			}
+
+
 		}
 
 		protected override void OnPause()
@@ -255,6 +272,37 @@ namespace Clockwise.Droid
 			gap.LayoutParameters = gap_params;
 			alarmViewer.AddView(gap);
 			alarmViewer.AddView(alarmRow);
+		}
+
+		public override async void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
+		{
+			switch (requestCode)
+			{
+				case 1:
+					{
+
+						// If request is cancelled, the result arrays are empty.
+						if (grantResults.Count() > 0
+							&& grantResults[0] == Permission.Granted)
+						{
+
+							// permission was granted, yay! Do the
+							// contacts-related task you need to do.
+							Settings.AndroidFileAccess = "true";
+							Toast.MakeText(Android.App.Application.Context, "Permission granted to access song files", ToastLength.Short).Show();
+							sm = SongManager.getInstance(this);
+							songList = sm.getSongList();
+						}
+						else {
+
+							// permission denied, boo! Disable the
+							// functionality that depends on this permission.
+							Toast.MakeText(Android.App.Application.Context, "Permission denied to access song files", ToastLength.Short).Show();
+
+						}
+						break;
+					}
+			}
 		}
 	}
 }

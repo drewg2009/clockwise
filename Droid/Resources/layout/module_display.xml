@@ -30,11 +30,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/display_row"
-        android:layout_below="@id/title_row">
+        android:layout_below="@id/title_row"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
         <ImageView
             android:src="@android:drawable/ic_menu_gallery"
             android:id="@+id/moduleImage"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     <!--<include xmlns:tools="http://schemas.android.com/tools"

@@ -290,6 +290,11 @@ namespace Clockwise.Droid
 				}
 			}
 
+			//Song select
+			FindViewById<ImageView>(Resource.Id.tone).Click += delegate {
+				StartActivity(typeof(SongSelect));
+			};
+
 			//Scrollview
 			HorizontalScrollView scrollView = FindViewById<HorizontalScrollView>(Resource.Id.module_scroller);
 			LinearLayout scroll_layout = FindViewById<LinearLayout>(Resource.Id.module_layout);
@@ -372,8 +377,8 @@ namespace Clockwise.Droid
 
 			parent.Measure(LinearLayout.LayoutParams.WrapContent, LinearLayout.LayoutParams.WrapContent);
 
-			navButton.LayoutParameters.Width = (int)((double)parent.MeasuredHeight*.14);
-			navButton.LayoutParameters.Height = (int)((double)parent.MeasuredHeight * .14);
+			navButton.LayoutParameters.Width = (int)(((double)parent.MeasuredHeight/metrics.Density) *.4);
+			navButton.LayoutParameters.Height = (int)(((double)parent.MeasuredHeight / metrics.Density) * .4);
 
 			settingTitle.Text = title;
 
@@ -418,8 +423,9 @@ namespace Clockwise.Droid
 			{
 				FrameLayout.LayoutParams editorParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MatchParent,
 				                                                                     ViewGroup.LayoutParams.WrapContent);
-				editorParams.LeftMargin = (int)(10*metrics.Density); //HOW THE FUCK DO YOU SET MARGINS CUS THIS AINT WORKING
-				editorParams.RightMargin = (int)(10*metrics.Density);
+				
+				//editorParams.LeftMargin = (int)(10*metrics.Density); //HOW THE FUCK DO YOU SET MARGINS CUS THIS AINT WORKING
+				//editorParams.RightMargin = (int)(10*metrics.Density);
 				editor.LayoutParameters = editorParams;
 				editor.Alpha = 0;
 				editor.Visibility = ViewStates.Invisible;

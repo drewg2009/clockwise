@@ -9,7 +9,7 @@ namespace Clockwise.Droid
 	public class Song
 	{
 		private long id;
-		private String title;
+		public String Title;
 		private String artist;
 		private Android.Net.Uri songUri;
 		private Context context;
@@ -17,7 +17,7 @@ namespace Clockwise.Droid
 		public Song(Context c, long songID, String songTitle, String songArtist, Android.Net.Uri songUri, long albumId)
 		{
 			id = songID;
-			title = songTitle;
+			Title = songTitle;
 			artist = songArtist;
 			this.songUri = songUri;
 			context = c;
@@ -30,10 +30,6 @@ namespace Clockwise.Droid
 			return id;
 		}
 
-		public String getTitle()
-		{
-			return title;
-		}
 
 		public String getArtist()
 		{

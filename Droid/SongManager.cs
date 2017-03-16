@@ -59,6 +59,8 @@ namespace Clockwise.Droid
 				while (musicCursor.MoveToNext());
 				musicCursor.Close();
 			}
+
+			songList.Sort((x, y) => string.Compare(x.Title, y.Title, StringComparison.Ordinal));
 			return songList;
 		}
 
