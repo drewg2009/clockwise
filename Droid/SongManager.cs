@@ -77,11 +77,17 @@ namespace Clockwise.Droid
 			return SongService.player != null && SongService.player.IsPlaying;
 		}
 
-		void stop()
+		public void setVolume(float i)
 		{
-			if (ServiceHelper.IsMyServiceRunning(typeof(SongService), c)) {
-	            c.StopService(SongService.intent);
-	        }
+			if(SongService.player != null) SongService.player.SetVolume(i, i);
+		}
+
+		public void stop()
+		{
+			//if (ServiceHelper.IsMyServiceRunning(typeof(SongService), c)) {
+	  //          c.StopService(SongService.intent);
+	  //      }
+			c.StopService(SongService.intent);
 	    }
 	}
 }

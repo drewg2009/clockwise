@@ -32,15 +32,17 @@ namespace Clockwise.Droid
 				Calendar calendar = Calendar.Instance;
 				calendar.TimeInMillis = Java.Lang.JavaSystem.CurrentTimeMillis();
 
-				if (Settings.IsAlarmOn(alarm_index))
+				int temp = int.Parse(Settings.GetAlarmField(alarm_index, Settings.AlarmField.Status));
+				if (temp == (int)Settings.AlarmStatus.ALARM_ON)
 				{
-					if (Settings.GetAlarmRepeatDays(alarm_index) > 0)
+					if (int.Parse(Settings.GetAlarmField(alarm_index, Settings.AlarmField.RepeatDays)) > 0)
 					{
-						AlarmUtils.SetTime(this, Settings.GetAlarmHour(alarm_index), Settings.GetAlarmMinute(alarm_index),
-						                   alarm_index, Settings.GetAlarmRepeatDays(alarm_index), Settings.GetAlarmSnooze(alarm_index), false);
+						AlarmUtils.SetTime(this, int.Parse(Settings.GetAlarmField(alarm_index, Settings.AlarmField.Hour)),
+						                   int.Parse(Settings.GetAlarmField(alarm_index, Settings.AlarmField.Minute)),
+						                   alarm_index, int.Parse(Settings.GetAlarmField(alarm_index, Settings.AlarmField.RepeatDays)), false); 
 					}
 					else {
-						Settings.ToggleAlarm(alarm_index, false);
+						Settings.SetAlarmField(alarm_index, Settings.AlarmField.Status, "" + (int)Settings.AlarmStatus.ALARM_OFF);
 						if (ManageAlarms.instance != null)
 							ManageAlarms.instance.RefreshAlarms();
 					}

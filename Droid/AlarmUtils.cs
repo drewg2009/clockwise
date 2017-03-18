@@ -50,11 +50,11 @@ namespace Clockwise.Droid
 			am = (AlarmManager)Application.Context.GetSystemService(Context.AlarmService);
 		}
 
-		public static void SetTime(Context context, int hour, int minute, int alarmIndex, int repeatDays, int snooze, bool addingAlarm)
+		public static void SetTime(Context context, int hour, int minute, int alarmIndex, int repeatDays, bool addingAlarm)
 		{
 			Init(context, addingAlarm);
 
-			Settings.EditAlarm(alarmIndex, hour, minute, repeatDays, snooze);
+			Settings.EditAlarm(alarmIndex, hour, minute, repeatDays);
 			am.Cancel(pendingIntents[alarmIndex]);
 
 			bool[] daySelection = new bool[7];
@@ -123,7 +123,7 @@ namespace Clockwise.Droid
 
 		public static void Snooze(int index)
 		{
-			int interval = 1000 * 60 * Settings.GetAlarmSnooze(index);
+			int interval = 1000 * 60 * int.Parse(Settings.GetAlarmField(index, Settings.AlarmField.Snooze));
 			Calendar calendar = Calendar.Instance;
 			calendar.TimeInMillis = Java.Lang.JavaSystem.CurrentTimeMillis() + interval;
 

@@ -24,13 +24,13 @@ namespace Clockwise.Droid
 
 		public override void OnReceive(Context context, Intent intent)
 		{
+			int alarm_index = intent.GetIntExtra("alarm_index", -1);
 			if (context.CheckSelfPermission(Android.Manifest.Permission.ReadExternalStorage)
 				== Permission.Granted)
 			{
 				//Check if song exists
 				bool songExists = false;
-				String startSongUri = Clockwise.Helpers.Settings.AndroidStartSongUri;
-				String startSongName = Clockwise.Helpers.Settings.AndroidStartSong;
+				String startSongUri = Helpers.Settings.GetAlarmField(alarm_index, Helpers.Settings.AlarmField.Song);
 
 				Android.Net.Uri musicUri = MediaStore.Audio.Media.ExternalContentUri;
 				ContentResolver musicResolver = context.ContentResolver;
@@ -49,8 +49,7 @@ namespace Clockwise.Droid
 							MediaStore.Audio.Media.ExternalContentUri, thisId);
 						String title = musicCursor.GetString(titleColumn);
 
-						if (contentUri.ToString().Equals(startSongUri)
-						    && startSongName.Equals(title))
+						if (contentUri.ToString().Equals(startSongUri))
 						{
 							songExists = true;
 							break;
@@ -63,12 +62,14 @@ namespace Clockwise.Droid
 				if (songExists)
 				{
 					sm = SongManager.getInstance(context);
-					sm.getSongList();
+					//sm.getSongList();
 					sm.play(startSongUri);
 				}
 				else {
 					Clockwise.Helpers.Settings.AndroidStartSong = string.Empty;
 					Clockwise.Helpers.Settings.AndroidStartSongUri = string.Empty;
+					Helpers.Settings.SetAlarmField(alarm_index, Helpers.Settings.AlarmField.Song,
+					                               Helpers.Settings.EMPTY_MODULE);
 
 					//Play default alarm tone
 					if (player == null)
@@ -96,6 +97,8 @@ namespace Clockwise.Droid
 				//Play default alarm tone
 				Clockwise.Helpers.Settings.AndroidStartSong = string.Empty;
 				Clockwise.Helpers.Settings.AndroidStartSongUri = string.Empty;
+				Helpers.Settings.SetAlarmField(alarm_index, Helpers.Settings.AlarmField.Song,
+												   Helpers.Settings.EMPTY_MODULE);
 
 				if (player == null)
 				{
@@ -118,7 +121,7 @@ namespace Clockwise.Droid
 			}
 
 
-			AlarmUtils.PostNotification(context, intent.GetIntExtra("alarm_index", -1));
+			AlarmUtils.PostNotification(context, alarm_index);
 		}
 	}
 }

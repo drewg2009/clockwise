@@ -51,18 +51,20 @@ namespace Clockwise.Droid
 			ampmpicker.SetDisplayedValues(new string[] { "am", "pm" });
 
 			hourpicker.ValueChanged += delegate {
-				Settings.SetAlarmHour(alarm_number, hourpicker.Value + ampmpicker.Value * 12);
+				Settings.SetAlarmField(alarm_number, Settings.AlarmField.Hour, 
+				                       "" + (hourpicker.Value + ampmpicker.Value * 12));
 			};
 
 
 			minutepicker.ValueChanged += delegate
 			{
-				Settings.SetAlarmMinute(alarm_number, minutepicker.Value);
+				Settings.SetAlarmField(alarm_number, Settings.AlarmField.Minute, "" + minutepicker.Value);
 			};
 
 			ampmpicker.ValueChanged += delegate
 			{
-				Settings.SetAlarmHour(alarm_number, hourpicker.Value + ampmpicker.Value * 12);
+				Settings.SetAlarmField(alarm_number, Settings.AlarmField.Hour,
+									   "" + (hourpicker.Value + ampmpicker.Value * 12));
 			};
 
 
@@ -73,7 +75,8 @@ namespace Clockwise.Droid
 			string[] alarmSettings = Settings.Alarms.Split('|')[alarm_number].Split(':');
 
 			//Load settings
-			if (Settings.IsAlarmOn(alarm_number))
+			int status = int.Parse(Settings.GetAlarmField(alarm_number, Settings.AlarmField.Status));
+			if (status == (int)Settings.AlarmStatus.ALARM_ON)
 			{
 				alarm_toggle.SetImageResource(Resource.Drawable.on_toggle);
 			}
@@ -90,23 +93,25 @@ namespace Clockwise.Droid
 			ampmpicker.Value = (am ? 0 : 1);
 
 			alarm_toggle.Click += delegate {
-				if (!Settings.IsAlarmOn(alarm_number)) //if alarm is off
+				int temp = int.Parse(Settings.GetAlarmField(alarm_number, Settings.AlarmField.Status));
+
+				if (temp == (int)Settings.AlarmStatus.ALARM_OFF) //if alarm is off
 				{
 					//Turn alarm on
 					//int hourSet = hourpicker.Value + ampmpicker.Value * 12;
 					//if (hourSet == 12 && ampmpicker.Value == 0) hourSet = 0;
 					//if (hourSet == 24) hourSet = 12;
-					Settings.ToggleAlarm(alarm_number, true);
+					Settings.SetAlarmField(alarm_number, Settings.AlarmField.Status, "" + (int)Settings.AlarmStatus.ALARM_ON);
 					alarm_toggle.SetImageResource(Resource.Drawable.on_toggle);
 					alarm_toggle.Activated = true;
-					int hourSet = Settings.GetAlarmHour(alarm_number);
-					int minuteSet = Settings.GetAlarmMinute(alarm_number);
-					int snoozeSet = Settings.GetAlarmSnooze(alarm_number);
-					AlarmUtils.SetTime(Application.Context, hourSet, minuteSet, alarm_number, Settings.GetAlarmRepeatDays(alarm_number), snoozeSet, false);
+					int hourSet = int.Parse(Settings.GetAlarmField(alarm_number, Settings.AlarmField.Hour));
+					int minuteSet = int.Parse(Settings.GetAlarmField(alarm_number, Settings.AlarmField.Minute));
+					int days = int.Parse(Settings.GetAlarmField(alarm_number, Settings.AlarmField.RepeatDays));
+					AlarmUtils.SetTime(Application.Context, hourSet, minuteSet, alarm_number, days, false);
 				}
 				else {
 					//Turn alarm off
-					Settings.ToggleAlarm(alarm_number, false);
+					Settings.SetAlarmField(alarm_number, Settings.AlarmField.Status, "" + (int)Settings.AlarmStatus.ALARM_OFF);
 					alarm_toggle.SetImageResource(Resource.Drawable.off_toggle);
 					alarm_toggle.Activated = false;
 					AlarmUtils.Cancel(Application.Context, alarm_number, false);
@@ -149,7 +154,7 @@ namespace Clockwise.Droid
 
 					repeatDaysResult = repeatDaysResult ^ temp;
 					//Settings.RepeatDays = repeatDaysResult.ToString();
-					Settings.SetRepeatDays(alarm_number, repeatDaysResult);
+					Settings.SetAlarmField(alarm_number, Settings.AlarmField.RepeatDays, "" + repeatDaysResult);
 
 					//
 					//LOOK INTO
@@ -157,7 +162,8 @@ namespace Clockwise.Droid
 					if (repeatDaysResult == 0 && alarm_toggle.Activated)
 					{
 						//Turn alarm off
-						Settings.ToggleAlarm(alarm_number, false);
+						Settings.SetAlarmField(alarm_number, Settings.AlarmField.Status, 
+						                       "" + (int)Settings.AlarmStatus.ALARM_OFF);
 						alarm_toggle.SetImageResource(Resource.Drawable.off_toggle);
 						alarm_toggle.Activated = false;
 						AlarmUtils.Cancel(Application.Context, alarm_number, false);
@@ -167,7 +173,7 @@ namespace Clockwise.Droid
 			}
 
 			//Load saved days
-			int savedModule = Settings.GetAlarmRepeatDays(alarm_number);
+			int savedModule = int.Parse(Settings.GetAlarmField(alarm_number, Settings.AlarmField.RepeatDays));
 
 			if (savedModule != 0)
 			{
@@ -278,10 +284,10 @@ namespace Clockwise.Droid
 			{
 				Console.WriteLine("seek: " + snoozeBar.Progress);
 				snoozeOutput.Text = snoozeValues[snoozeBar.Progress];
-				Settings.SetAlarmSnooze(alarm_number, int.Parse(snoozeValues[snoozeBar.Progress]));
+				Settings.SetAlarmField(alarm_number, Settings.AlarmField.Snooze, snoozeValues[snoozeBar.Progress]);
 			};
 
-			int snoozeVal = Settings.GetAlarmSnooze(alarm_number);
+			int snoozeVal = int.Parse(Settings.GetAlarmField(alarm_number, Settings.AlarmField.Snooze));
 			for (int i = 0; i < snoozeValues.Length; i++)
 			{
 				if (int.Parse(snoozeValues[i]) == snoozeVal)
@@ -292,7 +298,9 @@ namespace Clockwise.Droid
 
 			//Song select
 			FindViewById<ImageView>(Resource.Id.tone).Click += delegate {
-				StartActivity(typeof(SongSelect));
+				Intent i = new Intent(ApplicationContext, typeof(SongSelect));
+				i.PutExtra("alarm_index", alarm_number);
+				StartActivity(i);
 			};
 
 			//Scrollview
@@ -323,16 +331,16 @@ namespace Clockwise.Droid
 					switch (type)
 					{
 						case "fact":
-							moduleLayout.AddView(CreateModuleDisplay(type, "Fun Fact", index));
+							moduleLayout.AddView(CreateModuleDisplay(type, "Fun Fact", index, -1));
 							break;
 						case "quote":
-							moduleLayout.AddView(CreateModuleDisplay(type, "Quote of the Day", index));
+							moduleLayout.AddView(CreateModuleDisplay(type, "Quote of the Day", index, -1));
 							break;
 						case "tdih":
-							moduleLayout.AddView(CreateModuleDisplay(type, "This Day in History", index));
+							moduleLayout.AddView(CreateModuleDisplay(type, "This Day in History", index, -1));
 							break;
 						case "weather":
-							moduleLayout.AddView(CreateModuleDisplay(type, "Weather", index));
+							moduleLayout.AddView(CreateModuleDisplay(type, "Weather", index, -1));
 							break;
 						case "news":
 						case "reddit":
@@ -341,10 +349,10 @@ namespace Clockwise.Droid
 						case "reminders":
 						{ //news:cat:count,cat:count, ...
 							string[] moduleList = m.Substring(m.IndexOf(':') + 1).Split(',');
-							foreach (string s in moduleList)
+								for (int i = 0; i < moduleList.Length; i++)
 							{
-								string[] settings = s.Split(':');
-									moduleLayout.AddView(CreateModuleDisplay(type, settings[0], index));
+									string[] settings = moduleList[i].Split(':');
+									moduleLayout.AddView(CreateModuleDisplay(type, settings[0], index, i));
 							}
 							break;
 						}
@@ -353,7 +361,7 @@ namespace Clockwise.Droid
 			}
 		}
 
-		private RelativeLayout CreateModuleDisplay(string type, string title, int index)
+		private RelativeLayout CreateModuleDisplay(string type, string title, int index, int subindex)
 		{
 			var metrics = Resources.DisplayMetrics;
 			RelativeLayout rl = (RelativeLayout)LayoutInflater.Inflate(Resource.Layout.module_holder, null);
@@ -401,15 +409,21 @@ namespace Clockwise.Droid
 					break;
 				case "news":
 					settingImage.SetImageResource(Resource.Drawable.news_icon);
-					//editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.news, null);
+					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.news, null);
+					News.Setup(index, subindex, editor, null, this);
+
 					break;
 				case "reddit":
 					settingImage.SetImageResource(Resource.Drawable.reddit_icon);
-					//editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.reddit, null);
+					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.reddit, null);
+					Reddit.Setup(index, subindex, editor, null, this);
+
 					break;
 				case "twitter":
 					settingImage.SetImageResource(Resource.Drawable.twitter_icon);
-					//editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.twitter, null);
+					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.twitter, null);
+					Twitter.Setup(index, subindex, editor, null, this);
+
 					break;
 				case "reminders":
 					settingImage.SetImageResource(Resource.Drawable.todo_icon);
@@ -423,13 +437,9 @@ namespace Clockwise.Droid
 			{
 				FrameLayout.LayoutParams editorParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MatchParent,
 				                                                                     ViewGroup.LayoutParams.WrapContent);
-				
-				//editorParams.LeftMargin = (int)(10*metrics.Density); //HOW THE FUCK DO YOU SET MARGINS CUS THIS AINT WORKING
-				//editorParams.RightMargin = (int)(10*metrics.Density);
 				editor.LayoutParameters = editorParams;
 				editor.Alpha = 0;
 				editor.Visibility = ViewStates.Invisible;
-
 				displayRow.AddView(editor);
 			}
 

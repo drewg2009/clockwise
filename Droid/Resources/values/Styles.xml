@@ -1,0 +1,8 @@
+﻿<resources>
+
+	<style name="RadioButton" parent="Theme.AppCompat.Light">  
+	    <item name="colorControlActivated">@color/colorTemp</item>
+	    <item name="colorControlNormal">@color/lighter_gray</item>
+	</style>  
+
+</resources>

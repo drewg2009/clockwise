@@ -27,7 +27,7 @@ namespace Clockwise.Droid
 
 			AlarmUtils.Snooze(alarm_index);
 
-			Toast.MakeText(this, "Snoozing for " + Settings.GetAlarmSnooze(alarm_index) + " minutes.", ToastLength.Short).Show();
+			Toast.MakeText(this, "Snoozing for " + Settings.GetAlarmField(alarm_index, Settings.AlarmField.Snooze) + " minutes.", ToastLength.Short).Show();
 			StopSelf();
 			return base.OnStartCommand(intent, flags, startId);
 		}

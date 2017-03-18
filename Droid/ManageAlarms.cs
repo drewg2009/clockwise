@@ -106,7 +106,7 @@ namespace Clockwise.Droid
 				if (hourSet == 24) hourSet = 12;
 				Console.WriteLine("passing time: " + hourSet + ":" + minutepicker.Value);
 				AlarmUtils.SetTime(Android.App.Application.Context, hourSet, minutepicker.Value, 
-				                   Settings.Alarms == string.Empty ? 0 : currentAlarms.Length, repeatDaysResult, 5, true);
+				                   Settings.Alarms == string.Empty ? 0 : currentAlarms.Length, repeatDaysResult, true);
 
 				//Save repeat days
 				Settings.RepeatDays += Settings.RepeatDays == string.Empty ? "" + repeatDaysResult : "|" + repeatDaysResult;
@@ -141,7 +141,8 @@ namespace Clockwise.Droid
 
 				deleteLayout.Click += delegate {
 					Console.Write("deleting alarm");
-					if (Settings.IsAlarmOn((int)alarmRow.Tag))
+					int status = int.Parse(Settings.GetAlarmField((int)alarmRow.Tag, Settings.AlarmField.Status));
+					if (status == (int)Settings.AlarmStatus.ALARM_ON)
 						AlarmUtils.Cancel(Application.Context, (int)editLayout.Tag, false);
 					Settings.DeleteAlarm((int)editLayout.Tag);
 					Console.Write("New alarms: " + Settings.Alarms);
@@ -220,7 +221,11 @@ namespace Clockwise.Droid
 					int hour = System.Int32.Parse(alarms[i].Split(':')[1]);
 					int minute = System.Int32.Parse(alarms[i].Split(':')[2]);
 					bool am = hour < 12;
-					hour = am ? hour : hour - 12;
+					if(!am && hour != 12){
+						hour -= 12;
+					}
+					if (am && hour == 0) hour = 12;
+					//hour = am ? hour : hour - 12;
 					AddAlarm(alarmViewer, i, hour, minute, am ? 0 : 1); 
 				}
 			}
@@ -247,7 +252,8 @@ namespace Clockwise.Droid
 			deleteLayout.Click += delegate
 			{
 				Console.Write("deleting alarm");
-				if (Settings.IsAlarmOn((int)editLayout.Tag))
+				int temp = int.Parse(Settings.GetAlarmField((int)editLayout.Tag, Settings.AlarmField.Status));
+				if (temp == (int)Settings.AlarmStatus.ALARM_ON)
 					AlarmUtils.Cancel(Application.Context, (int)editLayout.Tag, false);
 				Settings.DeleteAlarm((int)editLayout.Tag);
 				Console.Write("New alarms: " + Settings.Alarms);
@@ -263,7 +269,10 @@ namespace Clockwise.Droid
 			//alarmTime.TextSize = metrics.HeightPixels
 
 			ImageView alarmStatus = alarmRow.FindViewById<ImageView>(Resource.Id.alarm_status);
-			if (Settings.IsAlarmOn(alarmIndex)) alarmStatus.SetImageResource(Resource.Drawable.alarm_on);
+			int status = int.Parse(Settings.GetAlarmField(alarmIndex, Settings.AlarmField.Status));
+
+			if (status == (int)Settings.AlarmStatus.ALARM_ON) 
+				alarmStatus.SetImageResource(Resource.Drawable.alarm_on);
 
 
 			View gap = new View(Application.Context);
@@ -282,7 +291,7 @@ namespace Clockwise.Droid
 					{
 
 						// If request is cancelled, the result arrays are empty.
-						if (grantResults.Count() > 0
+						if (grantResults.Length > 0
 							&& grantResults[0] == Permission.Granted)
 						{
 
