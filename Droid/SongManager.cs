@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Android.Content;
+using Android.Media;
 using Android.Provider;
 
 namespace Clockwise.Droid
@@ -8,6 +9,8 @@ namespace Clockwise.Droid
 	public class SongManager
 	{
 		List<Song> songList;
+		List<Song> defaultList;
+
 		Context c;
 		public int playingIndex = -1;
 		private static SongManager instance;
@@ -15,6 +18,7 @@ namespace Clockwise.Droid
 		private SongManager(Context c)
 		{
 			this.songList = new List<Song>();
+			this.defaultList = new List<Song>();
 			this.c = c;
 		}
 
@@ -64,6 +68,33 @@ namespace Clockwise.Droid
 			return songList;
 		}
 
+		public List<Song> getDefaultList()
+		{
+			defaultList = new List<Song>();
+			RingtoneManager manager = new RingtoneManager(c);
+			manager.SetType(RingtoneType.Alarm);
+			var cursor = manager.Cursor;
+			int titleColumn = cursor.GetColumnIndex
+					 (MediaStore.Audio.Media.InterfaceConsts.Title);
+			int idColumn = cursor.GetColumnIndex
+						(MediaStore.Audio.Media.InterfaceConsts.Id);
+			if (cursor != null && cursor.MoveToFirst())
+			{
+				do
+				{
+					String title = cursor.GetString(titleColumn);
+					Android.Net.Uri ringtoneURI = manager.GetRingtoneUri(cursor.Position);
+					long thisId = cursor.GetLong(idColumn);
+					defaultList.Add(new Song(c, thisId, title, null, ringtoneURI, -1));
+
+				}while (cursor.MoveToNext());
+				cursor.Close();
+			}
+
+			defaultList.Sort((x, y) => string.Compare(x.Title, y.Title, StringComparison.Ordinal));
+			return defaultList;
+		}
+
 		public void play(String songUri)
 		{
 			Intent i = new Intent(c, typeof(SongService));
@@ -85,9 +116,10 @@ namespace Clockwise.Droid
 		public void stop()
 		{
 			//if (ServiceHelper.IsMyServiceRunning(typeof(SongService), c)) {
-	  //          c.StopService(SongService.intent);
-	  //      }
-			c.StopService(SongService.intent);
+			//          c.StopService(SongService.intent);
+			//      }
+			if(SongService.intent != null)
+				c.StopService(SongService.intent);
 	    }
 	}
 }

@@ -47,5 +47,7 @@ namespace Clockwise.Droid
 			
 			return new Java.Lang.String(tabTitles[position]);
 		}
+
+
 	}
 }

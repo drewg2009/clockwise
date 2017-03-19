@@ -31,8 +31,8 @@ namespace Clockwise.Droid
 			int alarm_index = Intent.GetIntExtra("alarm_index", -1);
 
 			// Get the ViewPager and set it's PagerAdapter so that it can display items
-			ViewPager viewPager = (ViewPager)FindViewById<ViewPager>(Resource.Id.viewpager);
-			viewPager.Adapter = new SongPageAdapter(SupportFragmentManager,this, alarm_index);
+			ViewPager viewPager = FindViewById<ViewPager>(Resource.Id.viewpager);
+			viewPager.Adapter = new SongPageAdapter(SupportFragmentManager,ApplicationContext, alarm_index);
 			
 
 			// Give the TabLayout the ViewPager
@@ -46,52 +46,13 @@ namespace Clockwise.Droid
 				sm.setVolume((float)volume.Progress / 14f);
 			};
 
-			//radioList = FindViewById<RadioGroup>(Resource.Id.song_radio_group);
-			//songList = ManageAlarms.songList;
 			sm = ManageAlarms.sm;
-			//if (songList != null)
-			//{
-			//	Typeface font = Typeface.CreateFromAsset(ApplicationContext.Resources.Assets, "HelveticaNeueLight.ttf");
-
-			//	for (int i = 0; i < songList.Count; i++)
-			//	{
-			//		RadioButton rb = new RadioButton(this);
-			//		rb.Text = songList[i].Title;
-			//		rb.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent);
-			//		rb.SetTextColor(Color.Gray);
-
-			//		//Space
-			//		View v = new View(this);
-			//		v.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent,
-			//														1);
-			//		v.SetBackgroundColor(Color.Gray);
-			//		v.SetPadding(50, 0, 0, 0);
-			//		rb.Typeface = font;
-
-			//		int temp = i;
-			//		rb.Click += delegate {
-			//			//play
-			//			if (sm.isPlaying()) sm.stop();
-			//			sm.play(songList[temp].getUri().ToString());
-			//			sm.playingIndex = temp;
-
-			//			//save
-			//			Settings.SetAlarmField(alarm_index, Settings.AlarmField.Song, 
-			//			                       songList[temp].getUri().ToString());
-			//		};
-
-			//		radioList.AddView(rb);
-			//		radioList.AddView(v);
-			//	}
-
-			//}
-
 		}
 
-		protected override void OnStop() 
+		protected override void OnStop()
 		{
-	        base.OnStop();
-			if (sm != null) sm.stop();
-    	}
+			if (sm != null) { sm.stop(); }
+			base.OnStop();
+		}
 	}
 }

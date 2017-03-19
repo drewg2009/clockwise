@@ -7,7 +7,9 @@ using System.Text;
 using Android.App;
 using Android.Content;
 using Android.Graphics;
+using Android.Media;
 using Android.OS;
+using Android.Provider;
 using Android.Runtime;
 using Android.Util;
 using Android.Views;
@@ -47,13 +49,54 @@ namespace Clockwise.Droid
 			// return inflater.Inflate(Resource.Layout.YourFragment, container, false);
 			View view = inflater.Inflate(Resource.Layout.fragment_page, container, false);
 			RadioGroup group = view.FindViewById<RadioGroup>(Resource.Id.tone_radio_group);
-			if (mPage == 1)
+			Typeface font = Typeface.CreateFromAsset(Context.Resources.Assets, "HelveticaNeueLight.ttf");
+			List<Song> songList = ManageAlarms.songList;
+			List<Song> defaultList = ManageAlarms.defaultList;
+
+			SongManager sm = ManageAlarms.sm;
+
+			var metrics = Resources.DisplayMetrics;
+
+			if (mPage == 0)
 			{
-				List<Song> songList = ManageAlarms.songList;
-				SongManager sm = ManageAlarms.sm;
+				for (int i = 0; i < defaultList.Count; i++)
+				{
+					RadioButton rb = new RadioButton(Context);
+					rb.Text = defaultList[i].Title;
+					rb.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent);
+					rb.SetTextColor(Color.Gray);
+					rb.Typeface = font;
+					rb.TextSize = 20;
+					rb.SetPadding(0, (int)(4 * metrics.Density), 0, (int)(4 * metrics.Density));
+					rb.LetterSpacing = .1f;
+
+					int temp = i;
+					rb.Click += delegate
+					{
+						//play
+						if (sm.isPlaying()) sm.stop();
+						sm.play(defaultList[temp].getUri().ToString());
+						sm.playingIndex = temp;
+
+						//save
+						Helpers.Settings.SetAlarmField(index, Helpers.Settings.AlarmField.Song,
+						                               defaultList[temp].getUri().ToString());
+					};
+
+					//Space
+					View space = new View(Context);
+					space.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent, 1);
+					space.SetBackgroundColor(Color.Gray);
+					space.SetPadding((int)(10 * metrics.Density), 0, 0, 0);
+
+					group.AddView(rb);
+					group.AddView(space);
+				}
+			}
+			else
+			{
 				if (songList != null)
 				{
-					Typeface font = Typeface.CreateFromAsset(Context.Resources.Assets, "HelveticaNeueLight.ttf");
 
 					for (int i = 0; i < songList.Count; i++)
 					{
@@ -62,15 +105,11 @@ namespace Clockwise.Droid
 						rb.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent);
 						rb.SetTextColor(Color.Gray);
 
-						//Space
-						View v = new View(Context);
-						v.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent,
-																		1);
-						v.SetBackgroundColor(Color.Gray);
-						v.SetPadding(50, 0, 0, 0);
+
 						rb.Typeface = font;
-						rb.TextSize = 22;
-						rb.SetPadding(0, 3, 0, 3);
+						rb.TextSize = 20;
+						rb.SetPadding(0, (int)(12 * metrics.Density), 0, (int)(12 * metrics.Density));
+						rb.LetterSpacing = .1f;
 
 						int temp = i;
 						rb.Click += delegate {
@@ -80,12 +119,18 @@ namespace Clockwise.Droid
 							sm.playingIndex = temp;
 
 							//save
-							Settings.SetAlarmField(index, Settings.AlarmField.Song, 
+							Helpers.Settings.SetAlarmField(index, Helpers.Settings.AlarmField.Song, 
 							                       songList[temp].getUri().ToString());
 						};
 
+						//Space
+						View space = new View(Context);
+						space.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent, 1);
+						space.SetBackgroundColor(Color.Gray);
+						space.SetPadding((int)(10 * metrics.Density), 0, 0, 0);
+
 						group.AddView(rb);
-						group.AddView(v);
+						group.AddView(space);
 					}
 
 				}

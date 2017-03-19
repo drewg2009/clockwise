@@ -22,6 +22,8 @@ namespace Clockwise.Droid
 		public static ManageAlarms instance = null;
 		public static SongManager sm = null;
 		public static List<Song> songList = null;
+		public static List<Song> defaultList = null;
+
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
@@ -183,6 +185,9 @@ namespace Clockwise.Droid
 			}
 
 			instance = this;
+			sm = SongManager.getInstance(this);
+			defaultList = sm.getDefaultList();
+
 			if (CheckSelfPermission(
 				Android.Manifest.Permission.ReadExternalStorage)
 				!= Permission.Granted)
@@ -192,11 +197,8 @@ namespace Clockwise.Droid
 						1);
 			}
 			else {
-				sm = SongManager.getInstance(this);
 				songList = sm.getSongList();
 			}
-
-
 		}
 
 		protected override void OnPause()
@@ -218,8 +220,8 @@ namespace Clockwise.Droid
 				string[] alarms = Settings.Alarms.Split('|');
 				for (int i = 0; i < alarms.Length; i++)
 				{
-					int hour = System.Int32.Parse(alarms[i].Split(':')[1]);
-					int minute = System.Int32.Parse(alarms[i].Split(':')[2]);
+					int hour = int.Parse(Settings.GetAlarmField(i, Settings.AlarmField.Hour));
+					int minute = int.Parse(Settings.GetAlarmField(i, Settings.AlarmField.Minute));
 					bool am = hour < 12;
 					if(!am && hour != 12){
 						hour -= 12;

@@ -208,23 +208,24 @@ namespace Clockwise.Helpers
 			AlarmStatus status = AlarmStatus.ALARM_ON;
 			if (Alarms == string.Empty)
 			{
-				Alarms = "" + index + ":" + hour + ":" + minute + ":" + repeatDays + ":"
-					+ (int)status + ":10:10:" + EMPTY_MODULE;
+				Alarms = "" + index + "#" + hour + "#" + minute + "#" + repeatDays + "#"
+					+ (int)status + "#10#10#" + EMPTY_MODULE;
 				ModuleOrder = DefaultModuleOrder;
 				AddModules();
 			}
 			else if (index == currentAlarms.Length)
 			{
-				string newAlarm = "" + index + ":" + hour + ":" + minute + ":" + repeatDays + ":"
-					+ (int)status + ":10:10:" + EMPTY_MODULE; 
+				string newAlarm = "" + index + "#" + hour + "#" + minute + "#" + repeatDays + "#"
+					+ (int)status + "#10#10#" + EMPTY_MODULE; 
 				Alarms += "|" + newAlarm;
 				ModuleOrder += "|" + DefaultModuleOrder;
 				AddModules();
 			}
 			//Change old alarm
 			else {
-				currentAlarms[index] = "" + index + ":" + hour + ":" + minute + ":" + repeatDays +
-					":" + (int)status + ":10:10:" + EMPTY_MODULE;
+				currentAlarms[index] = "" + index + "#" + hour + "#" + minute + "#" + repeatDays +
+					"#" + (int)status + "#" + GetAlarmField(index, AlarmField.Snooze) + "#" + GetAlarmField(index, AlarmField.Volume) + "#"
+					+ GetAlarmField(index, AlarmField.Song);
 				string newAlarmSetting = "";
 				foreach (String s in currentAlarms)
 				{
@@ -387,25 +388,6 @@ namespace Clockwise.Helpers
 			Alarms = newSetting.TrimEnd('|');;
 			RemoveModules(index);
 		}
-
-		//public static void SetSong(int index, string song)
-		//{
-		//	string newSongSetting = string.Empty;
-		//	string[] songs = Song.Split('|');
-		//	songs[index] = song;
-
-		//	foreach (string s in songs)
-		//	{
-		//		newSongSetting += s + "|";
-		//	}
-
-		//	Song = newSongSetting.TrimEnd('|');
-		//}
-
-		//public static string GetSong(int index)
-		//{
-		//	return Song.Split('|')[index];
-		//}
 
 		public static void EditWeather(int index, bool description, bool currentTemp, bool maxTemp, bool celsius)
 		{
@@ -1011,7 +993,7 @@ namespace Clockwise.Helpers
 		public static void SetAlarmField(int index, AlarmField field, string newValue)
 		{
 			string[] alarms = Alarms.Split('|');
-			string[] alarmSettings = alarms[index].Split(':');
+			string[] alarmSettings = alarms[index].Split('#');
 			alarmSettings[(int)field] = newValue;
 
 			string temp = string.Empty;
@@ -1019,10 +1001,10 @@ namespace Clockwise.Helpers
 
 			for (int i = 0; i < numFields; i++)
 			{
-				temp += alarmSettings[i] + ":";
+				temp += alarmSettings[i] + "#";
 			}
 
-			alarms[index] = temp.TrimEnd(':');
+			alarms[index] = temp.TrimEnd('#');
 
 			string newSettings = string.Empty;
 			foreach (String s in alarms)
@@ -1034,7 +1016,7 @@ namespace Clockwise.Helpers
 
 		public static string GetAlarmField(int index, AlarmField field)
 		{
-			return Alarms.Split('|')[index].Split(':')[(int)field];
+			return Alarms.Split('|')[index].Split('#')[(int)field];
 		}
 
 		public static string[] GetActiveModules(int index)

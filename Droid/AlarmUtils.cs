@@ -201,7 +201,6 @@ namespace Clockwise.Droid
 
 			Notification notification = builder.Build();
 			notification.Flags |= NotificationFlags.NoClear | NotificationFlags.OngoingEvent;
-
 			NotificationManager nm = (NotificationManager)Application.Context.GetSystemService(Context.NotificationService);
 			nm.Notify("Clockwise", alarm_index, notification);
 

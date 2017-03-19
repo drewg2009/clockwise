@@ -51,8 +51,10 @@ namespace Clockwise.Droid
 			ampmpicker.SetDisplayedValues(new string[] { "am", "pm" });
 
 			hourpicker.ValueChanged += delegate {
+				int hourSet = (hourpicker.Value + ampmpicker.Value * 12);
+				if (hourSet == 12 && ampmpicker.Value == 0) hourSet = 0; 
 				Settings.SetAlarmField(alarm_number, Settings.AlarmField.Hour, 
-				                       "" + (hourpicker.Value + ampmpicker.Value * 12));
+				                       "" + hourSet);
 			};
 
 
@@ -72,7 +74,7 @@ namespace Clockwise.Droid
 			ImageSwitcher alarm_toggle = FindViewById<ImageSwitcher>(Resource.Id.alarm_toggle);
 			alarm_toggle.SetFactory(new Toggle());
 
-			string[] alarmSettings = Settings.Alarms.Split('|')[alarm_number].Split(':');
+			string[] alarmSettings = Settings.Alarms.Split('|')[alarm_number].Split('#');
 
 			//Load settings
 			int status = int.Parse(Settings.GetAlarmField(alarm_number, Settings.AlarmField.Status));
@@ -108,6 +110,7 @@ namespace Clockwise.Droid
 					int minuteSet = int.Parse(Settings.GetAlarmField(alarm_number, Settings.AlarmField.Minute));
 					int days = int.Parse(Settings.GetAlarmField(alarm_number, Settings.AlarmField.RepeatDays));
 					AlarmUtils.SetTime(Application.Context, hourSet, minuteSet, alarm_number, days, false);
+					Console.WriteLine("set time: " + hourSet + ":" + minuteSet);
 				}
 				else {
 					//Turn alarm off
