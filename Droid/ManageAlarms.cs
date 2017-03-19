@@ -162,6 +162,22 @@ namespace Clockwise.Droid
 				alarmViwer.AddView(alarmRow);
 
 			};
+
+			sm = SongManager.getInstance(this);
+			defaultList = sm.getDefaultList();
+
+			if (CheckSelfPermission(
+				Android.Manifest.Permission.ReadExternalStorage)
+				!= Permission.Granted)
+			{
+				RequestPermissions(
+						new String[] { Android.Manifest.Permission.ReadExternalStorage },
+						1);
+			}
+			else
+			{
+				songList = sm.getSongList();
+			}
 		}
 
 		protected override void OnResume()
@@ -185,20 +201,20 @@ namespace Clockwise.Droid
 			}
 
 			instance = this;
-			sm = SongManager.getInstance(this);
-			defaultList = sm.getDefaultList();
+			//sm = SongManager.getInstance(this);
+			//defaultList = sm.getDefaultList();
 
-			if (CheckSelfPermission(
-				Android.Manifest.Permission.ReadExternalStorage)
-				!= Permission.Granted)
-			{
-				RequestPermissions(
-						new String[] { Android.Manifest.Permission.ReadExternalStorage },
-						1);
-			}
-			else {
-				songList = sm.getSongList();
-			}
+			//if (CheckSelfPermission(
+			//	Android.Manifest.Permission.ReadExternalStorage)
+			//	!= Permission.Granted)
+			//{
+			//	RequestPermissions(
+			//			new String[] { Android.Manifest.Permission.ReadExternalStorage },
+			//			1);
+			//}
+			//else {
+			//	songList = sm.getSongList();
+			//}
 		}
 
 		protected override void OnPause()
