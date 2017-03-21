@@ -388,9 +388,6 @@ namespace Clockwise.Droid
 
 			parent.Measure(LinearLayout.LayoutParams.WrapContent, LinearLayout.LayoutParams.WrapContent);
 
-			navButton.LayoutParameters.Width = (int)(((double)parent.MeasuredHeight/metrics.Density) *.4);
-			navButton.LayoutParameters.Height = (int)(((double)parent.MeasuredHeight / metrics.Density) * .4);
-
 			settingTitle.Text = title;
 
 			//Add Editing
