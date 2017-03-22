@@ -168,7 +168,7 @@ namespace Clockwise.Droid
 			PendingIntent piClose = PendingIntent.GetService(context, alarm_index, closeIntent, PendingIntentFlags.UpdateCurrent);
 
 			Notification.Builder builder = new Notification.Builder(context)
-				.SetLargeIcon(BitmapFactory.DecodeResource(context.Resources, Resource.Drawable.circle_high_res))
+				.SetLargeIcon(BitmapFactory.DecodeResource(context.Resources, Resource.Mipmap.Icon))
 				.SetSmallIcon(Resource.Drawable.ic_alarm_white_48dp)
 				.SetContentTitle("Clockwise: " + alarm_index)
 				.SetDefaults(NotificationDefaults.All)

@@ -38,6 +38,7 @@ namespace Clockwise.Droid
 			// Give the TabLayout the ViewPager
 			TabLayout tabLayout = (TabLayout)FindViewById<TabLayout>(Resource.Id.sliding_tabs);
 			tabLayout.SetupWithViewPager(viewPager);
+			sm = SongManager.getInstance(this);
 
 			SeekBar volume = FindViewById<SeekBar>(Resource.Id.volume_seek_bar);
 			volume.Progress = int.Parse(Settings.GetAlarmField(alarm_index, Settings.AlarmField.Volume)) - 1;
@@ -46,7 +47,6 @@ namespace Clockwise.Droid
 				sm.setVolume((float)volume.Progress / 14f);
 			};
 
-			sm = ManageAlarms.sm;
 		}
 
 		protected override void OnStop()

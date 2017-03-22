@@ -124,7 +124,8 @@ namespace Clockwise.Droid
 			//AudioManager audioManager = (AudioManager)context.GetSystemService(Context.AudioService);
 			sm = SongManager.getInstance(context);
 			string song = Helpers.Settings.GetAlarmField(alarm_index, Helpers.Settings.AlarmField.Song);
-			if (song != Helpers.Settings.EMPTY_MODULE)
+			if (song != Helpers.Settings.EMPTY_MODULE && context.CheckSelfPermission(Android.Manifest.Permission.ReadExternalStorage)
+				== Permission.Granted)
 				sm.play(song);
 			else
 				sm.play(RingtoneManager.GetDefaultUri(RingtoneType.Alarm).ToString());

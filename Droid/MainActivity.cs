@@ -23,6 +23,8 @@ namespace Clockwise.Droid
 		LinearLayout buttonRow;
 		Typeface fontLight;
 		View parent;
+		bool moduleSettingOpen = false;
+
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
@@ -304,6 +306,8 @@ namespace Clockwise.Droid
 				Intent i = new Intent(ApplicationContext, typeof(SongSelect));
 				i.PutExtra("alarm_index", alarm_number);
 				StartActivity(i);
+				//Close settings
+				//settingsBtn.PerformClick();
 			};
 
 			//Scrollview
@@ -447,22 +451,22 @@ namespace Clockwise.Droid
 			}
 
 			navButton.Click += delegate {
+				//if(
+				AnimationHelper editorFade = new AnimationHelper(editor, null);
+				AnimationHelper imageFade = new AnimationHelper(settingImage, null);
 				if (editor.Alpha < .5f)
 				{
-					//buttonRow.Enabled = true;
-					//buttonRow.Clickable = true;
-					AnimationHelper editorFade = new AnimationHelper(editor, null);
-					AnimationHelper imageFade = new AnimationHelper(settingImage, null);
 					editorFade.Fade(200, 1f);
 					imageFade.Fade(200, 0f);
 					navButton.SetImageResource(Resource.Drawable.back_button);
+					moduleSettingOpen = true;
 				}
 				else {
-					AnimationHelper editorFade = new AnimationHelper(editor, null);
-					AnimationHelper imageFade = new AnimationHelper(settingImage, null);
 					editorFade.Fade(200, 0f);
 					imageFade.Fade(200, 1f);
 					navButton.SetImageResource(Resource.Drawable.edit_button);
+					moduleSettingOpen = false;
+
 				}
 			};
 
@@ -497,6 +501,11 @@ namespace Clockwise.Droid
 			LinearLayout moduleLayout = FindViewById<LinearLayout>(Resource.Id.module_layout);
 			while(moduleLayout.ChildCount > 0) moduleLayout.RemoveViewAt(0);
 			RefreshModules(Intent.GetIntExtra("alarm_number", 0));
+
+			if (CheckSelfPermission(Android.Manifest.Permission.ReadExternalStorage)
+			   == Permission.Granted && ManageAlarms.songsRadioGroup == null){
+				new ManageAlarms.GetSongs().Execute();
+			}
 		}
 
 		public class TwoDigitFormatter : Java.Lang.Object, NumberPicker.IFormatter

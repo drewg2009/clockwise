@@ -7,6 +7,14 @@
     android:minHeight="25px"
     android:background="#ffe8e8e8"
     android:id="@+id/set_alarm_window">
+    <LinearLayout
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_width="0px"
+        android:layout_height="0px"
+        android:id="@+id/dummy">
+        <requestFocus />
+    </LinearLayout>
     <RelativeLayout
         android:minWidth="25px"
         android:minHeight="25px"

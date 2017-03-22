@@ -23,16 +23,20 @@ namespace Clockwise.Droid
 		public static SongManager sm = null;
 		public static List<Song> songList = null;
 		public static List<Song> defaultList = null;
+		public static RadioGroup defaultsRadioGroup = null;
+		public static RadioGroup songsRadioGroup = null;
+		public static Typeface fontLight = null;
+		public static Typeface fontBold = null;
 
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
-
 			// Create your application here
 			SetContentView(Resource.Layout.manage_alarms);
+			instance = this;
 
-			Typeface fontLight = Typeface.CreateFromAsset(Resources.Assets, "HelveticaNeueLight.ttf");
-			Typeface fontBold = Typeface.CreateFromAsset(Resources.Assets, "HelveticaNeueBold.ttf");
+			fontLight = Typeface.CreateFromAsset(Resources.Assets, "HelveticaNeueLight.ttf");
+			fontBold = Typeface.CreateFromAsset(Resources.Assets, "HelveticaNeueBold.ttf");
 
 
 			// Setup pickers
@@ -163,9 +167,24 @@ namespace Clockwise.Droid
 
 			};
 
-			sm = SongManager.getInstance(this);
-			defaultList = sm.getDefaultList();
+			View tonePage = LayoutInflater.Inflate(Resource.Layout.fragment_page, null);
+			View alarmPage = LayoutInflater.Inflate(Resource.Layout.fragment_page, null);
 
+			defaultsRadioGroup = tonePage.FindViewById<RadioGroup>(Resource.Id.tone_radio_group);
+			songsRadioGroup = alarmPage.FindViewById<RadioGroup>(Resource.Id.tone_radio_group);
+			LinearLayout defParent = (LinearLayout)defaultsRadioGroup.Parent;
+			defParent.RemoveView(defaultsRadioGroup);
+			LinearLayout songParent = (LinearLayout)songsRadioGroup.Parent;
+			songParent.RemoveView(songsRadioGroup);
+
+			sm = SongManager.getInstance(this);
+			//defaultList = sm.getDefaultList();
+			//sm = SongManager.getInstance(this);
+
+			if (defaultList == null)
+			{
+				new GetDefaults().Execute();
+			}
 			if (CheckSelfPermission(
 				Android.Manifest.Permission.ReadExternalStorage)
 				!= Permission.Granted)
@@ -176,7 +195,8 @@ namespace Clockwise.Droid
 			}
 			else
 			{
-				songList = sm.getSongList();
+				//songList = sm.getSongList();
+				new GetSongs().Execute();
 			}
 		}
 
@@ -201,26 +221,12 @@ namespace Clockwise.Droid
 			}
 
 			instance = this;
-			//sm = SongManager.getInstance(this);
-			//defaultList = sm.getDefaultList();
-
-			//if (CheckSelfPermission(
-			//	Android.Manifest.Permission.ReadExternalStorage)
-			//	!= Permission.Granted)
-			//{
-			//	RequestPermissions(
-			//			new String[] { Android.Manifest.Permission.ReadExternalStorage },
-			//			1);
-			//}
-			//else {
-			//	songList = sm.getSongList();
-			//}
 		}
 
-		protected override void OnPause()
+		protected override void OnStop()
 		{
-			base.OnPause();
-			instance = null;
+			//instance = null;
+			base.OnStop();
 		}
 
 		public void RefreshAlarms()
@@ -317,8 +323,9 @@ namespace Clockwise.Droid
 							// contacts-related task you need to do.
 							Settings.AndroidFileAccess = "true";
 							Toast.MakeText(Android.App.Application.Context, "Permission granted to access song files", ToastLength.Short).Show();
-							sm = SongManager.getInstance(this);
-							songList = sm.getSongList();
+							//sm = SongManager.getInstance(this);
+							//songList = sm.getSongList();
+							new GetSongs().Execute();
 						}
 						else {
 
@@ -331,5 +338,111 @@ namespace Clockwise.Droid
 					}
 			}
 		}
+
+		public class GetDefaults : AsyncTask
+		{
+			
+			protected override void OnPreExecute()
+			{
+			}
+
+			protected override Java.Lang.Object DoInBackground(params Java.Lang.Object[] @params)
+			{
+				defaultList = SongManager.getInstance(instance).getDefaultList();
+				var metrics = instance.Resources.DisplayMetrics;
+
+				for (int i = 0; i < defaultList.Count; i++)
+				{
+					RadioButton rb = new RadioButton(instance.ApplicationContext);
+					rb.Text = defaultList[i].Title;
+					rb.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent);
+					rb.SetTextColor(Color.Gray);
+					rb.Typeface = fontLight;
+					rb.TextSize = 20;
+					rb.SetPadding(0, (int)(12 * metrics.Density), 0, (int)(12 * metrics.Density));
+					rb.LetterSpacing = .1f;
+
+					int temp = i;
+					rb.Click += delegate
+					{
+						//play
+						if (sm.isPlaying()) sm.stop();
+						sm.play(defaultList[temp].getUri().ToString());
+						sm.playingIndex = temp;
+					};
+
+					//Space
+					View space = new View(instance.ApplicationContext);
+					space.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent, 1);
+					space.SetBackgroundColor(Color.Gray);
+					space.SetPadding((int)(10 * metrics.Density), 0, 0, 0);
+
+					defaultsRadioGroup.AddView(rb);
+					defaultsRadioGroup.AddView(space);
+				}
+			
+
+				return null;
+			}
+
+			protected override void OnPostExecute(Java.Lang.Object result)
+			{
+			}
+		}
+
+		public class GetSongs : AsyncTask
+		{
+			protected override void OnPreExecute()
+			{
+			}
+
+			protected override Java.Lang.Object DoInBackground(params Java.Lang.Object[] @params)
+			{
+				songList = SongManager.getInstance(instance).getSongList();
+
+				if (songList != null && songList.Count > 0)
+				{
+					var metrics = instance.Resources.DisplayMetrics;
+					for (int i = 0; i < songList.Count; i++)
+					{
+						RadioButton rb = new RadioButton(instance.ApplicationContext);
+						rb.Text = songList[i].Title;
+						rb.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent);
+						rb.SetTextColor(Color.Gray);
+
+						rb.Typeface = fontLight;
+						rb.TextSize = 20;
+						rb.SetPadding(0, (int)(12 * metrics.Density), 0, (int)(12 * metrics.Density));
+						rb.LetterSpacing = .1f;
+
+						int temp = i;
+						rb.Click += delegate
+						{
+						//play
+						if (sm.isPlaying()) sm.stop();
+							sm.play(songList[temp].getUri().ToString());
+							sm.playingIndex = temp;
+						};
+
+						//Space
+						View space = new View(instance.ApplicationContext);
+						space.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent, 1);
+						space.SetBackgroundColor(Color.Gray);
+						space.SetPadding((int)(10 * metrics.Density), 0, 0, 0);
+
+						songsRadioGroup.AddView(rb);
+						songsRadioGroup.AddView(space);
+					}
+
+				}
+
+				return null;
+			}
+
+			protected override void OnPostExecute(Java.Lang.Object result)
+			{
+			}
+		}
+
 	}
 }
