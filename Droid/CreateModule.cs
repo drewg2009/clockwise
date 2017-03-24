@@ -50,23 +50,25 @@ namespace Clockwise.Droid
 			int alarmIndex = Intent.GetIntExtra("alarm_index", 0);
 
 			//Dropdown setup
-			Weather.Setup(alarmIndex, FindViewById<LinearLayout>(Resource.Id.weather_settings), 
-			              FindViewById<ImageView>(Resource.Id.addWeather), Application.Context);
+			Weather weather = new Weather(Application.Context, alarmIndex, FindViewById<LinearLayout>(Resource.Id.weather_settings));
+			weather.CreateSetup(FindViewById<ImageView>(Resource.Id.addWeather));
 
-			News.Setup(alarmIndex, -1, FindViewById<LinearLayout>(Resource.Id.news_settings),
-			           FindViewById<ImageView>(Resource.Id.addNews), this);
+			News news = new News(ApplicationContext, alarmIndex, FindViewById<LinearLayout>(Resource.Id.news_settings), this);
+			news.CreateSetup(FindViewById<ImageView>(Resource.Id.addNews));
 
-			Reddit.Setup(alarmIndex, -1, FindViewById<LinearLayout>(Resource.Id.reddit_settings),
-			             FindViewById<ImageView>(Resource.Id.addReddit), this);
+			Reddit reddit = new Reddit(ApplicationContext, alarmIndex, FindViewById<LinearLayout>(Resource.Id.reddit_settings), this);
+			reddit.CreateSetup(FindViewById<ImageView>(Resource.Id.addReddit));
 
-			Twitter.Setup(alarmIndex, -1, FindViewById<LinearLayout>(Resource.Id.twitter_settings),
-			              FindViewById<ImageView>(Resource.Id.addTwitter), this);
+			Twitter twitter = new Twitter(ApplicationContext, alarmIndex, FindViewById<LinearLayout>(Resource.Id.twitter_settings), this);
+			twitter.CreateSetup(FindViewById<ImageView>(Resource.Id.addTwitter));
 
-			Countdown.Setup(alarmIndex, -1, FindViewById<LinearLayout>(Resource.Id.countdown_settings),
-			                FindViewById<ImageView>(Resource.Id.addCountdown), this);
+			Countdown countdown = new Countdown(ApplicationContext, alarmIndex, 
+			                                    FindViewById<LinearLayout>(Resource.Id.countdown_settings), this);
+			countdown.CreateSetup(FindViewById<ImageView>(Resource.Id.addCountdown));
 
-			Reminders.Setup(alarmIndex, -1, FindViewById<LinearLayout>(Resource.Id.reminders_settings),
-			                FindViewById<ImageView>(Resource.Id.addReminders), this);
+			Reminders reminders = new Reminders(ApplicationContext, alarmIndex,
+			                                    FindViewById<LinearLayout>(Resource.Id.reminders_settings), this);
+			reminders.CreateSetup(FindViewById<ImageView>(Resource.Id.addReminders));
 			
 			//Toggle setup
 			ImageSwitcher factToggle = FindViewById<ImageSwitcher>(Resource.Id.factToggle);

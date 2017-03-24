@@ -23,6 +23,7 @@ namespace Clockwise.Droid
 		LinearLayout buttonRow;
 		Typeface fontLight;
 		View parent;
+		ImageView settingsBtn;
 		bool moduleSettingOpen = false;
 
 		protected override void OnCreate(Bundle savedInstanceState)
@@ -198,7 +199,7 @@ namespace Clockwise.Droid
 			settingsContainer = FindViewById<RelativeLayout>(Resource.Id.settings_container);
 			snoozeRow = FindViewById<LinearLayout>(Resource.Id.snooze_row);
 			buttonRow = FindViewById<LinearLayout>(Resource.Id.settings_row);
-			ImageView settingsBtn = FindViewById<ImageView>(Resource.Id.settings);
+			settingsBtn = FindViewById<ImageView>(Resource.Id.settings);
 			AnimationManager settingsAnimationManager = new AnimationManager(false);
 			AnimationHelper settingsHelper = new AnimationHelper(settingsContainer, settingsAnimationManager);
 
@@ -211,10 +212,12 @@ namespace Clockwise.Droid
 						//Expand
 						int targetHeight = (int)(80 * settingsContainer.Context.Resources.DisplayMetrics.Density);
 						settingsHelper.expand((int)(200), targetHeight);
+						settingsBtn.SetImageResource(Resource.Drawable.settings_cancel);
 					}
 					else {
 						//Collapse
 						settingsHelper.collapse((int)(200), 0);
+						settingsBtn.SetImageResource(Resource.Drawable.settings_button);
 
 						if (buttonRow.Alpha < .5f)
 						{
@@ -392,7 +395,6 @@ namespace Clockwise.Droid
 
 			parent.Measure(LinearLayout.LayoutParams.WrapContent, LinearLayout.LayoutParams.WrapContent);
 
-			settingTitle.Text = title;
 
 			//Add Editing
 			RelativeLayout displayRow = module.FindViewById<RelativeLayout>(Resource.Id.display_row);
@@ -409,30 +411,43 @@ namespace Clockwise.Droid
 				case "weather":
 					settingImage.SetImageResource(Resource.Drawable.weather_icon);
 					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.weather, null);
-					Weather.Setup(index, editor, null, ApplicationContext);
+					Weather weather = new Weather(ApplicationContext, index, editor);
+					weather.EditSetup(settingImage, navButton);
 					break;
 				case "news":
 					settingImage.SetImageResource(Resource.Drawable.news_icon);
 					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.news, null);
-					News.Setup(index, subindex, editor, null, this);
-
+					News news = new News(ApplicationContext, index, editor, this);
+					news.EditSetup(subindex, settingImage, navButton);
 					break;
 				case "reddit":
+					settingTitle.Text = "r/" + settingTitle.Text;
 					settingImage.SetImageResource(Resource.Drawable.reddit_icon);
 					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.reddit, null);
-					Reddit.Setup(index, subindex, editor, null, this);
-
+					Reddit reddit = new Reddit(ApplicationContext, index, editor, this);
+					reddit.EditSetup(subindex, settingImage, navButton);
 					break;
 				case "twitter":
 					settingImage.SetImageResource(Resource.Drawable.twitter_icon);
 					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.twitter, null);
-					Twitter.Setup(index, subindex, editor, null, this);
-
+					Twitter twitter = new Twitter(ApplicationContext, index, editor, this);
+					twitter.EditSetup(subindex, settingImage, navButton);
+					break;
+				case "countdown":
+					settingImage.SetImageResource(Resource.Drawable.countdown_icon);
+					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.countdown, null);
+					Countdown countdown = new Countdown(ApplicationContext, index, editor, this);
+					countdown.EditSetup(subindex, settingImage, navButton);
 					break;
 				case "reminders":
 					settingImage.SetImageResource(Resource.Drawable.todo_icon);
+					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.reminders, null);
+					Reminders reminders = new Reminders(ApplicationContext, index, editor, this);
+					reminders.EditSetup(subindex, settingImage, navButton);
 					break;
 			}
+
+			settingTitle.Text = title;
 
 			settingImage.LayoutParameters.Width = (int)((double)parent.MeasuredHeight * .4);
 			settingImage.LayoutParameters.Height = (int)((double)parent.MeasuredHeight * .4);
@@ -475,6 +490,7 @@ namespace Clockwise.Droid
 			if (buttonRow.Alpha < .5f)
 			{
 				Console.WriteLine("fading out");
+				settingsBtn.SetImageResource(Resource.Drawable.settings_button);
 				//Fade in settings
 				buttonRow.Enabled = true;
 				buttonRow.Clickable = true;

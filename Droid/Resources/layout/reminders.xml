@@ -36,7 +36,7 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/listTitle"
+                    android:id="@+id/listTitleInput"
                     android:hint="(i.e. chores)"
                     android:textSize="15sp"
                     android:textAlignment="center"

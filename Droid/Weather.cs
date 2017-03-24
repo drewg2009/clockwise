@@ -7,43 +7,13 @@ using Clockwise.Helpers;
 
 namespace Clockwise.Droid
 {
-	public class Weather
+	public class Weather : Module
 	{
-		public static void Setup(int index, View v, ImageView addButton, Context c)
+		ImageSwitcher s1, s2, s3, s4;
+		LinearLayout saveButton;
+		public Weather(Context c, int index, View v) : base(c, index, v)
 		{
 			Typeface font = Typeface.CreateFromAsset(c.Resources.Assets, "HelveticaNeueLight.ttf");
-
-			AnimationManager am = new AnimationManager(false);
-			AnimationHelper settingsHelper = new AnimationHelper(v, am);
-			v.Measure(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent);
-			v.Measure(RelativeLayout.LayoutParams.MatchParent, RelativeLayout.LayoutParams.MatchParent);
-			int expandedHeight = v.MeasuredHeight;
-
-			if (addButton != null)
-			{
-				addButton.Click += delegate
-				{
-					if (!am.Animating)
-					{
-						if (v.LayoutParameters.Height == 0)
-						{
-							//Expand
-							int targetHeight = expandedHeight;
-							int duration = (int)(200);
-							settingsHelper.expand(duration, targetHeight);
-							addButton.SetImageResource(Resource.Drawable.up_icon);
-						}
-						else {
-							//Collapse
-							int targetHeight = 0;
-							int duration = (int)(200);
-							settingsHelper.collapse(duration, targetHeight);
-							addButton.SetImageResource(Resource.Drawable.plus);
-
-						}
-					}
-				};
-			}
 
 			TextView t1 = v.FindViewById<TextView>(Resource.Id.fahrenheitText);
 			TextView t2 = v.FindViewById<TextView>(Resource.Id.currentTempText);
@@ -55,10 +25,10 @@ namespace Clockwise.Droid
 			t3.Typeface = font;
 			t4.Typeface = font;
 
-			ImageSwitcher s1 = v.FindViewById<ImageSwitcher>(Resource.Id.fahrenheitToggle);
-			ImageSwitcher s2 = v.FindViewById<ImageSwitcher>(Resource.Id.currentTempToggle);
-			ImageSwitcher s3 = v.FindViewById<ImageSwitcher>(Resource.Id.maxTempToggle);
-			ImageSwitcher s4 = v.FindViewById<ImageSwitcher>(Resource.Id.descriptionToggle);
+			s1 = v.FindViewById<ImageSwitcher>(Resource.Id.fahrenheitToggle);
+			s2 = v.FindViewById<ImageSwitcher>(Resource.Id.currentTempToggle);
+			s3 = v.FindViewById<ImageSwitcher>(Resource.Id.maxTempToggle);
+			s4 = v.FindViewById<ImageSwitcher>(Resource.Id.descriptionToggle);
 
 			s1.SetFactory(new Toggle());
 			s2.SetFactory(new Toggle());
@@ -70,7 +40,6 @@ namespace Clockwise.Droid
 			s3.SetImageResource(Resource.Drawable.setting_toggle);
 			s4.SetImageResource(Resource.Drawable.setting_toggle);
 
-
 			string weatherSettings = Settings.Weather.Split('|')[index];
 			if (weatherSettings != Settings.EMPTY_MODULE)
 			{
@@ -81,7 +50,8 @@ namespace Clockwise.Droid
 				s4.ScaleX = settings[4] == "1" ? 1 : -1;
 			}
 
-			s1.Click += delegate {
+			s1.Click += delegate
+			{
 				s1.ScaleX *= -1;
 			};
 
@@ -100,9 +70,44 @@ namespace Clockwise.Droid
 				s4.ScaleX *= -1;
 			};
 
-			LinearLayout saveButton = v.FindViewById<LinearLayout>(Resource.Id.save_button);
+			saveButton = v.FindViewById<LinearLayout>(Resource.Id.save_button);
 			saveButton.FindViewById<TextView>(Resource.Id.save_text).Typeface = font;
-			saveButton.Click += delegate {
+		}
+
+		public void CreateSetup(ImageView addButton)
+		{
+			AnimationManager am = new AnimationManager(false);
+			AnimationHelper settingsHelper = new AnimationHelper(view, am);
+			view.Measure(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent);
+			view.Measure(RelativeLayout.LayoutParams.MatchParent, RelativeLayout.LayoutParams.MatchParent);
+			int expandedHeight = view.MeasuredHeight;
+
+			addButton.Click += delegate
+			{
+				if (!am.Animating)
+				{
+					if (view.LayoutParameters.Height == 0)
+					{
+						//Expand
+						int targetHeight = expandedHeight;
+						int duration = (int)(200);
+						settingsHelper.expand(duration, targetHeight);
+						addButton.SetImageResource(Resource.Drawable.up_icon);
+					}
+					else
+					{
+						//Collapse
+						int targetHeight = 0;
+						int duration = (int)(200);
+						settingsHelper.collapse(duration, targetHeight);
+						addButton.SetImageResource(Resource.Drawable.plus);
+
+					}
+				}
+			};
+
+			saveButton.Click += delegate
+			{
 				if (s1.ScaleX < 0 || s2.ScaleX < 0 || s3.ScaleX < 0)
 				{
 					Settings.EditWeather(index,
@@ -111,19 +116,46 @@ namespace Clockwise.Droid
 						(s3.ScaleX < 0),
 						(s4.ScaleX < 0));
 
-					if (addButton != null)
-					{
-						//Collapse
-						int targetHeight = 0;
-						int duration = (int)(200);
-						settingsHelper.collapse(duration, targetHeight);
-						addButton.SetImageResource(Resource.Drawable.plus);
-					}
+					//Collapse
+					int targetHeight = 0;
+					int duration = (int)(200);
+					settingsHelper.collapse(duration, targetHeight);
+					addButton.SetImageResource(Resource.Drawable.plus);
 
-					Toast.MakeText(c, "Weather module saved.", ToastLength.Short).Show();
+					Toast.MakeText(context, "Weather module saved.", ToastLength.Short).Show();
 				}
-				else {
-					Toast.MakeText(c, "Please turn on at least one setting", ToastLength.Long).Show();
+				else
+				{
+					Toast.MakeText(context, "Please turn on at least one setting", ToastLength.Long).Show();
+				}
+			};
+		}
+
+		public void EditSetup(ImageView settingImage, 
+		                             ImageView navButton)
+		{
+			saveButton.Click += delegate
+			{
+				if (s1.ScaleX < 0 || s2.ScaleX < 0 || s3.ScaleX < 0)
+				{
+					Settings.EditWeather(index,
+						(s1.ScaleX < 0),
+						(s2.ScaleX < 0),
+						(s3.ScaleX < 0),
+						(s4.ScaleX < 0));
+					
+					//Fade editor
+					AnimationHelper editorFade = new AnimationHelper(view, null);
+					AnimationHelper imageFade = new AnimationHelper(settingImage, null);
+					editorFade.Fade(200, 0f);
+					imageFade.Fade(200, 1f);
+					navButton.SetImageResource(Resource.Drawable.edit_button);
+
+					Toast.MakeText(context, "Weather module saved.", ToastLength.Short).Show();
+				}
+				else
+				{
+					Toast.MakeText(context, "Please turn on at least one setting", ToastLength.Long).Show();
 				}
 			};
 		}

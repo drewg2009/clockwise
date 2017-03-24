@@ -19,6 +19,7 @@ namespace Clockwise.Droid
 		private static List<PendingIntent> notificationClickIntents = new List<PendingIntent>();
 		private static AlarmManager am = null;
 		private static PackageManager pm;
+		private static long DayLength = 1000 * 60 * 60 * 24;
 		public static void Init(Context context, bool addingAlarm)
 		{
 			String[] currentAlarms = Settings.Alarms.Split('|');
@@ -116,9 +117,29 @@ namespace Clockwise.Droid
 			}
 
 			//Toast
-			string toast = "Set time: " + (calendar.Get(CalendarField.Month) + 1) + "/" + calendar.Get(CalendarField.DayOfMonth) + "/" + calendar.Get(CalendarField.Year)
-			                                                                                      + ", " + calendar.Get(CalendarField.HourOfDay) + ":" + calendar.Get(CalendarField.Minute);
-			Toast.MakeText(context, toast, ToastLength.Long).Show();
+			string toast2 = "Clockwise set for ";
+			int diff = (int)(calendar.Time.Time - Java.Lang.JavaSystem.CurrentTimeMillis());
+			Console.WriteLine("diff: " + diff);
+			if (diff < DayLength)
+			{
+				diff /= 60000; //Now diff is in minutes
+				Console.WriteLine("minute diff: " + diff);
+
+				int hoursUntil = diff / 60;
+				int minutesUntil = diff % 60;
+				if (hoursUntil > 0)
+					toast2 += (int)hoursUntil + " hours and ";
+				toast2 += (int)minutesUntil + " minutes from now.";
+			}
+			else
+			{
+				toast2 += (calendar.Get(CalendarField.Month) + 1) + "/" + calendar.Get(CalendarField.DayOfMonth) + "/" + calendar.Get(CalendarField.Year);
+				bool ispm = hour >= 12;
+				if (ispm && hour > 12) hour -= 12;
+				if (hour == 0) hour = 12;
+				toast2 += " at " + hour + ":" + (minute).ToString("00") + (ispm ? "pm" : "am");
+			}
+			Toast.MakeText(context, toast2, ToastLength.Long).Show();
 		}
 
 		public static void Snooze(int index)

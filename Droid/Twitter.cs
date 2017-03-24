@@ -1,5 +1,6 @@
 ﻿using System;
 using Android.App;
+using Android.Content;
 using Android.Graphics;
 using Android.Views;
 using Android.Views.InputMethods;
@@ -8,13 +9,14 @@ using Clockwise.Helpers;
 
 namespace Clockwise.Droid
 {
-	public class Twitter
+	public class Twitter : Module
 	{
-		static EditText amountInput;
-		static EditText usernameInput;
-
-		public static void Setup(int index, int subindex, View v, ImageView addButton, Activity activity)
+		private EditText amountInput;
+		private EditText usernameInput;
+		private Activity activity;
+		public Twitter(Context c, int index, View v, Activity activity) : base(c, index, v)
 		{
+			this.activity = activity;
 			Typeface font = Typeface.CreateFromAsset(activity.ApplicationContext.Resources.Assets, "HelveticaNeueLight.ttf");
 			v.FindViewById<TextView>(Resource.Id.usernameText).Typeface = font;
 			v.FindViewById<TextView>(Resource.Id.amountText).Typeface = font;
@@ -22,59 +24,29 @@ namespace Clockwise.Droid
 			amountInput = v.FindViewById<EditText>(Resource.Id.amountInput);
 			usernameInput = v.FindViewById<EditText>(Resource.Id.usernameInput);
 
-			if (subindex >= 0)
-			{
-				string savedModule = Settings.GetReddit(index, subindex);
-				usernameInput.Text = savedModule.Substring(0, savedModule.IndexOf(':'));
-				amountInput.Text = savedModule.Substring(savedModule.IndexOf(':') + 1);
-			}
+			saveBtn.FindViewById<TextView>(Resource.Id.save_text).Typeface = font;
+		}
 
+		public void CreateSetup(ImageView addButton)
+		{
 			AnimationManager am = new AnimationManager(false);
-			AnimationHelper settingsHelper = new AnimationHelper(v, am);
-			v.Measure(RelativeLayout.LayoutParams.MatchParent, RelativeLayout.LayoutParams.MatchParent);
-			int expandedHeight = v.MeasuredHeight;
+			AnimationHelper settingsHelper = new AnimationHelper(view, am);
+			view.Measure(RelativeLayout.LayoutParams.MatchParent, RelativeLayout.LayoutParams.MatchParent);
+			int expandedHeight = view.MeasuredHeight;
 
-			if (addButton != null)
+			addButton.Click += delegate
 			{
-				addButton.Click += delegate
+				if (!am.Animating)
 				{
-					if (!am.Animating)
+					if (view.LayoutParameters.Height == 0)
 					{
-						if (v.LayoutParameters.Height == 0)
-						{
-							//Expand
-							int targetHeight = expandedHeight;
-							int duration = (int)(200);
-							settingsHelper.expand(duration, targetHeight);
-							addButton.SetImageResource(Resource.Drawable.up_icon);
-						}
-						else {
-							//Collapse
-							int targetHeight = 0;
-							int duration = (int)(200);
-							settingsHelper.collapse(duration, targetHeight);
-							addButton.SetImageResource(Resource.Drawable.plus);
-
-							//Clear
-							usernameInput.Text = string.Empty;
-							amountInput.Text = string.Empty;
-						}
+						//Expand
+						int targetHeight = expandedHeight;
+						int duration = (int)(200);
+						settingsHelper.expand(duration, targetHeight);
+						addButton.SetImageResource(Resource.Drawable.up_icon);
 					}
-				};
-			}
-
-			LinearLayout saveButton = v.FindViewById<LinearLayout>(Resource.Id.save_button);
-			saveButton.FindViewById<TextView>(Resource.Id.save_text).Typeface = font;
-			saveButton.Click += delegate
-			{
-				if (int.Parse(amountInput.Text) > 0 && int.Parse(amountInput.Text) <= 10)
-				{
-					if (subindex < 0)
-						Settings.AddTwitter(index, usernameInput.Text, int.Parse(amountInput.Text));
 					else
-						Settings.EditTwitter(index, subindex, usernameInput.Text, int.Parse(amountInput.Text));
-
-					if (addButton != null)
 					{
 						//Collapse
 						int targetHeight = 0;
@@ -86,20 +58,79 @@ namespace Clockwise.Droid
 						usernameInput.Text = string.Empty;
 						amountInput.Text = string.Empty;
 					}
+				}
+			};
 
-					View view = activity.CurrentFocus;
-					if (view != null)
+			saveBtn.Click += delegate
+			{
+				int result = 0;
+				if (int.TryParse(amountInput.Text, out result) &&
+					int.Parse(amountInput.Text) > 0 && int.Parse(amountInput.Text) <= 10)
+				{
+					Settings.AddTwitter(index, usernameInput.Text, int.Parse(amountInput.Text));
+
+					//Collapse
+					int targetHeight = 0;
+					int duration = (int)(200);
+					settingsHelper.collapse(duration, targetHeight);
+					addButton.SetImageResource(Resource.Drawable.plus);
+
+					//Clear
+					usernameInput.Text = string.Empty;
+					amountInput.Text = string.Empty;
+
+					View focus = activity.CurrentFocus;
+					if (focus != null)
 					{
 						InputMethodManager imm = (InputMethodManager)activity.ApplicationContext.GetSystemService("input_method");
-						imm.HideSoftInputFromWindow(view.WindowToken, 0);
+						imm.HideSoftInputFromWindow(focus.WindowToken, 0);
 					}
 
 					Toast.MakeText(activity.ApplicationContext, "Twitter module saved.", ToastLength.Short).Show();
 				}
-				else {
+				else
+				{
 					Toast.MakeText(activity.ApplicationContext, "Select between 1 and 10 posts.", ToastLength.Long).Show();
 				}
 			};
+		}
+
+		public void EditSetup(int subindex, ImageView settingImage, ImageView navButton)
+		{
+			string savedModule = Settings.GetReddit(index, subindex);
+			usernameInput.Text = savedModule.Substring(0, savedModule.IndexOf(':'));
+			amountInput.Text = savedModule.Substring(savedModule.IndexOf(':') + 1);
+
+			saveBtn.Click += delegate
+			{
+				int result = 0;
+				if (int.TryParse(amountInput.Text, out result) &&
+					int.Parse(amountInput.Text) > 0 && int.Parse(amountInput.Text) <= 10)
+				{
+					//Fade editor
+					AnimationHelper editorFade = new AnimationHelper(view, null);
+					AnimationHelper imageFade = new AnimationHelper(settingImage, null);
+					editorFade.Fade(200, 0f);
+					imageFade.Fade(200, 1f);
+					navButton.SetImageResource(Resource.Drawable.edit_button);
+
+					Settings.EditTwitter(index, subindex, usernameInput.Text, int.Parse(amountInput.Text));
+
+					View focus = activity.CurrentFocus;
+					if (focus != null)
+					{
+						InputMethodManager imm = (InputMethodManager)activity.ApplicationContext.GetSystemService("input_method");
+						imm.HideSoftInputFromWindow(focus.WindowToken, 0);
+					}
+
+					Toast.MakeText(activity.ApplicationContext, "Twitter module saved.", ToastLength.Short).Show();
+				}
+				else
+				{
+					Toast.MakeText(activity.ApplicationContext, "Select between 1 and 10 posts.", ToastLength.Long).Show();
+				}
+			};
+
 		}
 	}
 }

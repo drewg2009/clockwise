@@ -1,5 +1,5 @@
-﻿using System;
-using Android.App;
+﻿using Android.App;
+using Android.Content;
 using Android.Graphics;
 using Android.Text;
 using Android.Views;
@@ -11,30 +11,25 @@ using Java.Util;
 
 namespace Clockwise.Droid
 {
-	public class Countdown
+	public class Countdown : Module
 	{
-		static EditText eventNameInput;
-		static EditText eventDateInput;
-		static Activity activity;
-		public static void Setup(int index, int subindex, View v, ImageView addButton, Activity a)
+		private EditText eventNameInput;
+		private EditText eventDateInput;
+		private Activity activity;
+
+		public Countdown(Context c, int index, View v, Activity activity) : base(c, index, v)
 		{
-			activity = a;
-			Typeface font = Typeface.CreateFromAsset(activity.ApplicationContext.Resources.Assets, "HelveticaNeueLight.ttf");
-			v.FindViewById<TextView>(Resource.Id.eventNameText).Typeface = font;
-			v.FindViewById<TextView>(Resource.Id.eventDateText).Typeface = font;
-
-			eventNameInput = v.FindViewById<EditText>(Resource.Id.eventNameInput);
-			eventDateInput = v.FindViewById<EditText>(Resource.Id.eventDateInput);
-
-			if (subindex >= 0)
-			{
-				string[] savedModuleSettings = Settings.GetCountdown(index, subindex).Split(':');
-				eventNameInput.Text = savedModuleSettings[0];
-				eventDateInput.Text = savedModuleSettings[1];
-			}
+			this.activity = activity;
+			Typeface font = Typeface.CreateFromAsset(c.Resources.Assets, "HelveticaNeueLight.ttf");
+			view.FindViewById<TextView>(Resource.Id.eventDateText).Typeface = font;
+			view.FindViewById<TextView>(Resource.Id.eventNameText).Typeface = font;
+			eventNameInput = view.FindViewById<EditText>(Resource.Id.eventNameInput);
+			eventDateInput = view.FindViewById<EditText>(Resource.Id.eventDateInput);
+			saveBtn.FindViewById<TextView>(Resource.Id.save_text).Typeface = font;
 
 			eventDateInput.InputType = InputTypes.Null;
-			eventDateInput.Click += delegate {
+			eventDateInput.Click += delegate
+			{
 				Calendar calendar = Calendar.Instance;
 				calendar.TimeInMillis = Java.Lang.JavaSystem.CurrentTimeMillis();
 				int year = calendar.Get(CalendarField.Year);
@@ -51,7 +46,7 @@ namespace Clockwise.Droid
 
 				DatePickerDialog dateWindow = new DatePickerDialog(activity, (object sender2, DatePickerDialog.DateSetEventArgs e2) =>
 				{
-					calendar.Set(e2.Year, e2.MonthOfYear, e2.DayOfMonth);
+					calendar.Set(e2.Year, e2.Month, e2.DayOfMonth);
 					Date selectedDate = new Date(calendar.Time.Time);
 					calendar.TimeInMillis = Java.Lang.JavaSystem.CurrentTimeMillis();
 					calendar.Set(CalendarField.HourOfDay, 0);
@@ -61,7 +56,7 @@ namespace Clockwise.Droid
 					currentDate.Time = currentDate.Time + (1000 * 60 * 60 * 24) - 1;
 
 					if (selectedDate.After(currentDate))
-						eventDateInput.Text = "" + (e2.MonthOfYear + 1) + "/" + e2.DayOfMonth + "/" + e2.Year;
+						eventDateInput.Text = "" + (e2.Month + 1) + "/" + e2.DayOfMonth + "/" + e2.Year;
 					else
 						Toast.MakeText(activity.ApplicationContext, "Please selected a date after today", ToastLength.Long).Show();
 
@@ -71,82 +66,97 @@ namespace Clockwise.Droid
 				dateWindow.DatePicker.MinDate = calendar.TimeInMillis - 1000;
 				dateWindow.Show();
 			};
+		}
 
-			if (subindex >= 0)
-			{
-				string savedModule = Settings.GetCountdown(index, subindex);
-				eventNameInput.Text = savedModule.Substring(0, savedModule.IndexOf(':'));
-				eventDateInput.Text = savedModule.Substring(savedModule.IndexOf(':') + 1);
-			}
-
+		public void CreateSetup(ImageView addButton)
+		{
 			AnimationManager am = new AnimationManager(false);
-			AnimationHelper settingsHelper = new AnimationHelper(v, am);
-			v.Measure(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent);
+			AnimationHelper settingsHelper = new AnimationHelper(view, am);
+			view.Measure(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent);
+			int expandedHeight = view.MeasuredHeight;
 
-			int expandedHeight = v.MeasuredHeight;
-
-			if (addButton != null)
+			addButton.Click += delegate
 			{
-				addButton.Click += delegate
+				if (!am.Animating)
 				{
-					if (!am.Animating)
+					if (view.LayoutParameters.Height == 0)
 					{
-						if (v.LayoutParameters.Height == 0)
-						{
-							//Expand
-							int targetHeight = expandedHeight;
-							int duration = (int)(200);
-							settingsHelper.expand(duration, targetHeight);
-							addButton.SetImageResource(Resource.Drawable.up_icon);
-						}
-						else {
-							//Collapse
-							int targetHeight = 0;
-							int duration = (int)(200);
-							settingsHelper.collapse(duration, targetHeight);
-							addButton.SetImageResource(Resource.Drawable.plus);
-
-						}
+						//Expand
+						int targetHeight = expandedHeight;
+						int duration = 200;
+						settingsHelper.expand(duration, targetHeight);
+						addButton.SetImageResource(Resource.Drawable.up_icon);
 					}
-				};
-			}
-
-			LinearLayout saveButton = v.FindViewById<LinearLayout>(Resource.Id.save_button);
-			saveButton.FindViewById<TextView>(Resource.Id.save_text).Typeface = font;
-			saveButton.Click += delegate
-			{
-				if (eventNameInput.Text != string.Empty && eventDateInput.Text != string.Empty)
-				{
-					if (subindex < 0)
-						Settings.AddCountdown(index, eventNameInput.Text, eventDateInput.Text);
 					else
-						Settings.EditCountdown(index, subindex, eventNameInput.Text, eventDateInput.Text);
-
-					//Clear
-					if (subindex < 0)
-					{
-						eventDateInput.Text = string.Empty;
-						eventNameInput.Text = string.Empty;
-					}
-					if (addButton != null)
 					{
 						//Collapse
 						int targetHeight = 0;
-						int duration = (int)(200);
+						int duration = 200;
 						settingsHelper.collapse(duration, targetHeight);
 						addButton.SetImageResource(Resource.Drawable.plus);
+						//Clear
+						eventNameInput.Text = string.Empty;
+						eventDateInput.Text = string.Empty;
 					}
+				}
+			};
 
-					View view = activity.CurrentFocus;
-					if (view != null)
+			saveBtn.Click += delegate
+			{
+				if (eventNameInput.Text != string.Empty && eventDateInput.Text != string.Empty)
+				{
+					Settings.AddCountdown(index, eventNameInput.Text, eventDateInput.Text);
+
+					//Collapse
+					int targetHeight = 0;
+					int duration = 200;
+					settingsHelper.collapse(duration, targetHeight);
+					addButton.SetImageResource(Resource.Drawable.plus);
+
+					View focus = activity.CurrentFocus;
+					if (focus != null)
 					{
 						InputMethodManager imm = (InputMethodManager)activity.ApplicationContext.GetSystemService("input_method");
-						imm.HideSoftInputFromWindow(view.WindowToken, 0);
+						imm.HideSoftInputFromWindow(focus.WindowToken, 0);
 					}
-
 					Toast.MakeText(activity.ApplicationContext, "Countdown module saved.", ToastLength.Short).Show();
 				}
-				else {
+				else
+				{
+					Toast.MakeText(activity.ApplicationContext, "Please fill all fields", ToastLength.Long).Show();
+				}
+			};
+		}
+
+		public void EditSetup(int subindex, ImageView settingImage, ImageView navButton)
+		{
+			string[] savedModuleSettings = Settings.GetCountdown(index, subindex).Split(':');
+			eventNameInput.Text = savedModuleSettings[0];
+			eventDateInput.Text = savedModuleSettings[1];
+
+			saveBtn.Click += delegate
+			{
+				if (eventNameInput.Text != string.Empty && eventDateInput.Text != string.Empty)
+				{
+					//Fade editor
+					AnimationHelper editorFade = new AnimationHelper(view, null);
+					AnimationHelper imageFade = new AnimationHelper(settingImage, null);
+					editorFade.Fade(200, 0f);
+					imageFade.Fade(200, 1f);
+					navButton.SetImageResource(Resource.Drawable.edit_button);
+
+					Settings.EditCountdown(index, subindex, eventNameInput.Text, eventDateInput.Text);
+
+					View focus = activity.CurrentFocus;
+					if (focus != null)
+					{
+						InputMethodManager imm = (InputMethodManager)activity.ApplicationContext.GetSystemService("input_method");
+						imm.HideSoftInputFromWindow(focus.WindowToken, 0);
+					}
+					Toast.MakeText(activity.ApplicationContext, "Countdown module saved.", ToastLength.Short).Show();
+				}
+				else
+				{
 					Toast.MakeText(activity.ApplicationContext, "Please fill all fields", ToastLength.Long).Show();
 				}
 			};

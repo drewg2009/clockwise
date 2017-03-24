@@ -11,89 +11,45 @@ using Java.Lang;
 
 namespace Clockwise.Droid
 {
-	public class Reminders
+	public class Reminders : Module
 	{
-		static EditText listTitleInput;
-		static List<View> reminderViews;
-		static View view;
-		static Context context;
-		static LinearLayout parent;
-		public static void Setup(int index, int subindex, View v, ImageView addButton, Activity activity)
+		private EditText listTitleInput;
+		private List<View> reminderViews;
+		private LinearLayout parent;
+		private Activity activity;
+		private Button addReminderBtn;
+		public Reminders(Context c, int index, View v, Activity activity) : base(c, index, v)
 		{
-			Typeface font = Typeface.CreateFromAsset(activity.ApplicationContext.Resources.Assets, "HelveticaNeueLight.ttf");
-			listTitleInput = v.FindViewById<EditText>(Resource.Id.listTitle);
+			ClearSettings();
+			Typeface font = Typeface.CreateFromAsset(c.Resources.Assets, "HelveticaNeueLight.ttf");
+			listTitleInput = view.FindViewById<EditText>(Resource.Id.listTitleInput);
 			listTitleInput.Typeface = font;
 
-			ClearSettings();
-			parent = v.FindViewById<LinearLayout>(Resource.Id.reminderContainer);
-			view = v;
-			context = activity;
-			Button addReminderButton = v.FindViewById<Button>(Resource.Id.addReminderButton);
-			addReminderButton.Typeface = font;
-			listTitleInput = v.FindViewById<EditText>(Resource.Id.listTitle);
 			reminderViews = new List<View>();
-
-			if (subindex >= 0)
-			{
-				string savedModule = Settings.GetReminders(index, subindex);
-				string[] splitSettings = savedModule.Split(':');
-				string listTitle = splitSettings[0];
-
-				listTitleInput.Text = listTitle;
-				//If building the layout
-				for (int i = 1; i < splitSettings.Length; i++)
-				{
-					AddReminderView(splitSettings[i]);
-				}
-			}
-
-
-			AnimationManager am = new AnimationManager(false);
-			AnimationHelper settingsHelper = new AnimationHelper(v, am);
-			v.Measure(RelativeLayout.LayoutParams.MatchParent, RelativeLayout.LayoutParams.MatchParent);
-			int expandedHeight = v.MeasuredHeight;
-
-			if (addButton != null)
-			{
-				addButton.Click += delegate
-				{
-					if (!am.Animating)
-					{
-						if (v.LayoutParameters.Height == 0)
-						{
-							//Expand
-							int targetHeight = expandedHeight;
-							int duration = (int)(200);
-							settingsHelper.expand(duration, targetHeight);
-							addButton.SetImageResource(Resource.Drawable.up_icon);
-						}
-						else {
-							//Collapse
-							int targetHeight = 0;
-							int duration = (int)(200);
-							settingsHelper.collapse(duration, targetHeight);
-							addButton.SetImageResource(Resource.Drawable.plus);
-							ClearSettings();
-						}
-					}
-				};
-			}
+			saveBtn.FindViewById<TextView>(Resource.Id.save_text).Typeface = font;
+			this.activity = activity;
+			parent = view.FindViewById<LinearLayout>(Resource.Id.reminderContainer);
+			addReminderBtn = view.FindViewById<Button>(Resource.Id.addReminderButton);
+			addReminderBtn.Typeface = font;
 
 			//Add button
-			v.FindViewById<Button>(Resource.Id.addReminderButton).Click += delegate {
+			addReminderBtn.Click += delegate
+			{
 				if (listTitleInput.Text != string.Empty)
 				{
 					if (reminderViews.Count == 0) AddReminderView(null);
-					else {
+					else
+					{
 						if (reminderViews[reminderViews.Count - 1]
-						      .FindViewById<EditText>(Resource.Id.reminderInput).Text != string.Empty)
+							  .FindViewById<EditText>(Resource.Id.reminderInput).Text != string.Empty)
 						{
 							if (!reminderViews[reminderViews.Count - 1]
 								.FindViewById<EditText>(Resource.Id.reminderInput).Text.Contains(Settings.SEPARATERS))
 							{
 								View newReminder = AddReminderView(null);
 							}
-							else {
+							else
+							{
 								Toast.MakeText(context, "Reminder cannot have special characters.", ToastLength.Short).Show();
 							}
 						}
@@ -104,10 +60,40 @@ namespace Clockwise.Droid
 				else
 					Toast.MakeText(context, "Please give a list title", ToastLength.Long).Show();
 			};
+		}
 
-			LinearLayout saveButton = v.FindViewById<LinearLayout>(Resource.Id.save_button);
-			saveButton.FindViewById<TextView>(Resource.Id.save_text).Typeface = font;
-			saveButton.Click += delegate
+		public void CreateSetup(ImageView addButton)
+		{
+			AnimationManager am = new AnimationManager(false);
+			AnimationHelper settingsHelper = new AnimationHelper(view, am);
+			view.Measure(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent);
+			int expandedHeight = view.MeasuredHeight;
+
+			addButton.Click += delegate
+			{
+				if (!am.Animating)
+				{
+					if (view.LayoutParameters.Height == 0)
+					{
+						//Expand
+						int targetHeight = expandedHeight;
+						int duration = 200;
+						settingsHelper.expand(duration, targetHeight);
+						addButton.SetImageResource(Resource.Drawable.up_icon);
+					}
+					else
+					{
+						//Collapse
+						int targetHeight = 0;
+						int duration = 200;
+						settingsHelper.collapse(duration, targetHeight);
+						addButton.SetImageResource(Resource.Drawable.plus);
+						ClearSettings();
+					}
+				}
+			};
+
+			saveBtn.Click += delegate
 			{
 				//build string of reminders to add to shared preferences
 				StringBuilder remindersSB = new StringBuilder();
@@ -118,51 +104,87 @@ namespace Clockwise.Droid
 				}
 
 				if (listTitleInput.Text.Length > 0 && reminderViews.Count > 0
-				    && (reminderViews[0].FindViewById<EditText>(Resource.Id.reminderInput)).Text.Trim() != string.Empty)
+					&& (reminderViews[0].FindViewById<EditText>(Resource.Id.reminderInput)).Text.Trim() != string.Empty)
 				{
-					if (subindex < 0)
-						Settings.AddReminders(index, listTitleInput.Text, remindersSB.ToString());
-					else
-						Settings.EditReminders(index, subindex, listTitleInput.Text, remindersSB.ToString());
-
+					Settings.AddReminders(index, listTitleInput.Text, remindersSB.ToString());
 					Toast.MakeText(context, "Reminders Module Saved", ToastLength.Short).Show();
-
-					View view2 = activity.CurrentFocus;
-					if (view2 != null)
+					View focus = activity.CurrentFocus;
+					if (focus != null)
 					{
 						InputMethodManager imm = (InputMethodManager)activity.ApplicationContext.GetSystemService("input_method");
-						imm.HideSoftInputFromWindow(view.WindowToken, 0);
+						imm.HideSoftInputFromWindow(focus.WindowToken, 0);
 					}
 
-					//Clear
-
-
-					if (addButton != null)
-					{
-						//Collapse
-						int targetHeight = 0;
-						int duration = (int)(200);
-						settingsHelper.collapse(duration, targetHeight);
-						addButton.SetImageResource(Resource.Drawable.plus);
-						ClearSettings();
-					}
-
-
+					//Collapse
+					int targetHeight = 0;
+					int duration = 200;
+					settingsHelper.collapse(duration, targetHeight);
+					addButton.SetImageResource(Resource.Drawable.plus);
+					ClearSettings();
 				}
-				else {
+				else
+				{
 					Toast.MakeText(context, "Please give a list title and at least 1 reminder.", ToastLength.Long).Show();
 				}
 			};
 		}
 
-		private static View AddReminderView(string reminderString)
+		public void EditSetup(int subindex, ImageView settingImage, ImageView navButton)
+		{
+			string savedModule = Settings.GetReminders(index, subindex);
+			string[] splitSettings = savedModule.Split(':');
+			string listTitle = splitSettings[0];
+
+			listTitleInput.Text = listTitle;
+			//If building the layout
+			for (int i = 1; i < splitSettings.Length; i++)
+			{
+				AddReminderView(splitSettings[i]);
+			}
+
+			saveBtn.Click += delegate
+			{
+				//build string of reminders to add to shared preferences
+				StringBuilder remindersSB = new StringBuilder();
+				foreach (View view1 in reminderViews)
+				{
+					string reminder = view1.FindViewById<EditText>(Resource.Id.reminderInput).Text;
+					if (reminder != string.Empty) remindersSB.Append(reminder + ";");
+				}
+
+				if (listTitleInput.Text.Length > 0 && reminderViews.Count > 0
+					&& (reminderViews[0].FindViewById<EditText>(Resource.Id.reminderInput)).Text.Trim() != string.Empty)
+				{
+					Settings.EditReminders(index, subindex, listTitleInput.Text, remindersSB.ToString());
+					Toast.MakeText(context, "Reminders Module Saved", ToastLength.Short).Show();
+					View focus = activity.CurrentFocus;
+					if (focus != null)
+					{
+						InputMethodManager imm = (InputMethodManager)activity.ApplicationContext.GetSystemService("input_method");
+						imm.HideSoftInputFromWindow(focus.WindowToken, 0);
+					}
+
+					//Fade editor
+					AnimationHelper editorFade = new AnimationHelper(view, null);
+					AnimationHelper imageFade = new AnimationHelper(settingImage, null);
+					editorFade.Fade(200, 0f);
+					imageFade.Fade(200, 1f);
+					navButton.SetImageResource(Resource.Drawable.edit_button);
+				}
+				else
+				{
+					Toast.MakeText(context, "Please give a list title and at least 1 reminder.", ToastLength.Long).Show();
+				}
+			};
+
+		}
+
+
+		private View AddReminderView(string reminderString)
 		{
 			View child = View.Inflate(context, Resource.Layout.new_reminder_template, null);
-			//child.FindViewById<EditText>(Resource.Id.reminderInput).SetHintTextColor(Color.Gray);
 			child.FindViewById<TextView>(Resource.Id.reminderCount).Text = "" + (reminderViews.Count + 1) + ") ";
-
 			child.FindViewById<EditText>(Resource.Id.reminderInput).RequestFocus();
-
 
 			reminderViews.Add(child);
 
@@ -178,12 +200,10 @@ namespace Clockwise.Droid
 			};
 
 			parent.AddView(child);
-
 			return child;
-
 		}
 
-		private static void RemoveReminderView(int id)
+		private void RemoveReminderView(int id)
 		{
 			parent.RemoveView(reminderViews[id]);
 			reminderViews.RemoveAt(id); //CHECK
@@ -192,7 +212,7 @@ namespace Clockwise.Droid
 			parent.Invalidate();
 		}
 
-		public static void ClearSettings()
+		public void ClearSettings()
 		{
 			if (listTitleInput != null)
 			{
