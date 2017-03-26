@@ -532,7 +532,7 @@ namespace Clockwise.Helpers
 			string[] reddits = Reddit.Split('|');
 			string thisReddit = reddits[index]; //reddit:subreddit:count,subreddit:count, ...
 			List<string> moduleList = new List<string>(thisReddit.Substring(thisReddit.IndexOf(':') + 1).Split(','));
-			moduleList[subindex] = subreddit + "," + count;
+			moduleList[subindex] = subreddit + ":" + count;
 
 			string newList = string.Empty;
 			foreach (String s in moduleList)
@@ -552,7 +552,7 @@ namespace Clockwise.Helpers
 			string[] twitters = Twitter.Split('|');
 			string thisTwitter = twitters[index]; //twitter:subreddit:count,subreddit:count, ...
 			List<string> moduleList = new List<string>(thisTwitter.Substring(thisTwitter.IndexOf(':') + 1).Split(','));
-			moduleList[subindex] = username + "," + count;
+			moduleList[subindex] = username + ":" + count;
 
 			string newList = string.Empty;
 			foreach (String s in moduleList)
@@ -569,10 +569,10 @@ namespace Clockwise.Helpers
 
 		public static void EditCountdown(int index, int subindex, string eventName, string date)
 		{
-			string[] countdowns = Twitter.Split('|');
+			string[] countdowns = Countdown.Split('|');
 			string thisCountdown = countdowns[index]; //countdown:subreddit:count,subreddit:count, ...
 			List<string> moduleList = new List<string>(thisCountdown.Substring(thisCountdown.IndexOf(':') + 1).Split(','));
-			moduleList[subindex] = eventName + "," + date;
+			moduleList[subindex] = eventName + ":" + date;
 
 			string newList = string.Empty;
 			foreach (String s in moduleList)
@@ -592,7 +592,7 @@ namespace Clockwise.Helpers
 			string[] traffics = Traffic.Split('|');
 			string thisTraffic = traffics[index]; //traffic:subreddit:count,subreddit:count, ...
 			List<string> moduleList = new List<string>(thisTraffic.Substring(thisTraffic.IndexOf(':') + 1).Split(','));
-			moduleList[subindex] = dest + "," + destUrl;
+			moduleList[subindex] = dest + ":" + destUrl;
 
 			string newList = string.Empty;
 			foreach (String s in moduleList)
@@ -609,10 +609,10 @@ namespace Clockwise.Helpers
 
 		public static void EditReminders(int index, int subindex, string listName, string list)
 		{
-			string[] reminders = Twitter.Split('|');
-			string thisReminders = reminders[index]; //reminders:subreddit:count,subreddit:count, ...
+			string[] reminders = Reminders.Split('|');
+			string thisReminders = reminders[index]; 
 			List<string> moduleList = new List<string>(thisReminders.Substring(thisReminders.IndexOf(':') + 1).Split(','));
-			moduleList[subindex] = listName + "," + list;
+			moduleList[subindex] = listName + ":" + list;
 
 			string newList = string.Empty;
 			foreach (String s in moduleList)
@@ -629,10 +629,10 @@ namespace Clockwise.Helpers
 
 		public static void EditNews(int index, int subindex, string category, int count)
 		{
-			string[] news = Twitter.Split('|');
+			string[] news = News.Split('|');
 			string thisNews = news[index]; //twitter:subreddit:count,subreddit:count, ...
 			List<string> moduleList = new List<string>(thisNews.Substring(thisNews.IndexOf(':') + 1).Split(','));
-			moduleList[subindex] = category + "," + count;
+			moduleList[subindex] = category + ":" + count;
 
 			string newList = string.Empty;
 			foreach (String s in moduleList)

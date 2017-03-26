@@ -119,6 +119,8 @@
     <Compile Include="Countdown.cs" />
     <Compile Include="SongPageAdapter.cs" />
     <Compile Include="PageFragment.cs" />
+    <Compile Include="Module.cs" />
+    <Compile Include="CustomHorizontalScrollView.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -184,6 +186,7 @@
     <AndroidResource Include="Resources\layout\fragment_page.xml" />
     <AndroidResource Include="Resources\values\Styles.xml" />
     <AndroidResource Include="Resources\values\Colors.xml" />
+    <AndroidResource Include="Resources\drawable\settings_cancel.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />

@@ -151,6 +151,10 @@ namespace Clockwise.Droid
 					imageFade.Fade(200, 1f);
 					navButton.SetImageResource(Resource.Drawable.edit_button);
 
+					//Expand clock
+					AnimationHelper clockHeight = new AnimationHelper(MainActivity.clock_settings_layout, new AnimationManager(MainActivity.clock_settings_layout.Height > 0));
+					clockHeight.expand(200, (int)(MainActivity.DisplayMetrics.HeightPixels * .4));
+
 					Toast.MakeText(context, "Weather module saved.", ToastLength.Short).Show();
 				}
 				else

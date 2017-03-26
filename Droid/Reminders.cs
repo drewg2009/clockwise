@@ -20,7 +20,7 @@ namespace Clockwise.Droid
 		private Button addReminderBtn;
 		public Reminders(Context c, int index, View v, Activity activity) : base(c, index, v)
 		{
-			ClearSettings();
+			//ClearSettings();
 			Typeface font = Typeface.CreateFromAsset(c.Resources.Assets, "HelveticaNeueLight.ttf");
 			listTitleInput = view.FindViewById<EditText>(Resource.Id.listTitleInput);
 			listTitleInput.Typeface = font;
@@ -106,7 +106,7 @@ namespace Clockwise.Droid
 				if (listTitleInput.Text.Length > 0 && reminderViews.Count > 0
 					&& (reminderViews[0].FindViewById<EditText>(Resource.Id.reminderInput)).Text.Trim() != string.Empty)
 				{
-					Settings.AddReminders(index, listTitleInput.Text, remindersSB.ToString());
+					Settings.AddReminders(index, listTitleInput.Text, remindersSB.ToString().TrimEnd(';'));
 					Toast.MakeText(context, "Reminders Module Saved", ToastLength.Short).Show();
 					View focus = activity.CurrentFocus;
 					if (focus != null)
@@ -136,10 +136,11 @@ namespace Clockwise.Droid
 			string listTitle = splitSettings[0];
 
 			listTitleInput.Text = listTitle;
+			string[] list = splitSettings[1].Split(';');
 			//If building the layout
-			for (int i = 1; i < splitSettings.Length; i++)
+			for (int i = 0; i < list.Length; i++)
 			{
-				AddReminderView(splitSettings[i]);
+				AddReminderView(list[i]);
 			}
 
 			saveBtn.Click += delegate
@@ -170,6 +171,10 @@ namespace Clockwise.Droid
 					editorFade.Fade(200, 0f);
 					imageFade.Fade(200, 1f);
 					navButton.SetImageResource(Resource.Drawable.edit_button);
+
+					//Expand clock
+					AnimationHelper clockHeight = new AnimationHelper(MainActivity.clock_settings_layout, new AnimationManager(MainActivity.clock_settings_layout.Height > 0));
+					clockHeight.expand(200, (int)(MainActivity.DisplayMetrics.HeightPixels * .4));
 				}
 				else
 				{
@@ -200,6 +205,8 @@ namespace Clockwise.Droid
 			};
 
 			parent.AddView(child);
+
+			RefreshHeight();
 			return child;
 		}
 
@@ -210,29 +217,29 @@ namespace Clockwise.Droid
 			if (reminderViews.Count > 0)
 				reminderViews[reminderViews.Count - 1].FindViewById(Resource.Id.reminderInput).RequestFocus();
 			parent.Invalidate();
+			RefreshHeight();
+		}
+
+		private void RefreshHeight()
+		{
+			//Adjust height
+			AnimationManager am = new AnimationManager(false);
+			AnimationHelper temp = new AnimationHelper(view, am);
+			view.Measure(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent);
+			int x = view.MeasuredHeight;
+			temp.expand(10, x);
 		}
 
 		public void ClearSettings()
 		{
-			if (listTitleInput != null)
-			{
-				listTitleInput.Text = string.Empty;
-				listTitleInput = null;
-			}
+			listTitleInput.Text = string.Empty;
 
-			if (reminderViews != null)
+			//Remove extra rows
+			foreach(View view1 in reminderViews)
 			{
-				if (parent != null)
-				{
-					//Remove extra rows
-					foreach(View view1 in reminderViews)
-					{
-						parent.RemoveView(view1);
-					}
-				}
-				reminderViews.Clear();
-				reminderViews = null;
+				parent.RemoveView(view1);
 			}
+			reminderViews.Clear();
 		}
 	}
 }

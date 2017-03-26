@@ -27,13 +27,12 @@
             android:id="@+id/moduleSection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-20dp"
-            android:layout_alignParentBottom="true">
-            <HorizontalScrollView
+            android:layout_marginTop="-20dp">
+            <Clockwise.Droid.CustomHorizontalScrollView
                 android:minWidth="25px"
                 android:minHeight="25px"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:id="@+id/module_scroller"
                 android:fadingEdge="vertical"
                 android:fadingEdgeLength="50dp"
@@ -43,11 +42,11 @@
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:minWidth="25px"
                     android:minHeight="25px"
                     android:id="@+id/module_layout" />
-            </HorizontalScrollView>
+            </Clockwise.Droid.CustomHorizontalScrollView>
         </FrameLayout>
         <RelativeLayout
             android:orientation="vertical"

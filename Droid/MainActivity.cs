@@ -11,6 +11,7 @@ using Android.Animation;
 using System;
 using Clockwise.Helpers;
 using Android.Content;
+using Android.Util;
 
 namespace Clockwise.Droid
 {
@@ -24,8 +25,14 @@ namespace Clockwise.Droid
 		Typeface fontLight;
 		View parent;
 		ImageView settingsBtn;
-		bool moduleSettingOpen = false;
-
+		//bool moduleSettingOpen = false;
+		public static RelativeLayout clock_settings_layout;
+		ImageView addModuleBtn;
+		ImageSwitcher alarm_toggle;
+		static CustomHorizontalScrollView scrollView;
+		LinearLayout scroll_layout;
+		public static DisplayMetrics DisplayMetrics;
+		static int currentModule = -1;
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
@@ -72,9 +79,7 @@ namespace Clockwise.Droid
 									   "" + (hourpicker.Value + ampmpicker.Value * 12));
 			};
 
-
-
-			ImageSwitcher alarm_toggle = FindViewById<ImageSwitcher>(Resource.Id.alarm_toggle);
+			alarm_toggle = FindViewById<ImageSwitcher>(Resource.Id.alarm_toggle);
 			alarm_toggle.SetFactory(new Toggle());
 
 			string[] alarmSettings = Settings.Alarms.Split('|')[alarm_number].Split('#');
@@ -103,9 +108,6 @@ namespace Clockwise.Droid
 				if (temp == (int)Settings.AlarmStatus.ALARM_OFF) //if alarm is off
 				{
 					//Turn alarm on
-					//int hourSet = hourpicker.Value + ampmpicker.Value * 12;
-					//if (hourSet == 12 && ampmpicker.Value == 0) hourSet = 0;
-					//if (hourSet == 24) hourSet = 12;
 					Settings.SetAlarmField(alarm_number, Settings.AlarmField.Status, "" + (int)Settings.AlarmStatus.ALARM_ON);
 					alarm_toggle.SetImageResource(Resource.Drawable.on_toggle);
 					alarm_toggle.Activated = true;
@@ -159,7 +161,6 @@ namespace Clockwise.Droid
 					}
 
 					repeatDaysResult = repeatDaysResult ^ temp;
-					//Settings.RepeatDays = repeatDaysResult.ToString();
 					Settings.SetAlarmField(alarm_number, Settings.AlarmField.RepeatDays, "" + repeatDaysResult);
 
 					//
@@ -194,8 +195,16 @@ namespace Clockwise.Droid
 				}
 			}
 
+			//Align module frame
+			DisplayMetrics = Resources.DisplayMetrics;
+			FrameLayout moduleFrame = FindViewById<FrameLayout>(Resource.Id.moduleSection);
+			RelativeLayout.LayoutParams testParams = (RelativeLayout.LayoutParams)moduleFrame.LayoutParameters;
+			testParams.AddRule(LayoutRules.Below, Resource.Id.pulldown);
+			testParams.Width = (int)DisplayMetrics.WidthPixels;
+			testParams.Height = (int)(DisplayMetrics.HeightPixels * .6);
+
 			//Settings expansion
-			RelativeLayout clock_settings_layout = FindViewById<RelativeLayout>(Resource.Id.clock_settings);
+			clock_settings_layout = FindViewById<RelativeLayout>(Resource.Id.clock_settings);
 			settingsContainer = FindViewById<RelativeLayout>(Resource.Id.settings_container);
 			snoozeRow = FindViewById<LinearLayout>(Resource.Id.snooze_row);
 			buttonRow = FindViewById<LinearLayout>(Resource.Id.settings_row);
@@ -207,17 +216,43 @@ namespace Clockwise.Droid
 			{
 				if (!settingsAnimationManager.Animating)
 				{
+					RelativeLayout currentModuleLayout = null;
+					if (currentModule != -1)
+					{
+						currentModuleLayout = (RelativeLayout)scroll_layout.GetChildAt(currentModule);
+					}
 					if (settingsContainer.LayoutParameters.Height == 0)
 					{
 						//Expand
 						int targetHeight = (int)(80 * settingsContainer.Context.Resources.DisplayMetrics.Density);
 						settingsHelper.expand((int)(200), targetHeight);
 						settingsBtn.SetImageResource(Resource.Drawable.settings_cancel);
+						scrollView.SetOnTouchListener(new ScrollViewOffListener());
+
+						//Fade nav button for current module
+						if (currentModuleLayout != null)
+						{
+							AnimationHelper navButtonFader = new AnimationHelper(
+								currentModuleLayout.FindViewById(Resource.Id.navButton), null);
+							navButtonFader.Fade(100, 0);
+						}
+
+
 					}
 					else {
 						//Collapse
 						settingsHelper.collapse((int)(200), 0);
 						settingsBtn.SetImageResource(Resource.Drawable.settings_button);
+						scrollView.SetOnTouchListener(new ScrollViewOnListener());
+
+						//Fade nav button for current module
+						if (currentModuleLayout != null)
+						{
+							AnimationHelper navButtonFader = new AnimationHelper(
+								currentModuleLayout.FindViewById(Resource.Id.navButton), null);
+							navButtonFader.Fade(100, 1f);
+						}
+						
 
 						if (buttonRow.Alpha < .5f)
 						{
@@ -237,26 +272,17 @@ namespace Clockwise.Droid
 				}
 			};
 
-			ImageView addModuleBtn = FindViewById<ImageView>(Resource.Id.add_module_button);
+			addModuleBtn = FindViewById<ImageView>(Resource.Id.add_module_button);
 			addModuleBtn.Click += delegate {
 				Intent creatModule = new Intent(Application.Context, typeof(CreateModule));
 				creatModule.PutExtra("alarm_index", alarm_number);
 				StartActivity(creatModule);
 			};
 
-			var metrics = Resources.DisplayMetrics;
-
 			//Set clocksettings height
 			RelativeLayout.LayoutParams clock_settings_layout_params = (RelativeLayout.LayoutParams)clock_settings_layout.LayoutParameters;
-			clock_settings_layout_params.Height = (int)(metrics.HeightPixels * .4);
+			clock_settings_layout_params.Height = (int)(DisplayMetrics.HeightPixels * .4);
 			clock_settings_layout.LayoutParameters = clock_settings_layout_params;
-			//clock_settings_layout.LayoutParameters
-
-			//Align test module
-			FrameLayout testLayout = FindViewById<FrameLayout>(Resource.Id.moduleSection);
-			RelativeLayout.LayoutParams testParams = (RelativeLayout.LayoutParams)testLayout.LayoutParameters;
-			testParams.AddRule(LayoutRules.Below, Resource.Id.pulldown);
-			testParams.Width = (int)metrics.WidthPixels;
 
 			//Pulldown
 			ImageView pulldown = FindViewById<ImageView>(Resource.Id.pulldown);
@@ -314,16 +340,9 @@ namespace Clockwise.Droid
 			};
 
 			//Scrollview
-			HorizontalScrollView scrollView = FindViewById<HorizontalScrollView>(Resource.Id.module_scroller);
-			LinearLayout scroll_layout = FindViewById<LinearLayout>(Resource.Id.module_layout);
-
-			scrollView.ScrollChange += delegate {
-				Console.WriteLine("scrollview x: " + scrollView.ScrollX);
-				//Console.WriteLine("scrollview width: " + scrollView.Width);
-
-				Console.WriteLine("percent scrolled: " + (double)scrollView.ScrollX/(double)scroll_layout.Width);
-
-			};
+			scrollView = FindViewById<CustomHorizontalScrollView>(Resource.Id.module_scroller);
+			scroll_layout = FindViewById<LinearLayout>(Resource.Id.module_layout);
+			scrollView.setOnScrollChangedListener(new HorizontalScrollListener());
 		}
 
 		private void RefreshModules(int index)
@@ -369,6 +388,8 @@ namespace Clockwise.Droid
 					}
 				}
 			}
+			scrollView.ClearFocus();
+			scrollView.ScrollX = 0;
 		}
 
 		private RelativeLayout CreateModuleDisplay(string type, string title, int index, int subindex)
@@ -442,6 +463,8 @@ namespace Clockwise.Droid
 				case "reminders":
 					settingImage.SetImageResource(Resource.Drawable.todo_icon);
 					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.reminders, null);
+					editor.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent);
+					if (editor.LayoutParameters == null) { }
 					Reminders reminders = new Reminders(ApplicationContext, index, editor, this);
 					reminders.EditSetup(subindex, settingImage, navButton);
 					break;
@@ -463,22 +486,37 @@ namespace Clockwise.Droid
 			}
 
 			navButton.Click += delegate {
-				//if(
 				AnimationHelper editorFade = new AnimationHelper(editor, null);
 				AnimationHelper imageFade = new AnimationHelper(settingImage, null);
-				if (editor.Alpha < .5f)
+				AnimationHelper alarmToggleFade = new AnimationHelper(alarm_toggle, null);
+				AnimationHelper addModuleBtnFade = new AnimationHelper(addModuleBtn, null);
+				AnimationHelper settingsBtnFade = new AnimationHelper(settingsBtn, null);
+
+				AnimationHelper clockHeight = new AnimationHelper(clock_settings_layout, new AnimationManager(clock_settings_layout.Height > 0));
+				if (editor.Alpha < .5f
+				    && settingsContainer.Height == 0) //open editor
 				{
+					scrollView.SetOnTouchListener(new ScrollViewOffListener());
 					editorFade.Fade(200, 1f);
 					imageFade.Fade(200, 0f);
 					navButton.SetImageResource(Resource.Drawable.back_button);
-					moduleSettingOpen = true;
+					clockHeight.collapse(200, 0);
+					alarmToggleFade.Fade(100, 0);
+					addModuleBtnFade.Fade(100, 0);
+					settingsBtnFade.Fade(100, 0);
+					scrollView.HorizontalScrollBarEnabled = false;
+					//moduleSettingOpen = true;
 				}
-				else {
+				else { //close editor
+					scrollView.SetOnTouchListener(new ScrollViewOnListener());
 					editorFade.Fade(200, 0f);
 					imageFade.Fade(200, 1f);
 					navButton.SetImageResource(Resource.Drawable.edit_button);
-					moduleSettingOpen = false;
-
+					clockHeight.expand(200, (int)(metrics.HeightPixels * .4));
+					//moduleSettingOpen = false;
+					alarmToggleFade.Fade(100, 1f);
+					addModuleBtnFade.Fade(100, 1f);
+					settingsBtnFade.Fade(100, 1f);
 				}
 			};
 
@@ -554,6 +592,44 @@ namespace Clockwise.Droid
 			}
 		}
 
+		public class ScrollViewOnListener : Java.Lang.Object, View.IOnTouchListener
+		{
+			public bool OnTouch(View v, MotionEvent e)
+			{
+				return false;
+			}
+		}
+
+		public class ScrollViewOffListener : Java.Lang.Object, View.IOnTouchListener
+		{
+			public bool OnTouch(View v, MotionEvent e)
+			{
+				return true;
+			}
+		}
+
+		public class HorizontalScrollListener : CustomHorizontalScrollView.IOnScrollChangedListener
+		{
+			public void onScrollEnd()
+			{
+				Console.WriteLine("scroll ended");
+				LinearLayout scroll_layout = (LinearLayout)((ViewGroup)scrollView).GetChildAt(0);
+				int moduleWidth = DisplayMetrics.WidthPixels;
+				int numModules = scroll_layout.Width / moduleWidth;
+				Console.WriteLine("num modules: " + numModules);
+
+				currentModule = (scrollView.ScrollX + (moduleWidth/2))/ moduleWidth;
+
+				int target = currentModule * moduleWidth;
+				scrollView.AnimateScrollTo(target);
+			}
+
+			public void onScrollStart()
+			{
+				Console.WriteLine("scroll started");
+			}
+		}
+
 		//public class Hou : Java.Lang.Object, View.IOnDragListener
 		//{
 		//	public bool OnDrag(View v, DragEvent e)
@@ -561,7 +637,7 @@ namespace Clockwise.Droid
 		//		return true;
 		//	}
 		//}
-				
+
 		public override async void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
 		{
 			switch (requestCode)
