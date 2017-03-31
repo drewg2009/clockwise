@@ -14,17 +14,32 @@ namespace Clockwise.iOS
     partial class ViewController
     {
         [Outlet]
-        UIKit.UIButton Button { get; set; }
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton addModuleButton { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIPickerView hoursPicker { get; set; }
+        UIKit.UIButton alarmToggle { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton settingsButton { get; set; }
 
         void ReleaseDesignerOutlets ()
         {
-            if (hoursPicker != null) {
-                hoursPicker.Dispose ();
-                hoursPicker = null;
+            if (addModuleButton != null) {
+                addModuleButton.Dispose ();
+                addModuleButton = null;
+            }
+
+            if (alarmToggle != null) {
+                alarmToggle.Dispose ();
+                alarmToggle = null;
+            }
+
+            if (settingsButton != null) {
+                settingsButton.Dispose ();
+                settingsButton = null;
             }
         }
     }
