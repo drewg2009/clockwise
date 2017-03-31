@@ -9,22 +9,26 @@ namespace Clockwise.iOS
 {
 	public partial class ViewController : UIViewController
 	{
-		public ViewController (IntPtr handle) : base (handle)
+		private bool settingsExpanded = false;
+
+		public ViewController(IntPtr handle) : base(handle)
 		{
-			
+
 		}
 
 		public override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
 
-			alarmToggle.TouchUpInside += delegate {
+			alarmToggle.TouchUpInside += delegate
+			{
 				Console.WriteLine("toggle alarm");
 			};
 
 			settingsButton.TouchUpInside += delegate
 			{
 				Console.WriteLine("settings button");
+				toggleSettingsAnimation();
 			};
 
 			addModuleButton.TouchUpInside += delegate
@@ -36,6 +40,32 @@ namespace Clockwise.iOS
 		public override void DidReceiveMemoryWarning()
 		{
 			base.DidReceiveMemoryWarning();
+		}
+
+
+		private void toggleSettingsAnimation()
+		{
+			UIView.Animate(.1, () =>
+				 {
+				//animate by getting the current frame in a variable, changing it, and reassigning it
+
+
+					 var frame = alarmButtonsContainer.Frame;
+					 var frame2 = pullDownMenu.Frame;
+					 int change = settingsExpanded ? -20 : 20 ;
+
+					 frame.Height = alarmButtonsContainer.Frame.Height + change;
+					 frame2.Y += change;
+
+					 alarmButtonsContainer.Frame = frame;
+					 pullDownMenu.Frame = frame2;
+
+					 settingsExpanded = !settingsExpanded; //toggle expansion flag
+				 }, () =>
+						 {
+
+						 }
+			  );
 		}
 	}
 }

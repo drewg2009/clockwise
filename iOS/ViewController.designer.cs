@@ -19,7 +19,15 @@ namespace Clockwise.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIView alarmButtonsContainer { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIButton alarmToggle { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIImageView pullDownMenu { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -32,9 +40,19 @@ namespace Clockwise.iOS
                 addModuleButton = null;
             }
 
+            if (alarmButtonsContainer != null) {
+                alarmButtonsContainer.Dispose ();
+                alarmButtonsContainer = null;
+            }
+
             if (alarmToggle != null) {
                 alarmToggle.Dispose ();
                 alarmToggle = null;
+            }
+
+            if (pullDownMenu != null) {
+                pullDownMenu.Dispose ();
+                pullDownMenu = null;
             }
 
             if (settingsButton != null) {

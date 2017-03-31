@@ -1,9 +1,7 @@
 ﻿<Properties StartupConfiguration="{25923E74-1BCD-4913-9DDD-9AC9574EF53C}|Default" GitUserInfo="UsingGIT">
   <MonoDevelop.Ide.Workbench ActiveDocument="clockwise Status">
     <Files>
-      <File FileName="iOS/Main.cs" Line="14" Column="4" />
-      <File FileName="iOS/ViewController.designer.cs" Line="1" Column="1" />
-      <File FileName="iOS/ViewController.cs" Line="32" Column="34" />
+      <File FileName="iOS/ViewController.cs" Line="48" Column="21" />
       <File FileName="clockwise Status" />
     </Files>
   </MonoDevelop.Ide.Workbench>
@@ -13,6 +11,6 @@
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.ItemProperties.Clockwise.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.4DA9C6AF-339C-406D-ABBD-924CAFD035E5" />
+  <MonoDevelop.Ide.ItemProperties.Clockwise.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.8F88CC7C-B2DD-4984-B31F-4E01FA8766B4" />
   <MonoDevelop.Ide.ItemProperties.Clockwise.Droid PreferredExecutionTarget="Android.efca1e22" />
 </Properties>
