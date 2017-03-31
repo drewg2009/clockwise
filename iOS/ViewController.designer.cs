@@ -31,7 +31,27 @@ namespace Clockwise.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton settingsAboutButton { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIButton settingsButton { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton settingsOrderButton { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton settingsSnoozeButton { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton settingsSpeechButton { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton settingsToneButton { get; set; }
 
         void ReleaseDesignerOutlets ()
         {
@@ -55,9 +75,34 @@ namespace Clockwise.iOS
                 pullDownMenu = null;
             }
 
+            if (settingsAboutButton != null) {
+                settingsAboutButton.Dispose ();
+                settingsAboutButton = null;
+            }
+
             if (settingsButton != null) {
                 settingsButton.Dispose ();
                 settingsButton = null;
+            }
+
+            if (settingsOrderButton != null) {
+                settingsOrderButton.Dispose ();
+                settingsOrderButton = null;
+            }
+
+            if (settingsSnoozeButton != null) {
+                settingsSnoozeButton.Dispose ();
+                settingsSnoozeButton = null;
+            }
+
+            if (settingsSpeechButton != null) {
+                settingsSpeechButton.Dispose ();
+                settingsSpeechButton = null;
+            }
+
+            if (settingsToneButton != null) {
+                settingsToneButton.Dispose ();
+                settingsToneButton = null;
             }
         }
     }

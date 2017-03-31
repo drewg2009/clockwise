@@ -19,6 +19,7 @@ namespace Clockwise.iOS
 		public override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
+			toggleAlarmSettingBtns();
 
 			alarmToggle.TouchUpInside += delegate
 			{
@@ -42,29 +43,37 @@ namespace Clockwise.iOS
 			base.DidReceiveMemoryWarning();
 		}
 
+		private void toggleAlarmSettingBtns()
+		{
+			settingsToneButton.Hidden = !settingsToneButton.Hidden;
+			settingsSnoozeButton.Hidden = !settingsSnoozeButton.Hidden;
+			settingsSpeechButton.Hidden = !settingsSpeechButton.Hidden;
+			settingsOrderButton.Hidden = !settingsOrderButton.Hidden;
+			settingsAboutButton.Hidden = !settingsAboutButton.Hidden;
+		}
+
 
 		private void toggleSettingsAnimation()
 		{
-			UIView.Animate(.1, () =>
+			UIView.Animate(.2, () =>
 				 {
 				//animate by getting the current frame in a variable, changing it, and reassigning it
 
 
 					 var frame = alarmButtonsContainer.Frame;
 					 var frame2 = pullDownMenu.Frame;
-					 int change = settingsExpanded ? -20 : 20 ;
+					 int factor = 50;
+					 int change = settingsExpanded ? -factor : factor ;
 
 					 frame.Height = alarmButtonsContainer.Frame.Height + change;
 					 frame2.Y += change;
 
 					 alarmButtonsContainer.Frame = frame;
 					 pullDownMenu.Frame = frame2;
+					 toggleAlarmSettingBtns();
 
 					 settingsExpanded = !settingsExpanded; //toggle expansion flag
-				 }, () =>
-						 {
-
-						 }
+				 }
 			  );
 		}
 	}
