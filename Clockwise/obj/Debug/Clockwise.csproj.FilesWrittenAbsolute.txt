@@ -1,7 +1,7 @@
-/Users/drewgallagher/Documents/Software/MobileApps/clockwise/clockwise/Clockwise/obj/Debug/.NETPortable,Version=v4.5,Profile=Profile259.AssemblyAttribute.cs
-/Users/drewgallagher/Documents/Software/MobileApps/clockwise/clockwise/Clockwise/bin/Debug/Clockwise.dll.mdb
-/Users/drewgallagher/Documents/Software/MobileApps/clockwise/clockwise/Clockwise/bin/Debug/Clockwise.dll
-/Users/drewgallagher/Documents/Software/MobileApps/clockwise/clockwise/Clockwise/obj/Debug/Clockwise.dll
-/Users/drewgallagher/Documents/Software/MobileApps/clockwise/clockwise/Clockwise/obj/Debug/Clockwise.dll.mdb
-/Users/drewgallagher/Documents/Software/MobileApps/clockwise/clockwise/Clockwise/bin/Debug/Plugin.Settings.Abstractions.dll
-/Users/drewgallagher/Documents/Software/MobileApps/clockwise/clockwise/Clockwise/bin/Debug/Plugin.Settings.dll
+/Users/drewgallagher/Documents/Software/MobileApps/clockwiseProjects/clockwise/Clockwise/obj/Debug/.NETPortable,Version=v4.5,Profile=Profile259.AssemblyAttribute.cs
+/Users/drewgallagher/Documents/Software/MobileApps/clockwiseProjects/clockwise/Clockwise/bin/Debug/Clockwise.dll.mdb
+/Users/drewgallagher/Documents/Software/MobileApps/clockwiseProjects/clockwise/Clockwise/bin/Debug/Clockwise.dll
+/Users/drewgallagher/Documents/Software/MobileApps/clockwiseProjects/clockwise/Clockwise/obj/Debug/Clockwise.dll
+/Users/drewgallagher/Documents/Software/MobileApps/clockwiseProjects/clockwise/Clockwise/obj/Debug/Clockwise.dll.mdb
+/Users/drewgallagher/Documents/Software/MobileApps/clockwiseProjects/clockwise/Clockwise/bin/Debug/Plugin.Settings.Abstractions.dll
+/Users/drewgallagher/Documents/Software/MobileApps/clockwiseProjects/clockwise/Clockwise/bin/Debug/Plugin.Settings.dll
