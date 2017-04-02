@@ -117,10 +117,7 @@ namespace Clockwise.Droid
 						(s4.ScaleX < 0));
 
 					//Collapse
-					int targetHeight = 0;
-					int duration = (int)(200);
-					settingsHelper.collapse(duration, targetHeight);
-					addButton.SetImageResource(Resource.Drawable.plus);
+					addButton.PerformClick();
 
 					Toast.MakeText(context, "Weather module saved.", ToastLength.Short).Show();
 				}
@@ -131,8 +128,7 @@ namespace Clockwise.Droid
 			};
 		}
 
-		public void EditSetup(ImageView settingImage, 
-		                             ImageView navButton)
+		public void EditSetup(ImageView navButton)
 		{
 			saveButton.Click += delegate
 			{
@@ -143,18 +139,8 @@ namespace Clockwise.Droid
 						(s2.ScaleX < 0),
 						(s3.ScaleX < 0),
 						(s4.ScaleX < 0));
-					
-					//Fade editor
-					AnimationHelper editorFade = new AnimationHelper(view, null);
-					AnimationHelper imageFade = new AnimationHelper(settingImage, null);
-					editorFade.Fade(200, 0f);
-					imageFade.Fade(200, 1f);
-					navButton.SetImageResource(Resource.Drawable.edit_button);
 
-					//Expand clock
-					AnimationHelper clockHeight = new AnimationHelper(MainActivity.clock_settings_layout, new AnimationManager(MainActivity.clock_settings_layout.Height > 0));
-					clockHeight.expand(200, (int)(MainActivity.DisplayMetrics.HeightPixels * .4));
-
+					navButton.PerformClick();
 					Toast.MakeText(context, "Weather module saved.", ToastLength.Short).Show();
 				}
 				else

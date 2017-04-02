@@ -13,8 +13,7 @@ namespace Clockwise.Droid
 	{
 		private EditText amountInput;
 		private EditText subredditInput;
-		private Activity activity;
-		public Reddit(Context c, int index, View v, Activity activity) : base(c, index, v)
+		public Reddit(Context c, int index, View v) : base(c, index, v)
 		{
 			Typeface font = Typeface.CreateFromAsset(c.Resources.Assets, "HelveticaNeueLight.ttf");
 			view.FindViewById<TextView>(Resource.Id.subredditText).Typeface = font;
@@ -22,10 +21,9 @@ namespace Clockwise.Droid
 			amountInput = v.FindViewById<EditText>(Resource.Id.amountInput);
 			subredditInput = v.FindViewById<EditText>(Resource.Id.subredditInput);
 			saveBtn.FindViewById<TextView>(Resource.Id.save_text).Typeface = font;
-			this.activity = activity;
 		}
 
-		public void CreateSetup(ImageView addButton)
+		public void CreateSetup(Activity activity, ImageView addButton)
 		{
 			AnimationManager am = new AnimationManager(false);
 			AnimationHelper settingsHelper = new AnimationHelper(view, am);
@@ -66,14 +64,7 @@ namespace Clockwise.Droid
 				{
 					Settings.AddReddit(index, subredditInput.Text, int.Parse(amountInput.Text));
 
-					//Collapse
-					int targetHeight = 0;
-					int duration = (int)(200);
-					settingsHelper.collapse(duration, targetHeight);
-					addButton.SetImageResource(Resource.Drawable.plus);
-					//Clear
-					subredditInput.Text = string.Empty;
-					amountInput.Text = string.Empty;
+					addButton.PerformClick();
 
 					View v = activity.CurrentFocus;
 					if (v != null)
@@ -92,7 +83,7 @@ namespace Clockwise.Droid
 		}
 
 
-		public void EditSetup(int subindex, ImageView settingImage, ImageView navButton)
+		public void EditSetup(int subindex, ImageView navButton)
 		{
 			string savedModule = Settings.GetReddit(index, subindex);
 			subredditInput.Text = savedModule.Substring(0, savedModule.IndexOf(':'));
@@ -104,30 +95,13 @@ namespace Clockwise.Droid
 				if (int.TryParse(amountInput.Text, out result) &&
 					int.Parse(amountInput.Text) > 0 && int.Parse(amountInput.Text) <= 10)
 				{
-					//Fade editor
-					AnimationHelper editorFade = new AnimationHelper(view, null);
-					AnimationHelper imageFade = new AnimationHelper(settingImage, null);
-					editorFade.Fade(200, 0f);
-					imageFade.Fade(200, 1f);
-					navButton.SetImageResource(Resource.Drawable.edit_button);
-
-					//Expand clock
-					AnimationHelper clockHeight = new AnimationHelper(MainActivity.clock_settings_layout, new AnimationManager(MainActivity.clock_settings_layout.Height > 0));
-					clockHeight.expand(200, (int)(MainActivity.DisplayMetrics.HeightPixels * .4));
-
+					navButton.PerformClick();
 					Settings.EditReddit(index, subindex, subredditInput.Text, int.Parse(amountInput.Text));
-					View v = activity.CurrentFocus;
-					if (v != null)
-					{
-						InputMethodManager imm = (InputMethodManager)activity.ApplicationContext.GetSystemService("input_method");
-						imm.HideSoftInputFromWindow(v.WindowToken, 0);
-					}
-
-					Toast.MakeText(activity.ApplicationContext, "Reddit module saved.", ToastLength.Short).Show();
+					Toast.MakeText(context, "Reddit module saved.", ToastLength.Short).Show();
 				}
 				else
 				{
-					Toast.MakeText(activity.ApplicationContext, "Select between 1 and 10 posts.", ToastLength.Long).Show();
+					Toast.MakeText(context, "Select between 1 and 10 posts.", ToastLength.Long).Show();
 				}
 			};
 

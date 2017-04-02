@@ -16,9 +16,8 @@ namespace Clockwise.Droid
 		private EditText listTitleInput;
 		private List<View> reminderViews;
 		private LinearLayout parent;
-		private Activity activity;
 		private Button addReminderBtn;
-		public Reminders(Context c, int index, View v, Activity activity) : base(c, index, v)
+		public Reminders(Context c, int index, View v) : base(c, index, v)
 		{
 			//ClearSettings();
 			Typeface font = Typeface.CreateFromAsset(c.Resources.Assets, "HelveticaNeueLight.ttf");
@@ -27,7 +26,6 @@ namespace Clockwise.Droid
 
 			reminderViews = new List<View>();
 			saveBtn.FindViewById<TextView>(Resource.Id.save_text).Typeface = font;
-			this.activity = activity;
 			parent = view.FindViewById<LinearLayout>(Resource.Id.reminderContainer);
 			addReminderBtn = view.FindViewById<Button>(Resource.Id.addReminderButton);
 			addReminderBtn.Typeface = font;
@@ -47,6 +45,8 @@ namespace Clockwise.Droid
 								.FindViewById<EditText>(Resource.Id.reminderInput).Text.Contains(Settings.SEPARATERS))
 							{
 								View newReminder = AddReminderView(null);
+								EditText et = newReminder.FindViewById<EditText>(Resource.Id.reminderInput);
+								et.RequestFocus();
 							}
 							else
 							{
@@ -62,7 +62,7 @@ namespace Clockwise.Droid
 			};
 		}
 
-		public void CreateSetup(ImageView addButton)
+		public void CreateSetup(Activity activity, ImageView addButton)
 		{
 			AnimationManager am = new AnimationManager(false);
 			AnimationHelper settingsHelper = new AnimationHelper(view, am);
@@ -115,12 +115,7 @@ namespace Clockwise.Droid
 						imm.HideSoftInputFromWindow(focus.WindowToken, 0);
 					}
 
-					//Collapse
-					int targetHeight = 0;
-					int duration = 200;
-					settingsHelper.collapse(duration, targetHeight);
-					addButton.SetImageResource(Resource.Drawable.plus);
-					ClearSettings();
+					addButton.PerformClick();
 				}
 				else
 				{
@@ -129,7 +124,7 @@ namespace Clockwise.Droid
 			};
 		}
 
-		public void EditSetup(int subindex, ImageView settingImage, ImageView navButton)
+		public void EditSetup(int subindex, ImageView navButton)
 		{
 			string savedModule = Settings.GetReminders(index, subindex);
 			string[] splitSettings = savedModule.Split(':');
@@ -140,8 +135,14 @@ namespace Clockwise.Droid
 			//If building the layout
 			for (int i = 0; i < list.Length; i++)
 			{
-				AddReminderView(list[i]);
+				View v = AddReminderView(list[i]);
+				//EditText et = v.FindViewById<EditText>(Resource.Id.reminderInput);
+				//et.Focusable = true;
+				//et.Focus
 			}
+
+			//ScrollView scrollView = view.FindViewById<ScrollView>(Resource.Id.reminderScrollView);
+			view.LayoutParameters.Height = ViewGroup.LayoutParams.MatchParent;
 
 			saveBtn.Click += delegate
 			{
@@ -156,25 +157,9 @@ namespace Clockwise.Droid
 				if (listTitleInput.Text.Length > 0 && reminderViews.Count > 0
 					&& (reminderViews[0].FindViewById<EditText>(Resource.Id.reminderInput)).Text.Trim() != string.Empty)
 				{
+					navButton.PerformClick();
 					Settings.EditReminders(index, subindex, listTitleInput.Text, remindersSB.ToString());
 					Toast.MakeText(context, "Reminders Module Saved", ToastLength.Short).Show();
-					View focus = activity.CurrentFocus;
-					if (focus != null)
-					{
-						InputMethodManager imm = (InputMethodManager)activity.ApplicationContext.GetSystemService("input_method");
-						imm.HideSoftInputFromWindow(focus.WindowToken, 0);
-					}
-
-					//Fade editor
-					AnimationHelper editorFade = new AnimationHelper(view, null);
-					AnimationHelper imageFade = new AnimationHelper(settingImage, null);
-					editorFade.Fade(200, 0f);
-					imageFade.Fade(200, 1f);
-					navButton.SetImageResource(Resource.Drawable.edit_button);
-
-					//Expand clock
-					AnimationHelper clockHeight = new AnimationHelper(MainActivity.clock_settings_layout, new AnimationManager(MainActivity.clock_settings_layout.Height > 0));
-					clockHeight.expand(200, (int)(MainActivity.DisplayMetrics.HeightPixels * .4));
 				}
 				else
 				{
@@ -189,7 +174,7 @@ namespace Clockwise.Droid
 		{
 			View child = View.Inflate(context, Resource.Layout.new_reminder_template, null);
 			child.FindViewById<TextView>(Resource.Id.reminderCount).Text = "" + (reminderViews.Count + 1) + ") ";
-			child.FindViewById<EditText>(Resource.Id.reminderInput).RequestFocus();
+			//child.FindViewById<EditText>(Resource.Id.reminderInput).RequestFocus();
 
 			reminderViews.Add(child);
 
@@ -203,6 +188,8 @@ namespace Clockwise.Droid
 			child.FindViewById<ImageView>(Resource.Id.reminderDeleteButton).Click += delegate {
 				RemoveReminderView(index);
 			};
+
+			//child.FindViewById<EditText>(Resource.Id.reminderInput).Focusable = false;
 
 			parent.AddView(child);
 

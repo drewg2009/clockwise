@@ -15,11 +15,8 @@ namespace Clockwise.Droid
 	{
 		private EditText eventNameInput;
 		private EditText eventDateInput;
-		private Activity activity;
-
-		public Countdown(Context c, int index, View v, Activity activity) : base(c, index, v)
+		public Countdown(Context c, int index, View v) : base(c, index, v)
 		{
-			this.activity = activity;
 			Typeface font = Typeface.CreateFromAsset(c.Resources.Assets, "HelveticaNeueLight.ttf");
 			view.FindViewById<TextView>(Resource.Id.eventDateText).Typeface = font;
 			view.FindViewById<TextView>(Resource.Id.eventNameText).Typeface = font;
@@ -44,7 +41,8 @@ namespace Clockwise.Droid
 					year = int.Parse(date[2]);
 				}
 
-				DatePickerDialog dateWindow = new DatePickerDialog(activity, (object sender2, DatePickerDialog.DateSetEventArgs e2) =>
+				//First param may need to be activity
+				DatePickerDialog dateWindow = new DatePickerDialog(c, (object sender2, DatePickerDialog.DateSetEventArgs e2) =>
 				{
 					calendar.Set(e2.Year, e2.Month, e2.DayOfMonth);
 					Date selectedDate = new Date(calendar.Time.Time);
@@ -58,7 +56,7 @@ namespace Clockwise.Droid
 					if (selectedDate.After(currentDate))
 						eventDateInput.Text = "" + (e2.Month + 1) + "/" + e2.DayOfMonth + "/" + e2.Year;
 					else
-						Toast.MakeText(activity.ApplicationContext, "Please selected a date after today", ToastLength.Long).Show();
+						Toast.MakeText(c, "Please selected a date after today", ToastLength.Long).Show();
 
 				}, year, month, day);
 				dateWindow.Window.SetType(WindowManagerTypes.ApplicationPanel);
@@ -68,7 +66,7 @@ namespace Clockwise.Droid
 			};
 		}
 
-		public void CreateSetup(ImageView addButton)
+		public void CreateSetup(Activity activity, ImageView addButton)
 		{
 			AnimationManager am = new AnimationManager(false);
 			AnimationHelper settingsHelper = new AnimationHelper(view, am);
@@ -108,10 +106,7 @@ namespace Clockwise.Droid
 					Settings.AddCountdown(index, eventNameInput.Text, eventDateInput.Text);
 
 					//Collapse
-					int targetHeight = 0;
-					int duration = 200;
-					settingsHelper.collapse(duration, targetHeight);
-					addButton.SetImageResource(Resource.Drawable.plus);
+					addButton.PerformClick();
 
 					View focus = activity.CurrentFocus;
 					if (focus != null)
@@ -128,7 +123,7 @@ namespace Clockwise.Droid
 			};
 		}
 
-		public void EditSetup(int subindex, ImageView settingImage, ImageView navButton)
+		public void EditSetup(int subindex, ImageView navButton)
 		{
 			string[] savedModuleSettings = Settings.GetCountdown(index, subindex).Split(':');
 			eventNameInput.Text = savedModuleSettings[0];
@@ -138,40 +133,15 @@ namespace Clockwise.Droid
 			{
 				if (eventNameInput.Text != string.Empty && eventDateInput.Text != string.Empty)
 				{
-					//Fade editor
-					AnimationHelper editorFade = new AnimationHelper(view, null);
-					AnimationHelper imageFade = new AnimationHelper(settingImage, null);
-					editorFade.Fade(200, 0f);
-					imageFade.Fade(200, 1f);
-					navButton.SetImageResource(Resource.Drawable.edit_button);
-
-					//Expand clock
-					AnimationHelper clockHeight = new AnimationHelper(MainActivity.clock_settings_layout, new AnimationManager(MainActivity.clock_settings_layout.Height > 0));
-					clockHeight.expand(200, (int)(MainActivity.DisplayMetrics.HeightPixels * .4));
-
+					navButton.PerformClick();
 					Settings.EditCountdown(index, subindex, eventNameInput.Text, eventDateInput.Text);
-
-					View focus = activity.CurrentFocus;
-					if (focus != null)
-					{
-						InputMethodManager imm = (InputMethodManager)activity.ApplicationContext.GetSystemService("input_method");
-						imm.HideSoftInputFromWindow(focus.WindowToken, 0);
-					}
-					Toast.MakeText(activity.ApplicationContext, "Countdown module saved.", ToastLength.Short).Show();
+					Toast.MakeText(context, "Countdown module saved.", ToastLength.Short).Show();
 				}
 				else
 				{
-					Toast.MakeText(activity.ApplicationContext, "Please fill all fields", ToastLength.Long).Show();
+					Toast.MakeText(context, "Please fill all fields", ToastLength.Long).Show();
 				}
 			};
-		}
-
-		public class DateClickListener : Java.Lang.Object, View.IOnClickListener
-		{
-			public void OnClick(View v)
-			{
-				
-			}
 		}
 	}
 }

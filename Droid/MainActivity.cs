@@ -12,6 +12,7 @@ using System;
 using Clockwise.Helpers;
 using Android.Content;
 using Android.Util;
+using Android.Views.InputMethods;
 
 namespace Clockwise.Droid
 {
@@ -29,10 +30,12 @@ namespace Clockwise.Droid
 		public static RelativeLayout clock_settings_layout;
 		ImageView addModuleBtn;
 		ImageSwitcher alarm_toggle;
-		static CustomHorizontalScrollView scrollView;
+		public static CustomHorizontalScrollView scrollView;
 		LinearLayout scroll_layout;
 		public static DisplayMetrics DisplayMetrics;
 		static int currentModule = -1;
+		private FrameLayout moduleFrame;
+		ImageView currentModuleNavButton = null;
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
@@ -197,7 +200,7 @@ namespace Clockwise.Droid
 
 			//Align module frame
 			DisplayMetrics = Resources.DisplayMetrics;
-			FrameLayout moduleFrame = FindViewById<FrameLayout>(Resource.Id.moduleSection);
+			moduleFrame = FindViewById<FrameLayout>(Resource.Id.moduleSection);
 			RelativeLayout.LayoutParams testParams = (RelativeLayout.LayoutParams)moduleFrame.LayoutParameters;
 			testParams.AddRule(LayoutRules.Below, Resource.Id.pulldown);
 			testParams.Width = (int)DisplayMetrics.WidthPixels;
@@ -335,14 +338,24 @@ namespace Clockwise.Droid
 				Intent i = new Intent(ApplicationContext, typeof(SongSelect));
 				i.PutExtra("alarm_index", alarm_number);
 				StartActivity(i);
-				//Close settings
-				//settingsBtn.PerformClick();
+			};
+
+			//Speech Settings
+			FindViewById<ImageView>(Resource.Id.speech).Click += delegate {
+				Intent intent = new Intent();
+				intent.SetAction("com.android.settings.TTS_SETTINGS");
+				intent.SetFlags(ActivityFlags.NewTask);
+				StartActivity(intent);
+			};
+
+			//Module Order
+			FindViewById<ImageView>(Resource.Id.moduleOrder).Click += delegate {
+				StartActivity(typeof(ModuleOrder));
 			};
 
 			//Scrollview
 			scrollView = FindViewById<CustomHorizontalScrollView>(Resource.Id.module_scroller);
 			scroll_layout = FindViewById<LinearLayout>(Resource.Id.module_layout);
-			scrollView.setOnScrollChangedListener(new HorizontalScrollListener());
 		}
 
 		private void RefreshModules(int index)
@@ -388,25 +401,23 @@ namespace Clockwise.Droid
 					}
 				}
 			}
-			scrollView.ClearFocus();
-			scrollView.ScrollX = 0;
 		}
 
 		private RelativeLayout CreateModuleDisplay(string type, string title, int index, int subindex)
 		{
 			var metrics = Resources.DisplayMetrics;
 			RelativeLayout rl = (RelativeLayout)LayoutInflater.Inflate(Resource.Layout.module_holder, null);
-			rl.LayoutParameters = new LinearLayout.LayoutParams((int)(metrics.WidthPixels), LinearLayout.LayoutParams.MatchParent);
+			rl.LayoutParameters = new LinearLayout.LayoutParams((int)(metrics.WidthPixels), LinearLayout.LayoutParams.WrapContent);
 
 			RelativeLayout module = rl.FindViewById<RelativeLayout>(Resource.Id.module);
-			RelativeLayout.LayoutParams moduleParams = new RelativeLayout.LayoutParams((int)(metrics.WidthPixels * .85), RelativeLayout.LayoutParams.MatchParent);
+			RelativeLayout.LayoutParams moduleParams = new RelativeLayout.LayoutParams((int)(metrics.WidthPixels * .85), RelativeLayout.LayoutParams.WrapContent);
 			moduleParams.AddRule(LayoutRules.CenterHorizontal);
 			module.LayoutParameters = moduleParams;
-			module.Measure(RelativeLayout.LayoutParams.MatchParent, RelativeLayout.LayoutParams.MatchParent);
 
 			TextView settingTitle = rl.FindViewById<TextView>(Resource.Id.setting_title);
 			ImageView settingImage = rl.FindViewById<ImageView>(Resource.Id.moduleImage);
 			ImageView navButton = rl.FindViewById<ImageView>(Resource.Id.navButton);
+			RelativeLayout titleRow = module.FindViewById<RelativeLayout>(Resource.Id.title_row);
 
 			settingTitle.Typeface = Typeface.CreateFromAsset(Resources.Assets, "HelveticaNeueLight.ttf");
 			settingTitle.TextSize = (int)((metrics.HeightPixels / metrics.Density) * .06);
@@ -433,40 +444,39 @@ namespace Clockwise.Droid
 					settingImage.SetImageResource(Resource.Drawable.weather_icon);
 					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.weather, null);
 					Weather weather = new Weather(ApplicationContext, index, editor);
-					weather.EditSetup(settingImage, navButton);
+					weather.EditSetup(navButton);
 					break;
 				case "news":
 					settingImage.SetImageResource(Resource.Drawable.news_icon);
 					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.news, null);
-					News news = new News(ApplicationContext, index, editor, this);
-					news.EditSetup(subindex, settingImage, navButton);
+					News news = new News(ApplicationContext, index, editor);
+					news.EditSetup(subindex, navButton);
 					break;
 				case "reddit":
 					settingTitle.Text = "r/" + settingTitle.Text;
 					settingImage.SetImageResource(Resource.Drawable.reddit_icon);
 					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.reddit, null);
-					Reddit reddit = new Reddit(ApplicationContext, index, editor, this);
-					reddit.EditSetup(subindex, settingImage, navButton);
+					Reddit reddit = new Reddit(ApplicationContext, index, editor);
+					reddit.EditSetup(subindex, navButton);
 					break;
 				case "twitter":
 					settingImage.SetImageResource(Resource.Drawable.twitter_icon);
 					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.twitter, null);
-					Twitter twitter = new Twitter(ApplicationContext, index, editor, this);
-					twitter.EditSetup(subindex, settingImage, navButton);
+					Twitter twitter = new Twitter(ApplicationContext, index, editor);
+					twitter.EditSetup(subindex, navButton);
 					break;
 				case "countdown":
 					settingImage.SetImageResource(Resource.Drawable.countdown_icon);
 					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.countdown, null);
-					Countdown countdown = new Countdown(ApplicationContext, index, editor, this);
-					countdown.EditSetup(subindex, settingImage, navButton);
+					Countdown countdown = new Countdown(ApplicationContext, index, editor);
+					countdown.EditSetup(subindex, navButton);
 					break;
 				case "reminders":
 					settingImage.SetImageResource(Resource.Drawable.todo_icon);
 					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.reminders, null);
 					editor.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent);
-					if (editor.LayoutParameters == null) { }
-					Reminders reminders = new Reminders(ApplicationContext, index, editor, this);
-					reminders.EditSetup(subindex, settingImage, navButton);
+					Reminders reminders = new Reminders(ApplicationContext, index, editor);
+					reminders.EditSetup(subindex, navButton);
 					break;
 			}
 
@@ -493,6 +503,9 @@ namespace Clockwise.Droid
 				AnimationHelper settingsBtnFade = new AnimationHelper(settingsBtn, null);
 
 				AnimationHelper clockHeight = new AnimationHelper(clock_settings_layout, new AnimationManager(clock_settings_layout.Height > 0));
+				AnimationHelper moduleFrameHeight = new AnimationHelper(moduleFrame, new AnimationManager(clock_settings_layout.Height == 0));
+				int targetHeight = (int)(metrics.HeightPixels * .6);
+
 				if (editor.Alpha < .5f
 				    && settingsContainer.Height == 0) //open editor
 				{
@@ -500,23 +513,41 @@ namespace Clockwise.Droid
 					editorFade.Fade(200, 1f);
 					imageFade.Fade(200, 0f);
 					navButton.SetImageResource(Resource.Drawable.back_button);
-					clockHeight.collapse(200, 0);
-					alarmToggleFade.Fade(100, 0);
-					addModuleBtnFade.Fade(100, 0);
-					settingsBtnFade.Fade(100, 0);
+					if (settingTitle.Text != "Weather")
+					{
+						clockHeight.collapse(200, 0);
+						targetHeight = editor.Height + titleRow.Height + (int)(20 * metrics.Density);
+						moduleFrameHeight.collapse(200, targetHeight);
+						alarmToggleFade.Fade(100, 0);
+						addModuleBtnFade.Fade(100, 0);
+						settingsBtnFade.Fade(100, 0);
+					}
+
 					scrollView.HorizontalScrollBarEnabled = false;
-					//moduleSettingOpen = true;
+					currentModuleNavButton = navButton;
 				}
 				else { //close editor
 					scrollView.SetOnTouchListener(new ScrollViewOnListener());
 					editorFade.Fade(200, 0f);
 					imageFade.Fade(200, 1f);
 					navButton.SetImageResource(Resource.Drawable.edit_button);
-					clockHeight.expand(200, (int)(metrics.HeightPixels * .4));
-					//moduleSettingOpen = false;
-					alarmToggleFade.Fade(100, 1f);
-					addModuleBtnFade.Fade(100, 1f);
-					settingsBtnFade.Fade(100, 1f);
+					if (settingTitle.Text != "Weather")
+					{
+						clockHeight.expand(200, (int)(metrics.HeightPixels * .4));
+						moduleFrameHeight.expand(200, (int)(metrics.HeightPixels * .6));
+						alarmToggleFade.Fade(100, 1f);
+						addModuleBtnFade.Fade(100, 1f);
+						settingsBtnFade.Fade(100, 1f);
+					}
+
+					View focus = CurrentFocus;
+					if (focus != null)
+					{
+						InputMethodManager imm = (InputMethodManager)ApplicationContext.GetSystemService("input_method");
+						imm.HideSoftInputFromWindow(focus.WindowToken, 0);
+					}
+
+					currentModuleNavButton = null;
 				}
 			};
 
@@ -541,6 +572,10 @@ namespace Clockwise.Droid
 				buttonHolderFade.Fade(100, 1.0f);
 				snoozeRowFade.Fade(100, 0f);
 			}
+			else if (currentModuleNavButton != null)
+			{
+				currentModuleNavButton.PerformClick();
+			}
 			else {
 				base.OnBackPressed();
 			}
@@ -552,12 +587,15 @@ namespace Clockwise.Droid
 			LinearLayout moduleLayout = FindViewById<LinearLayout>(Resource.Id.module_layout);
 			while(moduleLayout.ChildCount > 0) moduleLayout.RemoveViewAt(0);
 			RefreshModules(Intent.GetIntExtra("alarm_number", 0));
+			scrollView.setOnScrollChangedListener(new HorizontalScrollListener());
 
 			if (CheckSelfPermission(Android.Manifest.Permission.ReadExternalStorage)
 			   == Permission.Granted && ManageAlarms.songsRadioGroup == null){
 				new ManageAlarms.GetSongs().Execute();
 			}
 		}
+
+
 
 		public class TwoDigitFormatter : Java.Lang.Object, NumberPicker.IFormatter
 		{
@@ -666,7 +704,14 @@ namespace Clockwise.Droid
 					}
 			}
 		}
-			                        
+
+		public void ToggleScrolling(bool enabled)
+		{
+			if(enabled)
+				scrollView.SetOnTouchListener(new MainActivity.ScrollViewOnListener());
+			else
+				scrollView.SetOnTouchListener(new MainActivity.ScrollViewOffListener());
+		}                        
 	}
 }
 

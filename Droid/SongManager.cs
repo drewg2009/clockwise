@@ -54,7 +54,8 @@ namespace Clockwise.Droid
 				{
 					long thisId = musicCursor.GetLong(idColumn);
 					String thisTitle = musicCursor.GetString(titleColumn);
-					String thisArtist = musicCursor.GetString(artistColumn);					Android.Net.Uri contentUri = ContentUris.WithAppendedId(
+					String thisArtist = musicCursor.GetString(artistColumn);					
+					Android.Net.Uri contentUri = ContentUris.WithAppendedId(
 						MediaStore.Audio.Media.ExternalContentUri, thisId);
 					long thisAlbumId = musicCursor.GetLong(albumIdColumn);
 					songList.Add(new Song(c, thisId, thisTitle, thisArtist, contentUri, thisAlbumId));
