@@ -53,6 +53,10 @@ namespace Clockwise.iOS
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIButton settingsToneButton { get; set; }
 
+        [Action ("UIButton28_TouchUpInside:")]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        partial void UIButton28_TouchUpInside (UIKit.UIButton sender);
+
         void ReleaseDesignerOutlets ()
         {
             if (addModuleButton != null) {
