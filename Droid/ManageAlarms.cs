@@ -35,6 +35,8 @@ namespace Clockwise.Droid
 			SetContentView(Resource.Layout.manage_alarms);
 			instance = this;
 
+			View view = FindViewById<LinearLayout>(Resource.Id.root);
+
 			fontLight = Typeface.CreateFromAsset(Resources.Assets, "HelveticaNeueLight.ttf");
 			fontBold = Typeface.CreateFromAsset(Resources.Assets, "HelveticaNeueBold.ttf");
 
@@ -103,16 +105,99 @@ namespace Clockwise.Droid
 				};
 
 			}
-			FindViewById<TextView>(Resource.Id.save_button).Typeface = fontBold;
+
+			FindViewById<TextView>(Resource.Id.date_text).Typeface = fontLight;
+
+			//Options
+			TextView options = FindViewById<TextView>(Resource.Id.options_button);
+			RelativeLayout optionsRow = FindViewById<RelativeLayout>(Resource.Id.options_row);
+
+			options.Typeface = fontLight;
+			ScrollView scrollView = FindViewById<ScrollView>(Resource.Id.settings_scroller);
+			LinearLayout settings = (LinearLayout)((ViewGroup)scrollView).GetChildAt(0);
+			SeekBar volume = settings.FindViewById<SeekBar>(Resource.Id.volume_seek_bar);
+			RelativeLayout alarmToneRow = settings.FindViewById<RelativeLayout>(Resource.Id.alarm_tone_row);
+			alarmToneRow.Click += delegate {
+				StartActivity(typeof(SongSelect));
+			};
+
+			RelativeLayout alarmNameRow = settings.FindViewById<RelativeLayout>(Resource.Id.alarm_name_row);
+			TextView nameText = settings.FindViewById<TextView>(Resource.Id.name_text);
+			alarmNameRow.Click += delegate {
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.SetTitle("Alarm Name");
+				EditText input = new EditText(this);
+				//input.InputType = Android.Text.InputTypes.ClassText | Android.Text.InputTypes.TextVariationPassword;
+				builder.SetView(input);
+				builder.SetPositiveButton("OK", (sender, e) =>
+				{
+					if (!input.Text.Contains(Settings.SEPARATERS))
+						nameText.Text = input.Text;
+					else
+						Toast.MakeText(ApplicationContext, "Alarm name cannot have special characters", ToastLength.Long).Show();
+				});
+
+				builder.SetNegativeButton("CANCEL", (object sender, DialogClickEventArgs e) =>
+				{
+					((Dialog)sender).Dismiss();
+				});
+
+				builder.Show();
+			};
+
+			SeekBar snoozeBar = settings.FindViewById<SeekBar>(Resource.Id.snooze_bar);
+			TextView snoozeOutput = FindViewById<TextView>(Resource.Id.snooze_output);
+			snoozeOutput.Typeface = fontLight;
+			string[] snoozeValues = Resources.GetStringArray(Resource.Array.snooze_values);
+			snoozeBar.Max = snoozeValues.Length - 1;
+			snoozeBar.ProgressChanged += delegate
+			{
+				snoozeOutput.Text = snoozeValues[snoozeBar.Progress];
+			};
+
+
+			RelativeLayout clockSettings = FindViewById<RelativeLayout>(Resource.Id.clock_settings);
+			options.Click += delegate
+			{
+				AnimationHelper scrollViewHeight = new AnimationHelper(scrollView,
+																	   new AnimationManager(scrollView.Height > 0));
+				if (scrollView.Height == 0)
+				{
+					//expand
+					int targetHeight = view.Height - clockSettings.Height - optionsRow.Height;
+					scrollViewHeight.expand(200, targetHeight);
+					options.Text = "Hide Options";
+				}
+				else
+				{
+					//collapse
+					scrollViewHeight.collapse(200, 0);
+					options.Text = "Options";
+					volume.Progress = 10;
+					snoozeBar.Progress = 2;
+					nameText.Text = "None";
+
+				}
+			};
+
+			FindViewById<TextView>(Resource.Id.save_button).Typeface = fontLight;
 			FindViewById<TextView>(Resource.Id.save_button).Click += delegate {
+				String alarmName = "";
+				if (scrollView.Height > 0)
+				{
+					if (nameText.Text != "None") alarmName = nameText.Text;
+
+					options.PerformClick();
+				}
 				String[] currentAlarms = Settings.Alarms.Split('|');
 				//Turn alarm on
 				int hourSet = hourpicker.Value + ampmpicker.Value * 12;
 				if (hourSet == 12 && ampmpicker.Value == 0) hourSet = 0;
 				if (hourSet == 24) hourSet = 12;
 				Console.WriteLine("passing time: " + hourSet + ":" + minutepicker.Value);
-				AlarmUtils.SetTime(Android.App.Application.Context, hourSet, minutepicker.Value, 
-				                   Settings.Alarms == string.Empty ? 0 : currentAlarms.Length, repeatDaysResult, true);
+				AlarmUtils.SetTime(Application.Context, hourSet, minutepicker.Value, 
+				                   Settings.Alarms == string.Empty ? 0 : currentAlarms.Length, repeatDaysResult, true, 
+				                   int.Parse(snoozeValues[snoozeBar.Progress]),(volume.Progress + 1), alarmName);
 
 				//Save repeat days
 				Settings.RepeatDays += Settings.RepeatDays == string.Empty ? "" + repeatDaysResult : "|" + repeatDaysResult;
@@ -166,6 +251,8 @@ namespace Clockwise.Droid
 				alarmViwer.AddView(alarmRow);
 
 			};
+
+
 
 			View tonePage = LayoutInflater.Inflate(Resource.Layout.fragment_page, null);
 			View alarmPage = LayoutInflater.Inflate(Resource.Layout.fragment_page, null);

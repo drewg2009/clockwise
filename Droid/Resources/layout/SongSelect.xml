@@ -17,30 +17,6 @@
         android:layout_height="0px"
         android:layout_weight="1"
         android:background="@android:color/white" />
-<!--<ScrollView
-        android:minWidth="25px"
-        android:minHeight="25px"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/scrollView1">
-        <LinearLayout
-            android:orientation="vertical"
-            android:minWidth="25px"
-            android:minHeight="25px"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <RadioGroup
-                android:minWidth="25px"
-                android:minHeight="25px"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/song_radio_group"
-                android:paddingLeft="10dp"
-                android:showDividers="beginning"
-                android:divider="?android:attr/dividerHorizontal">
-            </RadioGroup>
-        </LinearLayout>
-    </ScrollView>-->
     <SeekBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
