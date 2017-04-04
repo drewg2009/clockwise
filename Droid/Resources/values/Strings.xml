@@ -21,5 +21,13 @@
         <item>30</item>
     </string-array>
 
+	<string name="trans_type_prompt">How are you getting there?</string>
+	<string-array name="transportation_methods">
+        <item>Driving</item>
+        <item>Bicycling</item>
+        <item>Walking</item>
+        <item>Transit</item>
+    </string-array>
+
 	<string name="news_prompt">Select a category</string>
 </resources>

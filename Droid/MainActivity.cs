@@ -38,6 +38,9 @@ namespace Clockwise.Droid
 		ImageView currentModuleNavButton = null;
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
+			Intent trafficIntent = new Intent(this, typeof(TrafficActivity));
+			StartActivity(trafficIntent);
+
 			base.OnCreate(savedInstanceState);
 			fontLight = Typeface.CreateFromAsset(Resources.Assets, "HelveticaNeueLight.ttf");
 			// Set our view from the "main" layout resource
