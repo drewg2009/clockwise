@@ -85,7 +85,7 @@ namespace Clockwise.Helpers
 		public enum AlarmStatus { ALARM_ON, ALARM_OFF };
 
 		public enum Modules {WEATHER, REDDIT, TWITTER, NEWS, COUNTDOWN, REMINDERS, TRAFFIC, FACT, QUOTE, TDIH};
-		public enum AlarmField {Index, Hour, Minute, RepeatDays, Status, Snooze, Volume, Song};
+		public enum AlarmField {Index, Hour, Minute, RepeatDays, Status, Snooze, Volume, Song, Name};
 		public static string EMPTY_MODULE = "null";
 		public static string SEPARATERS = ":/;";
 		#endregion
@@ -200,7 +200,7 @@ namespace Clockwise.Helpers
 			set { AppSettings.AddOrUpdateValue<string>(AndroidFileAccessKey, value); }
 		}
 
-		public static void EditAlarm(int index, int hour, int minute, int repeatDays)
+		public static void EditAlarm(int index, int hour, int minute, int repeatDays, int snooze = 10, int volume = 10, string name = null)
 		{
 			String[] currentAlarms = Settings.Alarms.Split('|');
 
@@ -209,14 +209,14 @@ namespace Clockwise.Helpers
 			if (Alarms == string.Empty)
 			{
 				Alarms = "" + index + "#" + hour + "#" + minute + "#" + repeatDays + "#"
-					+ (int)status + "#10#10#" + EMPTY_MODULE;
+					+ (int)status + "#" + snooze + "#" + volume + "#" + EMPTY_MODULE + "#" + name;
 				ModuleOrder = DefaultModuleOrder;
 				AddModules();
 			}
 			else if (index == currentAlarms.Length)
 			{
 				string newAlarm = "" + index + "#" + hour + "#" + minute + "#" + repeatDays + "#"
-					+ (int)status + "#10#10#" + EMPTY_MODULE; 
+					+ (int)status + "#" + snooze + "#" + volume + "#" + EMPTY_MODULE + "#" + name;
 				Alarms += "|" + newAlarm;
 				ModuleOrder += "|" + DefaultModuleOrder;
 				AddModules();
@@ -225,7 +225,8 @@ namespace Clockwise.Helpers
 			else {
 				currentAlarms[index] = "" + index + "#" + hour + "#" + minute + "#" + repeatDays +
 					"#" + (int)status + "#" + GetAlarmField(index, AlarmField.Snooze) + "#" + GetAlarmField(index, AlarmField.Volume) + "#"
-					+ GetAlarmField(index, AlarmField.Song);
+					+ GetAlarmField(index, AlarmField.Song) + "#"
+					+ GetAlarmField(index, AlarmField.Name);
 				string newAlarmSetting = "";
 				foreach (String s in currentAlarms)
 				{
@@ -997,9 +998,7 @@ namespace Clockwise.Helpers
 			alarmSettings[(int)field] = newValue;
 
 			string temp = string.Empty;
-			var numFields = Enum.GetNames(typeof(AlarmField)).Length;
-
-			for (int i = 0; i < numFields; i++)
+			for (int i = 0; i < alarmSettings.Length; i++)
 			{
 				temp += alarmSettings[i] + "#";
 			}

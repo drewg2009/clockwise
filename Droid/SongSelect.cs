@@ -41,12 +41,20 @@ namespace Clockwise.Droid
 			sm = SongManager.getInstance(this);
 
 			SeekBar volume = FindViewById<SeekBar>(Resource.Id.volume_seek_bar);
-			volume.Progress = int.Parse(Settings.GetAlarmField(alarm_index, Settings.AlarmField.Volume)) - 1;
-			volume.ProgressChanged += delegate {
-				Settings.SetAlarmField(alarm_index, Settings.AlarmField.Volume, "" + (volume.Progress + 1));
-				sm.setVolume((float)volume.Progress / 14f);
-			};
-
+			if (alarm_index == -1)
+			{
+				volume.LayoutParameters.Height = 0;
+				FindViewById<RelativeLayout>(Resource.Id.relativeLayout1).LayoutParameters.Height = 0;
+			}
+			else
+			{
+				volume.Progress = int.Parse(Settings.GetAlarmField(alarm_index, Settings.AlarmField.Volume)) - 1;
+				volume.ProgressChanged += delegate
+				{
+					Settings.SetAlarmField(alarm_index, Settings.AlarmField.Volume, "" + (volume.Progress + 1));
+					sm.setVolume((float)volume.Progress / 14f);
+				};
+			}
 		}
 
 		protected override void OnStop()

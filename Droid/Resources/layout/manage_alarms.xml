@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:minWidth="25px"
     android:minHeight="25px"
-    android:background="#ffe8e8e8">
+    android:background="#ffe8e8e8"
+    android:id="@+id/root">
     <LinearLayout
         android:focusable="true"
         android:focusableInTouchMode="true"
@@ -33,7 +34,44 @@
                 android:minHeight="25px"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/picker_holder">
+                android:id="@+id/day_select_row"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp">
+                <TextView
+                    android:text="text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/date_output"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="20dp"
+                    android:textSize="16dp" />
+                <TextView
+                    android:text="Date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/date_text"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:textSize="16dp" />
+                <ImageView
+                    android:src="@drawable/calendar"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:id="@+id/imageView4"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@id/date_text" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:minWidth="25px"
+                android:minHeight="25px"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/picker_holder"
+                android:layout_below="@id/day_select_row">
                 <LinearLayout
                     android:orientation="horizontal"
                     android:minWidth="25px"
@@ -174,59 +212,41 @@
                 </LinearLayout>
             </RelativeLayout>
         </RelativeLayout>
-        <LinearLayout
-            android:orientation="horizontal"
+        <ScrollView
             android:minWidth="25px"
             android:minHeight="25px"
-            android:layout_width="match_parent"
-            android:id="@+id/settings_row"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:background="#ffffffff"
-            android:layout_below="@id/clock_settings"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:paddingTop="40dp"
             android:paddingLeft="5dp"
-            android:paddingRight="5dp">
-            <ImageView
-                android:src="@drawable/settings_tone"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:id="@+id/imageView1"
-                android:layout_weight="1" />
-            <ImageView
-                android:src="@drawable/settings_snooze"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:id="@+id/imageView1"
-                android:layout_weight="1" />
-            <ImageView
-                android:src="@drawable/settings_speech"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:id="@+id/imageView1"
-                android:layout_weight="1" />
-            <ImageView
-                android:src="@drawable/settings_order"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:id="@+id/imageView1"
-                android:layout_weight="1" />
-            <ImageView
-                android:src="@drawable/settings_about"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:id="@+id/imageView1"
-                android:layout_weight="1" />
-        </LinearLayout>
+            android:paddingRight="5dp"
+            android:id="@+id/settings_scroller"
+            android:layout_below="@id/clock_settings">
+            <include
+                layout="@layout/alarm_settings_layout"
+                android:id="@+id/alarm_settings" />
+        </ScrollView>
         <RelativeLayout
             android:minWidth="25px"
             android:minHeight="25px"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/relativeLayout2"
-            android:layout_below="@id/clock_settings"
-            android:background="#ffffffff">
+            android:id="@+id/options_row"
+            android:layout_below="@id/settings_scroller"
+            android:background="#ffffffff"
+            android:weightSum="15"
+            android:paddingRight="20dp">
+            <TextView
+                android:text="Options"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/options_button"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:textSize="20dp"
+                android:layout_toLeftOf="@id/save_button"
+                android:layout_weight="3"
+                android:gravity="center_horizontal" />
             <TextView
                 android:text="Save"
                 android:layout_width="wrap_content"
@@ -235,8 +255,10 @@
                 android:layout_alignParentRight="true"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-                android:paddingRight="20dp"
-                android:textSize="20dp" />
+                android:textSize="20dp"
+                android:layout_weight="3"
+                android:gravity="center_horizontal"
+                android:paddingLeft="20dp" />
         </RelativeLayout>
     </RelativeLayout>
     <ScrollView

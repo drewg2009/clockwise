@@ -22,7 +22,9 @@ namespace Clockwise.Droid
 			SetContentView(Resource.Layout.module_order);
 
 			// Create your application here
-
+			FindViewById<ImageView>(Resource.Id.cancel_button).Click += delegate {
+				Finish();
+			};
 		}
 	}
 }

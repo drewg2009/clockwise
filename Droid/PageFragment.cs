@@ -137,6 +137,10 @@ namespace Clockwise.Droid
 						tv.Text = "You must give Clockwise file access to play device music. Click here to go to Settings.";
 						tv.Click += delegate {
 							Activity.Finish();
+							if (MainActivity.instance != null)
+							{
+								MainActivity.instance.Finish();
+							}
 							Intent intent = new Intent();
 							intent.SetAction(Android.Provider.Settings.ActionApplicationDetailsSettings);
 							Android.Net.Uri uri = Android.Net.Uri.FromParts("package", Context.PackageName, null);

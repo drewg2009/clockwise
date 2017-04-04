@@ -36,6 +36,7 @@ namespace Clockwise.Droid
 		static int currentModule = -1;
 		private FrameLayout moduleFrame;
 		ImageView currentModuleNavButton = null;
+		public static MainActivity instance;
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
@@ -319,7 +320,6 @@ namespace Clockwise.Droid
 			snoozeBar.Max = snoozeValues.Length-1;
 			snoozeBar.ProgressChanged += delegate
 			{
-				Console.WriteLine("seek: " + snoozeBar.Progress);
 				snoozeOutput.Text = snoozeValues[snoozeBar.Progress];
 				Settings.SetAlarmField(alarm_number, Settings.AlarmField.Snooze, snoozeValues[snoozeBar.Progress]);
 			};
@@ -330,6 +330,7 @@ namespace Clockwise.Droid
 				if (int.Parse(snoozeValues[i]) == snoozeVal)
 				{
 					snoozeBar.Progress = i;
+					break;
 				}
 			}
 
@@ -338,14 +339,6 @@ namespace Clockwise.Droid
 				Intent i = new Intent(ApplicationContext, typeof(SongSelect));
 				i.PutExtra("alarm_index", alarm_number);
 				StartActivity(i);
-			};
-
-			//Speech Settings
-			FindViewById<ImageView>(Resource.Id.speech).Click += delegate {
-				Intent intent = new Intent();
-				intent.SetAction("com.android.settings.TTS_SETTINGS");
-				intent.SetFlags(ActivityFlags.NewTask);
-				StartActivity(intent);
 			};
 
 			//Module Order
@@ -584,6 +577,7 @@ namespace Clockwise.Droid
 		protected override void OnResume()
 		{
 			base.OnResume();
+			instance = this;
 			LinearLayout moduleLayout = FindViewById<LinearLayout>(Resource.Id.module_layout);
 			while(moduleLayout.ChildCount > 0) moduleLayout.RemoveViewAt(0);
 			RefreshModules(Intent.GetIntExtra("alarm_number", 0));
@@ -595,7 +589,11 @@ namespace Clockwise.Droid
 			}
 		}
 
-
+		protected override void OnDestroy()
+		{
+			instance = null;
+			base.OnDestroy();
+		}
 
 		public class TwoDigitFormatter : Java.Lang.Object, NumberPicker.IFormatter
 		{
