@@ -132,6 +132,7 @@
     <Compile Include="PageFragment.cs" />
     <Compile Include="CustomHorizontalScrollView.cs" />
     <Compile Include="Module.cs" />
+    <Compile Include="ModuleOrder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -202,6 +203,10 @@
     <AndroidResource Include="Resources\drawable\delete.png" />
     <AndroidResource Include="Resources\drawable\check.png" />
     <AndroidResource Include="Resources\drawable\delete2.png" />
+    <AndroidResource Include="Resources\drawable\volume.png" />
+    <AndroidResource Include="Resources\drawable\calendar.png" />
+    <AndroidResource Include="Resources\layout\alarm_settings_layout.xml" />
+    <AndroidResource Include="Resources\drawable\delete3.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />

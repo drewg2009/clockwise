@@ -51,11 +51,12 @@ namespace Clockwise.Droid
 			am = (AlarmManager)Application.Context.GetSystemService(Context.AlarmService);
 		}
 
-		public static void SetTime(Context context, int hour, int minute, int alarmIndex, int repeatDays, bool addingAlarm)
+		public static long SetTime(Context context, int hour, int minute, int alarmIndex, int repeatDays, bool addingAlarm,
+		                          int snooze = -1, int volume = -1, string name = null)
 		{
 			Init(context, addingAlarm);
 
-			Settings.EditAlarm(alarmIndex, hour, minute, repeatDays);
+
 			am.Cancel(pendingIntents[alarmIndex]);
 
 			bool[] daySelection = new bool[7];
@@ -139,7 +140,15 @@ namespace Clockwise.Droid
 				if (hour == 0) hour = 12;
 				toast2 += " at " + hour + ":" + (minute).ToString("00") + (ispm ? "pm" : "am");
 			}
+
+			if (addingAlarm)
+				Settings.EditAlarm(alarmIndex, hour, minute, repeatDays, calendar.TimeInMillis, snooze, volume, name);
+			else
+				Settings.EditAlarm(alarmIndex, hour, minute, repeatDays, calendar.TimeInMillis);
+
 			Toast.MakeText(context, toast2, ToastLength.Long).Show();
+
+			return calendar.TimeInMillis;
 		}
 
 		public static void Snooze(int index)
