@@ -2,21 +2,21 @@
 <Paths>
   <Jars></Jars>
   <ResolvedResourceDirectories>
-    <ResolvedResourceDirectory>/Users/drewgallagher/Documents/Software/MobileApps/clockwiseProjects/clockwise/Droid/obj/Debug/__library_projects__/Plugin.Settings/library_project_imports/res</ResolvedResourceDirectory>
-    <ResolvedResourceDirectory>/Users/drewgallagher/Documents/Software/MobileApps/clockwiseProjects/clockwise/Droid/obj/Debug/__library_projects__/Xamarin.Android.Support.v7.AppCompat/library_project_imports/res</ResolvedResourceDirectory>
-    <ResolvedResourceDirectory>/Users/drewgallagher/Documents/Software/MobileApps/clockwiseProjects/clockwise/Droid/obj/Debug/__library_projects__/Xamarin.Android.Support.Transition/library_project_imports/res</ResolvedResourceDirectory>
-    <ResolvedResourceDirectory>/Users/drewgallagher/Documents/Software/MobileApps/clockwiseProjects/clockwise/Droid/obj/Debug/__library_projects__/Xamarin.Android.Support.v7.RecyclerView/library_project_imports/res</ResolvedResourceDirectory>
-    <ResolvedResourceDirectory>/Users/drewgallagher/Documents/Software/MobileApps/clockwiseProjects/clockwise/Droid/obj/Debug/__library_projects__/Xamarin.Android.Support.Design/library_project_imports/res</ResolvedResourceDirectory>
+    <ResolvedResourceDirectory>/Users/Seth/Projects/Clockwise/Droid/obj/Debug/__library_projects__/Plugin.Settings/library_project_imports/res</ResolvedResourceDirectory>
+    <ResolvedResourceDirectory>/Users/Seth/Projects/Clockwise/Droid/obj/Debug/__library_projects__/Xamarin.Android.Support.v7.AppCompat/library_project_imports/res</ResolvedResourceDirectory>
+    <ResolvedResourceDirectory>/Users/Seth/Projects/Clockwise/Droid/obj/Debug/__library_projects__/Xamarin.Android.Support.Transition/library_project_imports/res</ResolvedResourceDirectory>
+    <ResolvedResourceDirectory>/Users/Seth/Projects/Clockwise/Droid/obj/Debug/__library_projects__/Xamarin.Android.Support.v7.RecyclerView/library_project_imports/res</ResolvedResourceDirectory>
+    <ResolvedResourceDirectory>/Users/Seth/Projects/Clockwise/Droid/obj/Debug/__library_projects__/Xamarin.Android.Support.Design/library_project_imports/res</ResolvedResourceDirectory>
   </ResolvedResourceDirectories>
   <ResolvedAssetDirectories>
     <ResolvedAssetDirectory>obj/Debug/__library_projects__/Plugin.Settings/library_project_imports/assets</ResolvedAssetDirectory>
   </ResolvedAssetDirectories>
   <ResolvedEnvironmentFiles />
   <ResolvedResourceDirectoryStamps>
-    <ResolvedResourceDirectoryStamp>/Users/drewgallagher/Documents/Software/MobileApps/clockwiseProjects/clockwise/Droid/obj/Debug/__library_projects__/Plugin.Settings.stamp</ResolvedResourceDirectoryStamp>
-    <ResolvedResourceDirectoryStamp>/Users/drewgallagher/Documents/Software/MobileApps/clockwiseProjects/clockwise/Droid/obj/Debug/__library_projects__/Xamarin.Android.Support.v7.AppCompat.stamp</ResolvedResourceDirectoryStamp>
-    <ResolvedResourceDirectoryStamp>/Users/drewgallagher/Documents/Software/MobileApps/clockwiseProjects/clockwise/Droid/obj/Debug/__library_projects__/Xamarin.Android.Support.Transition.stamp</ResolvedResourceDirectoryStamp>
-    <ResolvedResourceDirectoryStamp>/Users/drewgallagher/Documents/Software/MobileApps/clockwiseProjects/clockwise/Droid/obj/Debug/__library_projects__/Xamarin.Android.Support.v7.RecyclerView.stamp</ResolvedResourceDirectoryStamp>
-    <ResolvedResourceDirectoryStamp>/Users/drewgallagher/Documents/Software/MobileApps/clockwiseProjects/clockwise/Droid/obj/Debug/__library_projects__/Xamarin.Android.Support.Design.stamp</ResolvedResourceDirectoryStamp>
+    <ResolvedResourceDirectoryStamp>/Users/Seth/Projects/Clockwise/Droid/obj/Debug/__library_projects__/Plugin.Settings.stamp</ResolvedResourceDirectoryStamp>
+    <ResolvedResourceDirectoryStamp>/Users/Seth/Projects/Clockwise/Droid/obj/Debug/__library_projects__/Xamarin.Android.Support.v7.AppCompat.stamp</ResolvedResourceDirectoryStamp>
+    <ResolvedResourceDirectoryStamp>/Users/Seth/Projects/Clockwise/Droid/obj/Debug/__library_projects__/Xamarin.Android.Support.Transition.stamp</ResolvedResourceDirectoryStamp>
+    <ResolvedResourceDirectoryStamp>/Users/Seth/Projects/Clockwise/Droid/obj/Debug/__library_projects__/Xamarin.Android.Support.v7.RecyclerView.stamp</ResolvedResourceDirectoryStamp>
+    <ResolvedResourceDirectoryStamp>/Users/Seth/Projects/Clockwise/Droid/obj/Debug/__library_projects__/Xamarin.Android.Support.Design.stamp</ResolvedResourceDirectoryStamp>
   </ResolvedResourceDirectoryStamps>
 </Paths>

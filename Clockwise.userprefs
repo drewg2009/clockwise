@@ -1,11 +1,29 @@
-﻿<Properties StartupConfiguration="{25923E74-1BCD-4913-9DDD-9AC9574EF53C}|Default" GitUserInfo="UsingGIT">
-  <MonoDevelop.Ide.Workbench ActiveDocument="clockwise Status">
+﻿<Properties StartupConfiguration="{B46E161A-E220-482B-B411-3F0B25C20CFD}|Default" GitUserInfo="UsingGIT">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Droid/Countdown.cs">
     <Files>
-      <File FileName="iOS/ViewController.designer.cs" Line="10" Column="1" />
-      <File FileName="iOS/ViewController.cs" Line="43" Column="18" />
-      <File FileName="iOS/Main.cs" Line="17" Column="1" />
-      <File FileName="clockwise Status" />
+      <File FileName="Droid/AlarmUtils.cs" Line="137" Column="21" />
+      <File FileName="Droid/ManageAlarms.cs" Line="313" Column="24" />
+      <File FileName="Droid/Countdown.cs" Line="28" Column="14" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Clockwise" expanded="True">
+            <Node name="Clockwise" expanded="True">
+              <Node name="Helpers" expanded="True" />
+            </Node>
+            <Node name="Clockwise.Droid" expanded="True">
+              <Node name="Resources" expanded="True">
+                <Node name="drawable" expanded="True" />
+                <Node name="layout" expanded="True" />
+                <Node name="values" expanded="True" />
+              </Node>
+              <Node name="Countdown.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
@@ -13,6 +31,5 @@
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.ItemProperties.Clockwise.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.4DA9C6AF-339C-406D-ABBD-924CAFD035E5" />
-  <MonoDevelop.Ide.ItemProperties.Clockwise.Droid PreferredExecutionTarget="Android.efca1e22" />
+  <MonoDevelop.Ide.ItemProperties.Clockwise.Droid AndroidDesignerPreferredDevice="Nexus 4" PreferredExecutionTarget="Android.03157df34c99320c" AndroidDesignerPreferredTheme="Theme.Holo.Light.NoActionBar" />
 </Properties>
