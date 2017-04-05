@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="75dp"
     android:background="@drawable/alarm_display_bg"
-    android:weightSum="10">
+    android:splitMotionEvents="false">
     <LinearLayout
         android:minWidth="25px"
         android:minHeight="25px"
@@ -18,7 +18,7 @@
             android:minHeight="25px"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/ltime_layout">
+            android:id="@+id/time_layout">
             <ImageView
                 android:src="@drawable/alarm_off"
                 android:id="@+id/alarm_status"
@@ -34,32 +34,35 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/alarm_status"
-                android:layout_alignParentBottom="true"
                 android:layout_centerVertical="true"
+                android:textColor="#ffbbbbbb"
+                android:layout_alignParentBottom="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/name_text"
+                android:layout_alignLeft="@id/alarm_time"
+                android:layout_alignTop="@id/alarm_time"
+                android:textSize="13dp"
                 android:textColor="#ffbbbbbb" />
-        </RelativeLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:minWidth="25px"
-        android:minHeight="25px"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:id="@+id/delete_alarm_layout">
-        <RelativeLayout
-            android:minWidth="25px"
-            android:minHeight="25px"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/relativeLayout6">
             <ImageView
-                android:src="@drawable/delete"
+                android:src="@drawable/delete3"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:id="@+id/delete_button"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="7dp" />
+            <TextView
+                android:text="Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/date_text"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:textColor="#ffbbbbbb"
+                android:textSize="12dp" />
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

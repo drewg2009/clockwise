@@ -13,6 +13,7 @@ using Android.Views;
 using Android.Widget;
 using Clockwise.Helpers;
 using Android.Content.PM;
+using Java.Util;
 
 namespace Clockwise.Droid
 {
@@ -180,6 +181,7 @@ namespace Clockwise.Droid
 				}
 			};
 
+			TextView dateOutput = FindViewById<TextView>(Resource.Id.date_output);
 			FindViewById<TextView>(Resource.Id.save_button).Typeface = fontLight;
 			FindViewById<TextView>(Resource.Id.save_button).Click += delegate {
 				String alarmName = "";
@@ -195,12 +197,10 @@ namespace Clockwise.Droid
 				if (hourSet == 12 && ampmpicker.Value == 0) hourSet = 0;
 				if (hourSet == 24) hourSet = 12;
 				Console.WriteLine("passing time: " + hourSet + ":" + minutepicker.Value);
-				AlarmUtils.SetTime(Application.Context, hourSet, minutepicker.Value, 
+				long alarmTimeInMillis = AlarmUtils.SetTime(Application.Context, hourSet, minutepicker.Value, 
 				                   Settings.Alarms == string.Empty ? 0 : currentAlarms.Length, repeatDaysResult, true, 
 				                   int.Parse(snoozeValues[snoozeBar.Progress]),(volume.Progress + 1), alarmName);
 
-				//Save repeat days
-				Settings.RepeatDays += Settings.RepeatDays == string.Empty ? "" + repeatDaysResult : "|" + repeatDaysResult;
 
 				foreach (TextView tv in repeatDays)
 				{
@@ -214,7 +214,27 @@ namespace Clockwise.Droid
 				LinearLayout alarmViwer = (LinearLayout)FindViewById(Resource.Id.alarm_viewer);
 				LinearLayout alarmRow = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.alarm_display, null);
 				LinearLayout editLayout = alarmRow.FindViewById<LinearLayout>(Resource.Id.edit_alarm_layout);
-				LinearLayout deleteLayout = alarmRow.FindViewById<LinearLayout>(Resource.Id.delete_alarm_layout);
+				View deleteImage = alarmRow.FindViewById(Resource.Id.delete_button);
+				if (alarmName != "")
+				{
+					if (alarmName.Length > 12)
+					{
+						alarmName = alarmName.Substring(0, 12) + "...";
+					}
+					TextView alarmNameText = alarmRow.FindViewById<TextView>(Resource.Id.name_text);
+					alarmNameText.Text = alarmName;
+				}
+
+				TextView dateText = alarmRow.FindViewById<TextView>(Resource.Id.date_text);
+				dateText.Typeface = fontLight;
+				Calendar calender = Calendar.Instance;
+				calender.TimeInMillis = alarmTimeInMillis;
+				int dayOfWeek = calender.Get(CalendarField.DayOfWeek)-1;
+				int month = calender.Get(CalendarField.Month);
+				int date = calender.Get(CalendarField.DayOfMonth);
+				dateText.Text = Resources.GetStringArray(Resource.Array.week_days)[dayOfWeek]
+					+ ", " + Resources.GetStringArray(Resource.Array.months)[month]
+					+ " " + date;
 
 				editLayout.Tag = Settings.Alarms.Split('|').Length - 1;
 				editLayout.Click += delegate {
@@ -230,7 +250,7 @@ namespace Clockwise.Droid
 				ImageView alarmStatus = alarmRow.FindViewById<ImageView>(Resource.Id.alarm_status);
 				alarmStatus.SetImageResource(Resource.Drawable.alarm_on);
 
-				deleteLayout.Click += delegate {
+				deleteImage.Click += delegate {
 					Console.Write("deleting alarm");
 					int status = int.Parse(Settings.GetAlarmField((int)alarmRow.Tag, Settings.AlarmField.Status));
 					if (status == (int)Settings.AlarmStatus.ALARM_ON)
@@ -250,6 +270,7 @@ namespace Clockwise.Droid
 				alarmViwer.AddView(gap);
 				alarmViwer.AddView(alarmRow);
 
+				dateOutput.Text = "";
 			};
 
 
@@ -285,6 +306,44 @@ namespace Clockwise.Droid
 				//songList = sm.getSongList();
 				new GetSongs().Execute();
 			}
+
+			//Date picker
+			View dateLayout = FindViewById(Resource.Id.date_layout);
+			TextView date_text = FindViewById<TextView>(Resource.Id.date_text);
+			dateOutput.Typeface = fontLight;
+			date_text.Typeface = fontLight;
+			dateLayout.Click += delegate {
+				//Launch datepicker
+				Calendar calendar = Calendar.Instance;
+				calendar.TimeInMillis = Java.Lang.JavaSystem.CurrentTimeMillis();
+				int year = calendar.Get(CalendarField.Year);
+				int month = calendar.Get(CalendarField.Month);
+				int day = calendar.Get(CalendarField.DayOfMonth);
+
+				DatePickerDialog dateWindow = new DatePickerDialog(this, (object sender2, DatePickerDialog.DateSetEventArgs e2) =>
+				{
+					calendar.Set(e2.Year, e2.Month, e2.DayOfMonth);
+					Date selectedDate = new Date(calendar.Time.Time);
+					calendar.TimeInMillis = Java.Lang.JavaSystem.CurrentTimeMillis();
+					calendar.Set(CalendarField.HourOfDay, 0);
+					calendar.Set(CalendarField.Minute, 0);
+					calendar.Set(CalendarField.Second, 0);
+					Date currentDate = new Date(calendar.Time.Time);
+					currentDate.Time = currentDate.Time + (1000 * 60 * 60 * 24) - 1;
+
+					int dayOfWeek = calendar.Get(CalendarField.DayOfWeek) - 1;
+					int month2 = calendar.Get(CalendarField.Month);
+					int dayOfMonth = calendar.Get(CalendarField.DayOfMonth);
+					int year2 = calendar.Get(CalendarField.Year);
+					dateOutput.Text = Resources.GetStringArray(Resource.Array.week_days)[dayOfWeek]
+						+ ", " + Resources.GetStringArray(Resource.Array.months)[month]
+						+ " " + dayOfMonth + ", " + year2;
+				}, year, month, day);
+				dateWindow.Window.SetType(WindowManagerTypes.ApplicationPanel);
+				//set min date to current date/time
+				dateWindow.DatePicker.MinDate = calendar.TimeInMillis - 1000;
+				dateWindow.Show();
+			};
 		}
 
 		protected override void OnResume()
@@ -347,7 +406,19 @@ namespace Clockwise.Droid
 			//Add view
 			LinearLayout alarmRow = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.alarm_display, null);
 			LinearLayout editLayout = alarmRow.FindViewById<LinearLayout>(Resource.Id.edit_alarm_layout);
-			LinearLayout deleteLayout = alarmRow.FindViewById<LinearLayout>(Resource.Id.delete_alarm_layout);
+			View deleteImage = alarmRow.FindViewById(Resource.Id.delete_button);
+
+			string alarmName = Settings.GetAlarmField(alarmIndex, Settings.AlarmField.Name);
+			if (alarmName != Settings.EMPTY_MODULE)
+			{
+				if (alarmName.Length > 12)
+				{
+					alarmName = alarmName.Substring(0, 12) + "...";
+				}
+				TextView alarmNameText = alarmRow.FindViewById<TextView>(Resource.Id.name_text);
+				alarmNameText.Text = alarmName;
+				alarmNameText.Typeface = fontLight;
+			}
 			editLayout.Tag = alarmIndex;
 
 			//Attaches editing action
@@ -360,7 +431,7 @@ namespace Clockwise.Droid
 			};
 
 			//Attaches delete action
-			deleteLayout.Click += delegate
+			deleteImage.Click += delegate
 			{
 				Console.Write("deleting alarm");
 				int temp = int.Parse(Settings.GetAlarmField((int)editLayout.Tag, Settings.AlarmField.Status));
@@ -382,8 +453,21 @@ namespace Clockwise.Droid
 			ImageView alarmStatus = alarmRow.FindViewById<ImageView>(Resource.Id.alarm_status);
 			int status = int.Parse(Settings.GetAlarmField(alarmIndex, Settings.AlarmField.Status));
 
-			if (status == (int)Settings.AlarmStatus.ALARM_ON) 
+			if (status == (int)Settings.AlarmStatus.ALARM_ON)
+			{
 				alarmStatus.SetImageResource(Resource.Drawable.alarm_on);
+				TextView dateText = alarmRow.FindViewById<TextView>(Resource.Id.date_text);
+				dateText.Typeface = fontLight;
+				long alarmTimeInMillis = long.Parse(Settings.GetAlarmField(alarmIndex, Settings.AlarmField.Millis));
+				Calendar calender = Calendar.Instance;
+				calender.TimeInMillis = alarmTimeInMillis;
+				int dayOfWeek = calender.Get(CalendarField.DayOfWeek)-1;
+				int month = calender.Get(CalendarField.Month);
+				int date = calender.Get(CalendarField.DayOfMonth);
+				dateText.Text = Resources.GetStringArray(Resource.Array.week_days)[dayOfWeek]
+					+ ", " + Resources.GetStringArray(Resource.Array.months)[month]
+					+ " " + date;
+			}
 
 
 			View gap = new View(Application.Context);

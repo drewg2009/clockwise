@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.epoch.Clockwise" >
-	<uses-sdk android:minSdkVersion="19" android:targetSdkVersion="25" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.epoch.Clockwise">
+	<uses-sdk android:minSdkVersion="19" />
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 	<application android:theme="@android:style/Theme.Holo.Light.NoActionBar" android:label="Clockwise" android:icon="@mipmap/icon" android:fullBackupContent="false" android:allowBackup="false"></application>
 </manifest>

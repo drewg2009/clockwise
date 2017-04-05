@@ -21,5 +21,30 @@
         <item>30</item>
     </string-array>
 
+	<string-array name="week_days">
+        <item>Sun</item>
+        <item>Mon</item>
+        <item>Tues</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+		<item>Sat</item>
+    </string-array>
+
+	<string-array name="months">
+        <item>Jan</item>
+        <item>Feb</item>
+        <item>Mar</item>
+        <item>Apr</item>
+        <item>May</item>
+        <item>Jun</item>
+		<item>Jul</item>
+		<item>Aug</item>
+        <item>Sep</item>
+        <item>Oct</item>
+        <item>Nov</item>
+        <item>Dec</item>
+    </string-array>
+
 	<string name="news_prompt">Select a category</string>
 </resources>

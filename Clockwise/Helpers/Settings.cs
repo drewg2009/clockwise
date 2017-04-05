@@ -85,9 +85,9 @@ namespace Clockwise.Helpers
 		public enum AlarmStatus { ALARM_ON, ALARM_OFF };
 
 		public enum Modules {WEATHER, REDDIT, TWITTER, NEWS, COUNTDOWN, REMINDERS, TRAFFIC, FACT, QUOTE, TDIH};
-		public enum AlarmField {Index, Hour, Minute, RepeatDays, Status, Snooze, Volume, Song, Name};
+		public enum AlarmField {Index, Hour, Minute, RepeatDays, Status, Snooze, Volume, Song, Name, Millis};
 		public static string EMPTY_MODULE = "null";
-		public static string SEPARATERS = ":/;";
+		public static string SEPARATERS = "#:/;|";
 		#endregion
 
 
@@ -200,7 +200,7 @@ namespace Clockwise.Helpers
 			set { AppSettings.AddOrUpdateValue<string>(AndroidFileAccessKey, value); }
 		}
 
-		public static void EditAlarm(int index, int hour, int minute, int repeatDays, int snooze = 10, int volume = 10, string name = null)
+		public static void EditAlarm(int index, int hour, int minute, int repeatDays, long millis, int snooze = 10, int volume = 10, string name = "null")
 		{
 			String[] currentAlarms = Settings.Alarms.Split('|');
 
@@ -209,14 +209,14 @@ namespace Clockwise.Helpers
 			if (Alarms == string.Empty)
 			{
 				Alarms = "" + index + "#" + hour + "#" + minute + "#" + repeatDays + "#"
-					+ (int)status + "#" + snooze + "#" + volume + "#" + EMPTY_MODULE + "#" + name;
+					+ (int)status + "#" + snooze + "#" + volume + "#" + EMPTY_MODULE + "#" + name + "#" + millis;
 				ModuleOrder = DefaultModuleOrder;
 				AddModules();
 			}
 			else if (index == currentAlarms.Length)
 			{
 				string newAlarm = "" + index + "#" + hour + "#" + minute + "#" + repeatDays + "#"
-					+ (int)status + "#" + snooze + "#" + volume + "#" + EMPTY_MODULE + "#" + name;
+					+ (int)status + "#" + snooze + "#" + volume + "#" + EMPTY_MODULE + "#" + name + "#" + millis;
 				Alarms += "|" + newAlarm;
 				ModuleOrder += "|" + DefaultModuleOrder;
 				AddModules();
@@ -226,7 +226,8 @@ namespace Clockwise.Helpers
 				currentAlarms[index] = "" + index + "#" + hour + "#" + minute + "#" + repeatDays +
 					"#" + (int)status + "#" + GetAlarmField(index, AlarmField.Snooze) + "#" + GetAlarmField(index, AlarmField.Volume) + "#"
 					+ GetAlarmField(index, AlarmField.Song) + "#"
-					+ GetAlarmField(index, AlarmField.Name);
+					+ GetAlarmField(index, AlarmField.Name) + "#"
+					+ GetAlarmField(index, AlarmField.Millis);
 				string newAlarmSetting = "";
 				foreach (String s in currentAlarms)
 				{
