@@ -28,11 +28,11 @@ namespace Clockwise.Droid
 		{
 			Spinner transType = FindViewById<Spinner>(Resource.Id.transType);
 			transType.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spinner_ItemSelected);
-			var adapter = ArrayAdapter.CreateFromResource(
-					this, Resource.Array.transportation_methods, Android.Resource.Layout.SimpleSpinnerItem);
+			//var adapter = ArrayAdapter.CreateFromResource(
+			//		this, Resource.Array.transportation_methods, Android.Resource.Layout.SimpleSpinnerItem);
 
-			adapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
-			transType.Adapter = adapter;
+			//adapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
+			//transType.Adapter = adapter;
 		}
 
 		private void spinner_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)

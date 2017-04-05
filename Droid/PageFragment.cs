@@ -23,6 +23,8 @@ namespace Clockwise.Droid
 	{
 		public static String ARG_PAGE = "ARG_PAGE";
 		public static String INDEX = "INDEX";
+		static RadioButton defaultRadioButton = null;
+		static RadioButton songRadioButton = null;
 		private LinearLayout groupHolder;
 		private int mPage;
 		private int index;
@@ -95,11 +97,24 @@ namespace Clockwise.Droid
 					Console.WriteLine("casting: " + i/2);
 					RadioButton rb = (RadioButton)group.GetChildAt(i);
 					int temp = i/2;
+
+					if (defaultList[temp].getUri().ToString()
+						== Helpers.Settings.GetAlarmField(index, Helpers.Settings.AlarmField.Song))
+					{
+						rb.Checked = true;
+					}
+
 					rb.Click += delegate
 					{
 						//save
 						Helpers.Settings.SetAlarmField(index, Helpers.Settings.AlarmField.Song,
 													   defaultList[temp].getUri().ToString());
+						if (songRadioButton != null)
+						{
+							songRadioButton.Checked = false;
+							songRadioButton = null;
+						}
+						defaultRadioButton = rb;
 					};
 				}
 			}
@@ -119,11 +134,24 @@ namespace Clockwise.Droid
 					{
 						RadioButton rb = (RadioButton)group.GetChildAt(i);
 						int temp = i / 2;
+
+						if (songList[temp].getUri().ToString()
+							== Helpers.Settings.GetAlarmField(index, Helpers.Settings.AlarmField.Song))
+						{
+							rb.Checked = true;
+						}
+
 						rb.Click += delegate
 						{
 							//save
 							Helpers.Settings.SetAlarmField(index, Helpers.Settings.AlarmField.Song,
 															   songList[temp].getUri().ToString());
+							if (defaultRadioButton != null)
+							{
+								defaultRadioButton.Checked = false;
+								defaultRadioButton = null;
+							}
+							songRadioButton = rb;
 						};
 					}
 				}

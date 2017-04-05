@@ -51,12 +51,60 @@ namespace Clockwise.Droid
 			am = (AlarmManager)Application.Context.GetSystemService(Context.AlarmService);
 		}
 
+		public static long SetTime(Context context, int month, int dayOfMonth, int year, int hour, int minute, int alarmIndex, int repeatDays,
+								   int snooze = -1, int volume = -1, string name = null)
+		{
+			Init(context, true);
+			am.Cancel(pendingIntents[alarmIndex]);
+			Calendar calendar = Calendar.Instance;
+			calendar.Set(CalendarField.Month, month);
+			calendar.Set(CalendarField.DayOfMonth, dayOfMonth);
+			calendar.Set(CalendarField.Year, year);
+			calendar.Set(CalendarField.HourOfDay, hour);
+			calendar.Set(CalendarField.Minute, minute);
+
+			if ((int)Build.VERSION.SdkInt >= 21)
+			{
+				AlarmManager.AlarmClockInfo info = new AlarmManager.AlarmClockInfo(calendar.TimeInMillis, notificationClickIntents[alarmIndex]);
+				am.SetAlarmClock(info, pendingIntents[alarmIndex]);
+			}
+			else
+			{
+				am.SetExact(AlarmType.RtcWakeup, calendar.TimeInMillis, notificationClickIntents[alarmIndex]);
+			}
+
+			//Toast
+			string toast2 = "Clockwise set for ";
+			int diff = (int)(calendar.Time.Time - Java.Lang.JavaSystem.CurrentTimeMillis());
+			Console.WriteLine("diff: " + diff);
+			if (diff < DayLength)
+			{
+				diff /= 60000; //Now diff is in minutes
+				int hoursUntil = diff / 60;
+				int minutesUntil = diff % 60;
+				if (hoursUntil > 0)
+					toast2 += (int)hoursUntil + " hours and ";
+				toast2 += (int)minutesUntil + " minutes from now.";
+			}
+			else
+			{
+				toast2 += (calendar.Get(CalendarField.Month) + 1) + "/" + calendar.Get(CalendarField.DayOfMonth) + "/" + calendar.Get(CalendarField.Year);
+				bool ispm = hour >= 12;
+				if (ispm && hour > 12) hour -= 12;
+				if (hour == 0) hour = 12;
+				toast2 += " at " + hour + ":" + (minute).ToString("00") + (ispm ? "pm" : "am");
+			}
+
+			Settings.EditAlarm(alarmIndex, hour, minute, repeatDays, calendar.TimeInMillis, snooze, volume, name);
+			Toast.MakeText(context, toast2, ToastLength.Long).Show();
+
+			return calendar.TimeInMillis;
+		}
+
 		public static long SetTime(Context context, int hour, int minute, int alarmIndex, int repeatDays, bool addingAlarm,
 		                          int snooze = -1, int volume = -1, string name = null)
 		{
 			Init(context, addingAlarm);
-
-
 			am.Cancel(pendingIntents[alarmIndex]);
 
 			bool[] daySelection = new bool[7];
@@ -196,11 +244,13 @@ namespace Clockwise.Droid
 			PendingIntent piSpeech = PendingIntent.GetService(context, alarm_index, speechIntent, PendingIntentFlags.UpdateCurrent);
 			PendingIntent piSnooze = PendingIntent.GetService(context, alarm_index, snoozeIntent, PendingIntentFlags.UpdateCurrent);
 			PendingIntent piClose = PendingIntent.GetService(context, alarm_index, closeIntent, PendingIntentFlags.UpdateCurrent);
-
+			string alarmNamePart = Settings.GetAlarmField(alarm_index, Settings.AlarmField.Name);
+			if (alarmNamePart == Settings.EMPTY_MODULE) alarmNamePart = "";
+			else alarmNamePart = " - " + alarmNamePart;
 			Notification.Builder builder = new Notification.Builder(context)
 				.SetLargeIcon(BitmapFactory.DecodeResource(context.Resources, Resource.Mipmap.Icon))
 				.SetSmallIcon(Resource.Drawable.ic_alarm_white_48dp)
-				.SetContentTitle("Clockwise: " + alarm_index)
+				.SetContentTitle("Clockwise" + alarmNamePart)
 				.SetDefaults(NotificationDefaults.All)
 				.SetPriority((int)NotificationPriority.Max)
 				.SetStyle(new Notification.BigTextStyle().BigText("Click Play to hear your modules."));

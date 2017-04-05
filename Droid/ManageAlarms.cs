@@ -28,6 +28,9 @@ namespace Clockwise.Droid
 		public static RadioGroup songsRadioGroup = null;
 		public static Typeface fontLight = null;
 		public static Typeface fontBold = null;
+		private int selectedMonth;
+		private int selectedDayOfMonth;
+		private int selectedYear;
 
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
@@ -197,9 +200,21 @@ namespace Clockwise.Droid
 				if (hourSet == 12 && ampmpicker.Value == 0) hourSet = 0;
 				if (hourSet == 24) hourSet = 12;
 				Console.WriteLine("passing time: " + hourSet + ":" + minutepicker.Value);
-				long alarmTimeInMillis = AlarmUtils.SetTime(Application.Context, hourSet, minutepicker.Value, 
-				                   Settings.Alarms == string.Empty ? 0 : currentAlarms.Length, repeatDaysResult, true, 
-				                   int.Parse(snoozeValues[snoozeBar.Progress]),(volume.Progress + 1), alarmName);
+				long alarmTimeInMillis;
+				if (dateOutput.Text != "")
+				{
+					
+					alarmTimeInMillis = AlarmUtils.SetTime(Application.Context, selectedMonth, selectedDayOfMonth,
+					                                       selectedYear, hourSet, minutepicker.Value,
+									   Settings.Alarms == string.Empty ? 0 : currentAlarms.Length, repeatDaysResult,
+									   int.Parse(snoozeValues[snoozeBar.Progress]), (volume.Progress + 1), alarmName);
+				}
+				else
+				{
+					alarmTimeInMillis = AlarmUtils.SetTime(Application.Context, hourSet, minutepicker.Value,
+									   Settings.Alarms == string.Empty ? 0 : currentAlarms.Length, repeatDaysResult, true,
+									   int.Parse(snoozeValues[snoozeBar.Progress]), (volume.Progress + 1), alarmName);
+				}
 
 
 				foreach (TextView tv in repeatDays)
@@ -323,20 +338,17 @@ namespace Clockwise.Droid
 				DatePickerDialog dateWindow = new DatePickerDialog(this, (object sender2, DatePickerDialog.DateSetEventArgs e2) =>
 				{
 					calendar.Set(e2.Year, e2.Month, e2.DayOfMonth);
-					Date selectedDate = new Date(calendar.Time.Time);
-					calendar.TimeInMillis = Java.Lang.JavaSystem.CurrentTimeMillis();
-					calendar.Set(CalendarField.HourOfDay, 0);
-					calendar.Set(CalendarField.Minute, 0);
-					calendar.Set(CalendarField.Second, 0);
-					Date currentDate = new Date(calendar.Time.Time);
-					currentDate.Time = currentDate.Time + (1000 * 60 * 60 * 24) - 1;
-
 					int dayOfWeek = calendar.Get(CalendarField.DayOfWeek) - 1;
-					int month2 = calendar.Get(CalendarField.Month);
 					int dayOfMonth = calendar.Get(CalendarField.DayOfMonth);
+					int month2 = calendar.Get(CalendarField.Month);
 					int year2 = calendar.Get(CalendarField.Year);
+
+					selectedMonth = e2.Month;
+					selectedDayOfMonth = e2.DayOfMonth;
+					selectedYear = e2.Year;
+
 					dateOutput.Text = Resources.GetStringArray(Resource.Array.week_days)[dayOfWeek]
-						+ ", " + Resources.GetStringArray(Resource.Array.months)[month]
+						+ ", " + Resources.GetStringArray(Resource.Array.months)[month2]
 						+ " " + dayOfMonth + ", " + year2;
 				}, year, month, day);
 				dateWindow.Window.SetType(WindowManagerTypes.ApplicationPanel);
@@ -453,21 +465,23 @@ namespace Clockwise.Droid
 			ImageView alarmStatus = alarmRow.FindViewById<ImageView>(Resource.Id.alarm_status);
 			int status = int.Parse(Settings.GetAlarmField(alarmIndex, Settings.AlarmField.Status));
 
+			TextView dateText = alarmRow.FindViewById<TextView>(Resource.Id.date_text);
 			if (status == (int)Settings.AlarmStatus.ALARM_ON)
 			{
 				alarmStatus.SetImageResource(Resource.Drawable.alarm_on);
-				TextView dateText = alarmRow.FindViewById<TextView>(Resource.Id.date_text);
 				dateText.Typeface = fontLight;
 				long alarmTimeInMillis = long.Parse(Settings.GetAlarmField(alarmIndex, Settings.AlarmField.Millis));
 				Calendar calender = Calendar.Instance;
 				calender.TimeInMillis = alarmTimeInMillis;
-				int dayOfWeek = calender.Get(CalendarField.DayOfWeek)-1;
+				int dayOfWeek = calender.Get(CalendarField.DayOfWeek) - 1;
 				int month = calender.Get(CalendarField.Month);
 				int date = calender.Get(CalendarField.DayOfMonth);
 				dateText.Text = Resources.GetStringArray(Resource.Array.week_days)[dayOfWeek]
 					+ ", " + Resources.GetStringArray(Resource.Array.months)[month]
 					+ " " + date;
 			}
+			else
+				dateText.Text = "";
 
 
 			View gap = new View(Application.Context);

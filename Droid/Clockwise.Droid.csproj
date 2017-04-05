@@ -133,6 +133,7 @@
     <Compile Include="CustomHorizontalScrollView.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="ModuleOrder.cs" />
+    <Compile Include="TrafficActivity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -207,6 +208,7 @@
     <AndroidResource Include="Resources\drawable\calendar.png" />
     <AndroidResource Include="Resources\layout\alarm_settings_layout.xml" />
     <AndroidResource Include="Resources\drawable\delete3.png" />
+    <AndroidResource Include="Resources\layout\traffic.axml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />

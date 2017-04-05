@@ -69,6 +69,11 @@ namespace Clockwise.Droid
 			Reminders reminders = new Reminders(ApplicationContext, alarmIndex,
 			                                    FindViewById<LinearLayout>(Resource.Id.reminders_settings));
 			reminders.CreateSetup(this, FindViewById<ImageView>(Resource.Id.addReminders));
+
+			FindViewById(Resource.Id.addTraffic).Click += delegate {
+				StartActivity(typeof(TrafficActivity));
+			};
+
 			
 			//Toggle setup
 			ImageSwitcher factToggle = FindViewById<ImageSwitcher>(Resource.Id.factToggle);
