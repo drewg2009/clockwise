@@ -45,20 +45,16 @@ namespace Clockwise.iOS
 			while (counter < moduleList.Count)
 			{
 				int xFactor = (counter + 1);
+				nfloat padding = 10.0f;
 				UIView moduleView = new UIView();
 				var frame = new CGRect();
 				frame.Height = moduleScrollView.Frame.Height - 20;
-				frame.Width = moduleScrollView.Frame.Width / 2;
-				frame.X = xFactor * (moduleScrollView.Frame.Width / 2 - frame.Width / 2);
+				frame.Width = moduleScrollView.Frame.Width - 40;
+				frame.X = padding * xFactor + (counter* moduleScrollView.Frame.Width);
 				frame.Y = 0;
-				var margins = moduleView.LayoutMargins;
-				margins.Left += 10;
-				margins.Right += 10;
-				moduleView.LayoutMargins = margins;
 				moduleView.Frame = frame;
 				moduleView.BackgroundColor = UIColor.Black;
-
-			moduleScrollView.Add(moduleView);
+				moduleScrollView.Add(moduleView);
 				counter++;
 			}
 			var contentSize= moduleScrollView.ContentSize;
@@ -77,7 +73,7 @@ namespace Clockwise.iOS
 			moduleList.Add(new Module());
 			moduleList.Add(new Module());
 			moduleList.Add(new Module());
-			moduleList.Add(new Module());
+			//moduleList.Add(new Module());
 
 			addModuleBoxes(); 
 
