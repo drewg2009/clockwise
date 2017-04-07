@@ -27,6 +27,10 @@ namespace Clockwise.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIScrollView moduleScrollView { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIImageView pullDownMenu { get; set; }
 
         [Outlet]
@@ -72,6 +76,11 @@ namespace Clockwise.iOS
             if (alarmToggle != null) {
                 alarmToggle.Dispose ();
                 alarmToggle = null;
+            }
+
+            if (moduleScrollView != null) {
+                moduleScrollView.Dispose ();
+                moduleScrollView = null;
             }
 
             if (pullDownMenu != null) {

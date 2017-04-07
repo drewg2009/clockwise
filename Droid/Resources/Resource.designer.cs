@@ -108,14 +108,17 @@ namespace Clockwise.Droid
 		public partial class Array
 		{
 			
-			// aapt resource value: 0x7f0e0003
-			public const int months = 2131623939;
+			// aapt resource value: 0x7f0e0004
+			public const int months = 2131623940;
 			
 			// aapt resource value: 0x7f0e0000
 			public const int news_categories_array = 2131623936;
 			
 			// aapt resource value: 0x7f0e0001
 			public const int snooze_values = 2131623937;
+			
+			// aapt resource value: 0x7f0e0003
+			public const int transportation_methods = 2131623939;
 			
 			// aapt resource value: 0x7f0e0002
 			public const int week_days = 2131623938;
@@ -2114,26 +2117,8 @@ namespace Clockwise.Droid
 			// aapt resource value: 0x7f020057
 			public const int avd_hide_password = 2130837591;
 			
-			// aapt resource value: 0x7f02008d
-			public const int avd_hide_password_1 = 2130837645;
-			
-			// aapt resource value: 0x7f02008e
-			public const int avd_hide_password_2 = 2130837646;
-			
-			// aapt resource value: 0x7f02008f
-			public const int avd_hide_password_3 = 2130837647;
-			
 			// aapt resource value: 0x7f020058
 			public const int avd_show_password = 2130837592;
-			
-			// aapt resource value: 0x7f020090
-			public const int avd_show_password_1 = 2130837648;
-			
-			// aapt resource value: 0x7f020091
-			public const int avd_show_password_2 = 2130837649;
-			
-			// aapt resource value: 0x7f020092
-			public const int avd_show_password_3 = 2130837650;
 			
 			// aapt resource value: 0x7f020059
 			public const int back_button = 2130837593;
@@ -2511,11 +2496,11 @@ namespace Clockwise.Droid
 			// aapt resource value: 0x7f0b008e
 			public const int create_module_title = 2131427470;
 			
-			// aapt resource value: 0x7f0b013b
-			public const int currentTempText = 2131427643;
+			// aapt resource value: 0x7f0b0140
+			public const int currentTempText = 2131427648;
 			
-			// aapt resource value: 0x7f0b013c
-			public const int currentTempToggle = 2131427644;
+			// aapt resource value: 0x7f0b0141
+			public const int currentTempToggle = 2131427649;
 			
 			// aapt resource value: 0x7f0b0055
 			public const int custom = 2131427413;
@@ -2547,11 +2532,11 @@ namespace Clockwise.Droid
 			// aapt resource value: 0x7f0b0078
 			public const int delete_button = 2131427448;
 			
-			// aapt resource value: 0x7f0b013f
-			public const int descriptionText = 2131427647;
+			// aapt resource value: 0x7f0b0144
+			public const int descriptionText = 2131427652;
 			
-			// aapt resource value: 0x7f0b0140
-			public const int descriptionToggle = 2131427648;
+			// aapt resource value: 0x7f0b0145
+			public const int descriptionToggle = 2131427653;
 			
 			// aapt resource value: 0x7f0b00be
 			public const int design_bottom_sheet = 2131427518;
@@ -2625,11 +2610,11 @@ namespace Clockwise.Droid
 			// aapt resource value: 0x7f0b00b5
 			public const int fact_desc = 2131427509;
 			
-			// aapt resource value: 0x7f0b0139
-			public const int fahrenheitText = 2131427641;
+			// aapt resource value: 0x7f0b013e
+			public const int fahrenheitText = 2131427646;
 			
-			// aapt resource value: 0x7f0b013a
-			public const int fahrenheitToggle = 2131427642;
+			// aapt resource value: 0x7f0b013f
+			public const int fahrenheitToggle = 2131427647;
 			
 			// aapt resource value: 0x7f0b0024
 			public const int fill = 2131427364;
@@ -2709,14 +2694,20 @@ namespace Clockwise.Droid
 			// aapt resource value: 0x7f0b0048
 			public const int list_item = 2131427400;
 			
+			// aapt resource value: 0x7f0b0138
+			public const int map = 2131427640;
+			
+			// aapt resource value: 0x7f0b0139
+			public const int mapButtonsContainer = 2131427641;
+			
+			// aapt resource value: 0x7f0b0147
+			public const int masked = 2131427655;
+			
 			// aapt resource value: 0x7f0b0142
-			public const int masked = 2131427650;
+			public const int maxTempText = 2131427650;
 			
-			// aapt resource value: 0x7f0b013d
-			public const int maxTempText = 2131427645;
-			
-			// aapt resource value: 0x7f0b013e
-			public const int maxTempToggle = 2131427646;
+			// aapt resource value: 0x7f0b0143
+			public const int maxTempToggle = 2131427651;
 			
 			// aapt resource value: 0x7f0b011c
 			public const int media_actions = 2131427612;
@@ -2918,6 +2909,9 @@ namespace Clockwise.Droid
 			
 			// aapt resource value: 0x7f0b00e3
 			public const int saturdayInput = 2131427555;
+			
+			// aapt resource value: 0x7f0b013b
+			public const int saveButton = 2131427643;
 			
 			// aapt resource value: 0x7f0b008c
 			public const int save_button = 2131427468;
@@ -3171,11 +3165,17 @@ namespace Clockwise.Droid
 			// aapt resource value: 0x7f0b00bd
 			public const int touch_outside = 2131427517;
 			
+			// aapt resource value: 0x7f0b0137
+			public const int traffic = 2131427639;
+			
 			// aapt resource value: 0x7f0b00b0
 			public const int trafficRow = 2131427504;
 			
 			// aapt resource value: 0x7f0b00b2
 			public const int traffic_desc = 2131427506;
+			
+			// aapt resource value: 0x7f0b013a
+			public const int transType = 2131427642;
 			
 			// aapt resource value: 0x7f0b0004
 			public const int transition_current_scene = 2131427332;
@@ -3201,11 +3201,11 @@ namespace Clockwise.Droid
 			// aapt resource value: 0x7f0b0037
 			public const int useLogo = 2131427383;
 			
-			// aapt resource value: 0x7f0b0138
-			public const int usernameInput = 2131427640;
+			// aapt resource value: 0x7f0b013d
+			public const int usernameInput = 2131427645;
 			
-			// aapt resource value: 0x7f0b0137
-			public const int usernameText = 2131427639;
+			// aapt resource value: 0x7f0b013c
+			public const int usernameText = 2131427644;
 			
 			// aapt resource value: 0x7f0b0098
 			public const int view1 = 2131427480;
@@ -3243,8 +3243,8 @@ namespace Clockwise.Droid
 			// aapt resource value: 0x7f0b0136
 			public const int viewpager = 2131427638;
 			
-			// aapt resource value: 0x7f0b0141
-			public const int visible = 2131427649;
+			// aapt resource value: 0x7f0b0146
+			public const int visible = 2131427654;
 			
 			// aapt resource value: 0x7f0b007e
 			public const int volume_icon = 2131427454;
@@ -3558,13 +3558,16 @@ namespace Clockwise.Droid
 			public const int support_simple_spinner_dropdown_item = 2130968652;
 			
 			// aapt resource value: 0x7f04004d
-			public const int twitter = 2130968653;
+			public const int traffic = 2130968653;
 			
 			// aapt resource value: 0x7f04004e
-			public const int weather = 2130968654;
+			public const int twitter = 2130968654;
 			
 			// aapt resource value: 0x7f04004f
-			public const int weather_settings = 2130968655;
+			public const int weather = 2130968655;
+			
+			// aapt resource value: 0x7f040050
+			public const int weather_settings = 2130968656;
 			
 			static Layout()
 			{
