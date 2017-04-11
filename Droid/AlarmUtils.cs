@@ -102,7 +102,7 @@ namespace Clockwise.Droid
 		}
 
 		public static long SetTime(Context context, int hour, int minute, int alarmIndex, int repeatDays, bool addingAlarm,
-		                          int snooze = -1, int volume = -1, string name = null)
+		                           int snooze = -1, int volume = -1, string name = "null")
 		{
 			Init(context, addingAlarm);
 			am.Cancel(pendingIntents[alarmIndex]);

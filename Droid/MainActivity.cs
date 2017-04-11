@@ -37,6 +37,8 @@ namespace Clockwise.Droid
 		private FrameLayout moduleFrame;
 		ImageView currentModuleNavButton = null;
 		public static MainActivity instance;
+		static private List<View> moduleTabs = new List<View>();
+		static private int selectedTab = -1;
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
@@ -356,7 +358,6 @@ namespace Clockwise.Droid
 			string[] modules = Settings.GetActiveModules(index);
 			LinearLayout moduleLayout = FindViewById<LinearLayout>(Resource.Id.module_layout);
 			var metrics = Resources.DisplayMetrics;
-
 			foreach(string m in modules)
 			{
 				if (m != string.Empty)
@@ -394,6 +395,39 @@ namespace Clockwise.Droid
 					}
 				}
 			}
+
+			//Tab holder
+			moduleTabs.Clear();
+			LinearLayout tabHolder = FindViewById<LinearLayout>(Resource.Id.tab_holder);
+			tabHolder.LayoutParameters.Width = (int)(Resources.DisplayMetrics.WidthPixels * .75);
+			int numModules = moduleLayout.ChildCount;
+			if (numModules > 0) selectedTab = 0;
+			int spaceWidth = (int)(tabHolder.Width * .05);
+			int totalSpaceSize = spaceWidth * (numModules - 1);
+			int tabWidth = (tabHolder.Width - totalSpaceSize) / numModules;
+
+			Console.WriteLine("numModules: " + numModules);
+
+			for (int i = 0; i < numModules; i++)
+			{
+				View tab = new View(ApplicationContext);
+				LinearLayout.LayoutParams tabLp = new LinearLayout.LayoutParams(tabWidth, (int)(2 * Resources.DisplayMetrics.Density));
+				tab.LayoutParameters = tabLp;
+				tab.SetBackgroundColor(Color.Black);
+				tab.Alpha = (i == 0) ? .4f : .15f; 
+				tabHolder.AddView(tab);
+				moduleTabs.Add(tab);
+
+				//Add space
+				if (i != numModules - 1)
+				{
+					View space = new View(ApplicationContext);
+					LinearLayout.LayoutParams spaceLp = new LinearLayout.LayoutParams(spaceWidth, (int)(2 * Resources.DisplayMetrics.Density));
+					space.LayoutParameters = spaceLp;
+					tabHolder.AddView(space);
+				}
+			}
+
 		}
 
 		private RelativeLayout CreateModuleDisplay(string type, string title, int index, int subindex)
@@ -577,12 +611,13 @@ namespace Clockwise.Droid
 		protected override void OnResume()
 		{
 			base.OnResume();
+			Console.WriteLine("resuming alarm screen");
 			instance = this;
 			LinearLayout moduleLayout = FindViewById<LinearLayout>(Resource.Id.module_layout);
 			while(moduleLayout.ChildCount > 0) moduleLayout.RemoveViewAt(0);
 			RefreshModules(Intent.GetIntExtra("alarm_number", 0));
-			scrollView.setOnScrollChangedListener(new HorizontalScrollListener());
 
+			scrollView.setOnScrollChangedListener(new HorizontalScrollListener());
 			if (CheckSelfPermission(Android.Manifest.Permission.ReadExternalStorage)
 			   == Permission.Granted && ManageAlarms.songsRadioGroup == null){
 				new ManageAlarms.GetSongs().Execute();
@@ -658,6 +693,10 @@ namespace Clockwise.Droid
 
 				int target = currentModule * moduleWidth;
 				scrollView.AnimateScrollTo(target);
+
+				if (selectedTab != -1) moduleTabs[selectedTab].Animate().Alpha(.15f).SetDuration(100).Start();
+				moduleTabs[currentModule].Animate().Alpha(.4f).SetDuration(100).Start();
+				selectedTab = currentModule;
 			}
 
 			public void onScrollStart()
