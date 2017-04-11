@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Foundation;
 using UIKit;
+using CoreGraphics;
 
 namespace Clockwise.iOS
 {
@@ -11,6 +12,8 @@ namespace Clockwise.iOS
 	{
 		private bool settingsExpanded = false;
 		private List<UIButton> extraSettingButtons;
+		private List<Module> moduleList;
+
 
 		public ViewController(IntPtr handle) : base(handle)
 		{
@@ -25,6 +28,7 @@ namespace Clockwise.iOS
 			extraSettingButtons.Add(settingsOrderButton);
 			extraSettingButtons.Add(settingsSpeechButton);
 			extraSettingButtons.Add(settingsToneButton);
+			moduleList =  new List<Module>();
 
 
 		}
@@ -35,12 +39,44 @@ namespace Clockwise.iOS
 
 		}
 
+		private void addModuleBoxes()
+		{
+			int counter = 0;
+			while (counter < moduleList.Count)
+			{
+				int xFactor = (counter + 1);
+				nfloat padding = 10.0f;
+				UIView moduleView = new UIView();
+				var frame = new CGRect();
+				frame.Height = moduleScrollView.Frame.Height - 20;
+				frame.Width = moduleScrollView.Frame.Width - 40;
+				frame.X = padding * xFactor + (counter* moduleScrollView.Frame.Width);
+				frame.Y = 0;
+				moduleView.Frame = frame;
+				moduleView.BackgroundColor = UIColor.Black;
+				moduleScrollView.Add(moduleView);
+				counter++;
+			}
+			var contentSize= moduleScrollView.ContentSize;
+			contentSize.Width = moduleScrollView.Frame.Width * moduleList.Count;
+			moduleScrollView.ContentSize = contentSize;
+		}
+
 		public override void ViewDidAppear(bool animated)
 		{
 			base.ViewDidAppear(animated);
 
 			addButtonsToList();
 			hideButtons();
+
+			moduleList.Add(new Module());
+			moduleList.Add(new Module());
+			moduleList.Add(new Module());
+			moduleList.Add(new Module());
+			//moduleList.Add(new Module());
+
+			addModuleBoxes(); 
+
 
 			alarmToggle.TouchUpInside += delegate
 			{
