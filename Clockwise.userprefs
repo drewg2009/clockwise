@@ -1,29 +1,11 @@
 ﻿<Properties StartupConfiguration="{B46E161A-E220-482B-B411-3F0B25C20CFD}|Default" GitUserInfo="UsingGIT">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Droid/Countdown.cs">
+  <MonoDevelop.Ide.Workbench>
     <Files>
-      <File FileName="Droid/AlarmUtils.cs" Line="137" Column="21" />
-      <File FileName="Droid/ManageAlarms.cs" Line="313" Column="24" />
-      <File FileName="Droid/Countdown.cs" Line="28" Column="14" />
+      <File FileName="Droid/MainActivity.cs" Line="695" Column="1" />
+      <File FileName="Droid/AlarmUtils.cs" Line="105" Column="85" />
+      <File FileName="Clockwise/Helpers/Settings.cs" Line="13" Column="17" />
+      <File FileName="Droid/CustomHorizontalScrollView.cs" Line="87" Column="14" />
     </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State name="__root__">
-          <Node name="Clockwise" expanded="True">
-            <Node name="Clockwise" expanded="True">
-              <Node name="Helpers" expanded="True" />
-            </Node>
-            <Node name="Clockwise.Droid" expanded="True">
-              <Node name="Resources" expanded="True">
-                <Node name="drawable" expanded="True" />
-                <Node name="layout" expanded="True" />
-                <Node name="values" expanded="True" />
-              </Node>
-              <Node name="Countdown.cs" selected="True" />
-            </Node>
-          </Node>
-        </State>
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
@@ -31,5 +13,5 @@
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.ItemProperties.Clockwise.Droid AndroidDesignerPreferredDevice="Nexus 4" PreferredExecutionTarget="Android.03157df34c99320c" AndroidDesignerPreferredTheme="Theme.Holo.Light.NoActionBar" />
+  <MonoDevelop.Ide.ItemProperties.Clockwise.Droid AndroidDesignerPreferredDevice="Nexus 4" PreferredExecutionTarget="Android.Android_Accelerated_x86" AndroidDesignerPreferredTheme="Theme.Holo.Light.NoActionBar" />
 </Properties>
