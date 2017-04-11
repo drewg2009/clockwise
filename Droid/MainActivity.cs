@@ -401,33 +401,35 @@ namespace Clockwise.Droid
 			LinearLayout tabHolder = FindViewById<LinearLayout>(Resource.Id.tab_holder);
 			tabHolder.LayoutParameters.Width = (int)(Resources.DisplayMetrics.WidthPixels * .75);
 			int numModules = moduleLayout.ChildCount;
-			if (numModules > 0) selectedTab = 0;
-			int spaceWidth = (int)(tabHolder.Width * .05);
-			int totalSpaceSize = spaceWidth * (numModules - 1);
-			int tabWidth = (tabHolder.Width - totalSpaceSize) / numModules;
-
-			Console.WriteLine("numModules: " + numModules);
-
-			for (int i = 0; i < numModules; i++)
+			if (numModules > 0)
 			{
-				View tab = new View(ApplicationContext);
-				LinearLayout.LayoutParams tabLp = new LinearLayout.LayoutParams(tabWidth, (int)(2 * Resources.DisplayMetrics.Density));
-				tab.LayoutParameters = tabLp;
-				tab.SetBackgroundColor(Color.Black);
-				tab.Alpha = (i == 0) ? .4f : .15f; 
-				tabHolder.AddView(tab);
-				moduleTabs.Add(tab);
+				selectedTab = 0;
+				int spaceWidth = (int)(tabHolder.Width * .05);
+				int totalSpaceSize = spaceWidth * (numModules - 1);
+				int tabWidth = (tabHolder.Width - totalSpaceSize) / numModules;
 
-				//Add space
-				if (i != numModules - 1)
+				Console.WriteLine("numModules: " + numModules);
+
+				for (int i = 0; i < numModules; i++)
 				{
-					View space = new View(ApplicationContext);
-					LinearLayout.LayoutParams spaceLp = new LinearLayout.LayoutParams(spaceWidth, (int)(2 * Resources.DisplayMetrics.Density));
-					space.LayoutParameters = spaceLp;
-					tabHolder.AddView(space);
+					View tab = new View(ApplicationContext);
+					LinearLayout.LayoutParams tabLp = new LinearLayout.LayoutParams(tabWidth, (int)(2 * Resources.DisplayMetrics.Density));
+					tab.LayoutParameters = tabLp;
+					tab.SetBackgroundColor(Color.Black);
+					tab.Alpha = (i == 0) ? .4f : .15f;
+					tabHolder.AddView(tab);
+					moduleTabs.Add(tab);
+
+					//Add space
+					if (i != numModules - 1)
+					{
+						View space = new View(ApplicationContext);
+						LinearLayout.LayoutParams spaceLp = new LinearLayout.LayoutParams(spaceWidth, (int)(2 * Resources.DisplayMetrics.Density));
+						space.LayoutParameters = spaceLp;
+						tabHolder.AddView(space);
+					}
 				}
 			}
-
 		}
 
 		private RelativeLayout CreateModuleDisplay(string type, string title, int index, int subindex)
