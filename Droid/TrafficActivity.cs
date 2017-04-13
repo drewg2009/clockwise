@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Threading;
 using Android.App;
 using Android.Content;
 using Android.Gms.Maps;
@@ -26,11 +26,15 @@ namespace Clockwise.Droid
 		MapFragment mapFragment;
 		GoogleMap map;
 		LocationManager locMgr;
+		SearchView searchFrom;
+		IList<Address> fromAddresses;
+		int maxResults = 1;
 
 
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
+			this.RequestedOrientation = Android.Content.PM.ScreenOrientation.Portrait;
 			SetContentView(Resource.Layout.traffic);
 			initUI();
 			initLocationCode();
@@ -48,6 +52,28 @@ namespace Clockwise.Droid
 			adapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
 			transType.Adapter = adapter;
 
+			searchFrom = (SearchView)FindViewById(Resource.Id.search_from);
+			searchFrom.QueryTextFocusChange += delegate {
+				var thread = new Thread(new ThreadStart(() =>
+							{
+								Geocoder geocoder;
+								geocoder = new Geocoder(this);
+								fromAddresses = geocoder.GetFromLocationName(searchFrom.Query, maxResults);
+							}));
+				thread.Start();
+
+				while (thread.IsAlive)
+				{
+
+				}
+				if (fromAddresses.Count > 0)
+				{
+					addMarker(fromAddresses.ElementAt(0));
+				}
+
+
+
+			};
 
 		}
 
@@ -57,15 +83,7 @@ namespace Clockwise.Droid
 
 		}
 
-		private List<Address> getAddressesFromLocation(double latitude,double longitude)
-		{
-			Geocoder geocoder;
-			List<Address> addresses;
-			geocoder = new Geocoder(this);
 
-			addresses = geocoder.GetFromLocationAsync(latitude,longitude,1);
-			return addresses;
-		}
 
 		private void updateLocation()
 		{
@@ -75,19 +93,29 @@ namespace Clockwise.Droid
 			    {
 			      locMgr.RequestLocationUpdates (Provider, 0,300000, this);
 				}
-		   		 else
-		   		 {
+		   		else
+		   		{
 		      		//Log.Info(tag, Provider + " is not available. Does the device have location services enabled?");
 		    	}
 
 		}
 
-		private void addMarkers()
+		private void addMarker(Address addr)
 		{
-				MarkerOptions markerOpt1 = new MarkerOptions();
-				markerOpt1.SetPosition(new LatLng(50.379444, 2.773611));
-				markerOpt1.SetTitle("Vimy Ridge");
+
+			MarkerOptions markerOpt1 = new MarkerOptions();
+			markerOpt1.SetPosition(new LatLng(addr.Latitude, addr.Longitude));
+			StringBuilder sb = new StringBuilder();
+
+			for (int i = 0; i < addr.MaxAddressLineIndex; i++)
+			{
+				sb.Append(addr.GetAddressLine(i));
+				sb.Append(" ");
+			}
+				markerOpt1.SetTitle(sb.ToString());
 				map.AddMarker(markerOpt1);
+			map.AnimateCamera(CameraUpdateFactory.NewLatLngZoom(new LatLng(addr.Latitude, addr.Longitude), 13));
+
 		}
 		private void initMap()
 		{
@@ -119,7 +147,6 @@ namespace Clockwise.Droid
 		public void OnMapReady(GoogleMap googleMap)
 		{
 			map = googleMap;
-			addMarkers();
 		}
 
 		public void OnLocationChanged(Location location)
