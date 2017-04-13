@@ -27,13 +27,18 @@ namespace Clockwise.Droid
 		GoogleMap map;
 		LocationManager locMgr;
 		SearchView searchFrom;
+		SearchView searchTo;
 		IList<Address> fromAddresses;
+		IList<Address> toAddresses;
+
 		int maxResults = 1;
 
 
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
+			fromAddresses = new List<Address>();
+			toAddresses = new List<Address>();
 			this.RequestedOrientation = Android.Content.PM.ScreenOrientation.Portrait;
 			SetContentView(Resource.Layout.traffic);
 			initUI();
@@ -53,28 +58,38 @@ namespace Clockwise.Droid
 			transType.Adapter = adapter;
 
 			searchFrom = (SearchView)FindViewById(Resource.Id.search_from);
-			searchFrom.QueryTextFocusChange += delegate {
-				var thread = new Thread(new ThreadStart(() =>
-							{
-								Geocoder geocoder;
-								geocoder = new Geocoder(this);
-								fromAddresses = geocoder.GetFromLocationName(searchFrom.Query, maxResults);
-							}));
-				thread.Start();
-
-				while (thread.IsAlive)
-				{
-
-				}
-				if (fromAddresses.Count > 0)
-				{
-					addMarker(fromAddresses.ElementAt(0));
-				}
-
-
-
+			searchFrom.QueryTextFocusChange += delegate
+			{
+				updateMapToLocation(fromAddresses, searchFrom);
 			};
 
+			searchTo = (SearchView)FindViewById(Resource.Id.search_to);
+			searchTo.QueryTextFocusChange += delegate
+			{
+				updateMapToLocation(toAddresses, searchTo);
+				addPath();
+			};
+
+		}
+
+		private void updateMapToLocation(IList<Address> addresses, SearchView view)
+		{
+			var thread = new Thread(new ThreadStart(() =>
+			{
+				Geocoder geocoder;
+				geocoder = new Geocoder(this);
+				addresses = geocoder.GetFromLocationName(view.Query, maxResults);
+			}));
+			thread.Start();
+
+			while (thread.IsAlive)
+			{
+				//do nothing to wait and add address after addresses have been pulled
+			}
+			if (addresses.Count > 0)
+			{
+				addMarker(addresses.ElementAt(0));
+			}
 		}
 
 		private void initLocationCode()
@@ -87,16 +102,16 @@ namespace Clockwise.Droid
 
 		private void updateLocation()
 		{
-				string Provider = LocationManager.GpsProvider;
+			string Provider = LocationManager.GpsProvider;
 
-			    if(locMgr.IsProviderEnabled(Provider))
-			    {
-			      locMgr.RequestLocationUpdates (Provider, 0,300000, this);
-				}
-		   		else
-		   		{
-		      		//Log.Info(tag, Provider + " is not available. Does the device have location services enabled?");
-		    	}
+			if (locMgr.IsProviderEnabled(Provider))
+			{
+				locMgr.RequestLocationUpdates(Provider, 0, 300000, this);
+			}
+			else
+			{
+				//Log.Info(tag, Provider + " is not available. Does the device have location services enabled?");
+			}
 
 		}
 
@@ -112,25 +127,44 @@ namespace Clockwise.Droid
 				sb.Append(addr.GetAddressLine(i));
 				sb.Append(" ");
 			}
-				markerOpt1.SetTitle(sb.ToString());
-				map.AddMarker(markerOpt1);
+			markerOpt1.SetTitle(sb.ToString());
+			map.AddMarker(markerOpt1);
 			map.AnimateCamera(CameraUpdateFactory.NewLatLngZoom(new LatLng(addr.Latitude, addr.Longitude), 13));
 
 		}
+
+		private void addPath()
+		{
+			if (fromAddresses.Count > 0 && toAddresses.Count > 0)
+			{
+				Polyline polyline1 = map.AddPolyline(new PolylineOptions()
+			.Clickable(true)
+			.Add(
+					new LatLng(fromAddresses.ElementAt(0).Latitude,
+							   fromAddresses.ElementAt(0).Longitude),
+					new LatLng(toAddresses.ElementAt(0).Latitude,
+							   toAddresses.ElementAt(0).Longitude)
+
+														));
+
+			}
+
+		}
+
 		private void initMap()
 		{
 			mapFragment = FragmentManager.FindFragmentByTag("map") as MapFragment;
 			if (mapFragment == null)
 			{
-			    GoogleMapOptions mapOptions = new GoogleMapOptions()
-					.InvokeMapType(GoogleMap.MapTypeHybrid)
+				GoogleMapOptions mapOptions = new GoogleMapOptions()
+					.InvokeMapType(GoogleMap.MapTypeNormal)
 					.InvokeZoomControlsEnabled(false)
 					.InvokeCompassEnabled(true);
 
 				Android.App.FragmentTransaction fragTx = FragmentManager.BeginTransaction();
 				mapFragment = MapFragment.NewInstance(mapOptions);
-			    fragTx.Add(Resource.Id.map, mapFragment, "map");
-			    fragTx.Commit();
+				fragTx.Add(Resource.Id.map, mapFragment, "map");
+				fragTx.Commit();
 
 			}
 			mapFragment.GetMapAsync(this);
