@@ -14,6 +14,7 @@ using Android.Support.V4.App;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using Java.Util;
 
 namespace Clockwise.Droid
 {
@@ -54,6 +55,16 @@ namespace Clockwise.Droid
 		{
 			locMgr = GetSystemService(Context.LocationService) as LocationManager;
 
+		}
+
+		private List<Address> getAddressesFromLocation(double latitude,double longitude)
+		{
+			Geocoder geocoder;
+			List<Address> addresses;
+			geocoder = new Geocoder(this);
+
+			addresses = geocoder.GetFromLocationAsync(latitude,longitude,1);
+			return addresses;
 		}
 
 		private void updateLocation()

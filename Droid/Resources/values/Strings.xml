@@ -2,6 +2,7 @@
 <resources>
 	<string name="app_name">Clockwise.Droid</string>
 
+
 	<string-array name="news_categories_array">
         <item>Top</item>
         <item>Sports</item>
@@ -31,6 +32,10 @@
 		<item>Sat</item>
     </string-array>
 
+	<string name="search_from_desc">Where are you coming from?</string>
+	<string name="search_to_desc">Where do you want to go?</string>
+	<string name="transDescription">How are you traveling?</string>
+	<string name="transportation_prompt">Choose method of transportation</string>
 	<string-array name="transportation_methods">
 		<item>Driving</item>
 		<item>Bicycling</item>
