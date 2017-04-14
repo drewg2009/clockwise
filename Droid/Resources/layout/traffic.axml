@@ -6,9 +6,9 @@
     android:id="@+id/traffic">
     <fragment
         android:id="@+id/map"
+        class="com.google.android.gms.maps.MapFragment"
         android:layout_width="match_parent"
-        android:layout_height="338.5dp"
-        class="com.google.android.gms.maps.MapFragment" />
+        android:layout_height="338.5dp" />
     <LinearLayout
         android:id="@+id/mapButtonsContainer"
         android:layout_width="match_parent"
