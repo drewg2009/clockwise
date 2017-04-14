@@ -308,19 +308,30 @@ namespace Clockwise.Droid
 			{
 				new GetDefaults().Execute();
 			}
-			if (CheckSelfPermission(
+
+			//External Songs
+			if ((int)Build.VERSION.SdkInt >= 23)
+			{
+				if (CheckSelfPermission(
 				Android.Manifest.Permission.ReadExternalStorage)
 				!= Permission.Granted)
-			{
-				RequestPermissions(
-						new String[] { Android.Manifest.Permission.ReadExternalStorage },
-						1);
+				{
+					RequestPermissions(
+							new String[] { Android.Manifest.Permission.ReadExternalStorage },
+							1);
+				}
+				else
+				{
+					//songList = sm.getSongList();
+					new GetSongs().Execute();
+				}
 			}
 			else
 			{
-				//songList = sm.getSongList();
 				new GetSongs().Execute();
 			}
+
+
 
 			//Date picker
 			View dateLayout = FindViewById(Resource.Id.date_layout);
@@ -355,6 +366,11 @@ namespace Clockwise.Droid
 				//set min date to current date/time
 				dateWindow.DatePicker.MinDate = calendar.TimeInMillis - 1000;
 				dateWindow.Show();
+			};
+
+			//About
+			FindViewById(Resource.Id.about_button).Click += delegate {
+				StartActivity(typeof(About));
 			};
 		}
 
