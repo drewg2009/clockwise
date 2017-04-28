@@ -460,28 +460,38 @@ namespace Clockwise.Droid
 			//Add Editing
 			RelativeLayout displayRow = module.FindViewById<RelativeLayout>(Resource.Id.display_row);
 			LinearLayout editor = null;
-
+			bool isToggle = false;
+			Settings.Modules modType = 0;
 			switch (type)
 			{
 				case "fact":
+					modType = Settings.Modules.FACT;
+					isToggle = true;
 					break;
 				case "quote":
+					modType = Settings.Modules.QUOTE;
+					isToggle = true;
 					break;
 				case "tdih":
+					modType = Settings.Modules.TDIH;
+					isToggle = true;
 					break;
 				case "weather":
+					modType = Settings.Modules.WEATHER;
 					settingImage.SetImageResource(Resource.Drawable.weather_icon);
 					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.weather, null);
 					Weather weather = new Weather(ApplicationContext, index, editor);
 					weather.EditSetup(navButton);
 					break;
 				case "news":
+					modType = Settings.Modules.NEWS;
 					settingImage.SetImageResource(Resource.Drawable.news_icon);
 					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.news, null);
 					News news = new News(ApplicationContext, index, editor);
 					news.EditSetup(subindex, navButton);
 					break;
 				case "reddit":
+					modType = Settings.Modules.REDDIT;
 					settingTitle.Text = "r/" + settingTitle.Text;
 					settingImage.SetImageResource(Resource.Drawable.reddit_icon);
 					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.reddit, null);
@@ -489,18 +499,21 @@ namespace Clockwise.Droid
 					reddit.EditSetup(subindex, navButton);
 					break;
 				case "twitter":
+					modType = Settings.Modules.TWITTER;
 					settingImage.SetImageResource(Resource.Drawable.twitter_icon);
 					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.twitter, null);
 					Twitter twitter = new Twitter(ApplicationContext, index, editor);
 					twitter.EditSetup(subindex, navButton);
 					break;
 				case "countdown":
+					modType = Settings.Modules.COUNTDOWN;
 					settingImage.SetImageResource(Resource.Drawable.countdown_icon);
 					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.countdown, null);
 					Countdown countdown = new Countdown(ApplicationContext, index, editor);
 					countdown.EditSetup(subindex, navButton);
 					break;
 				case "reminders":
+					modType = Settings.Modules.REMINDERS;
 					settingImage.SetImageResource(Resource.Drawable.todo_icon);
 					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.reminders, null);
 					editor.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent);
@@ -524,61 +537,90 @@ namespace Clockwise.Droid
 				displayRow.AddView(editor);
 			}
 
-			navButton.Click += delegate {
-				AnimationHelper editorFade = new AnimationHelper(editor, null);
-				AnimationHelper imageFade = new AnimationHelper(settingImage, null);
-				AnimationHelper alarmToggleFade = new AnimationHelper(alarm_toggle, null);
-				AnimationHelper addModuleBtnFade = new AnimationHelper(addModuleBtn, null);
-				AnimationHelper settingsBtnFade = new AnimationHelper(settingsBtn, null);
-
-				AnimationHelper clockHeight = new AnimationHelper(clock_settings_layout, new AnimationManager(clock_settings_layout.Height > 0));
-				AnimationHelper moduleFrameHeight = new AnimationHelper(moduleFrame, new AnimationManager(clock_settings_layout.Height == 0));
-				int targetHeight = (int)(metrics.HeightPixels * .6);
-
-				if (editor.Alpha < .5f
-				    && settingsContainer.Height == 0) //open editor
+			if (isToggle)
+			{
+				navButton.SetImageResource(Resource.Drawable.delete2);
+				navButton.Click += delegate
 				{
-					scrollView.SetOnTouchListener(new ScrollViewOffListener());
-					editorFade.Fade(200, 1f);
-					imageFade.Fade(200, 0f);
-					navButton.SetImageResource(Resource.Drawable.back_button);
-					if (settingTitle.Text != "Weather")
+					//Delete module
+					Settings.DeleteModule(index, modType, subindex);
+					//Update scrollview layout-----
+					//1) Fade module
+					rl.Animate().Alpha(0).SetDuration(50).Start();
+					//2) Scroll to another module. Scroll left if possible
+					if (scrollView.ScrollX > 0)
 					{
-						clockHeight.collapse(200, 0);
-						targetHeight = editor.Height + titleRow.Height + (int)(20 * metrics.Density);
-						moduleFrameHeight.collapse(200, targetHeight);
-						alarmToggleFade.Fade(100, 0);
-						addModuleBtnFade.Fade(100, 0);
-						settingsBtnFade.Fade(100, 0);
+						scrollView.AnimateScrollTo(0);
 					}
-
-					scrollView.HorizontalScrollBarEnabled = false;
-					currentModuleNavButton = navButton;
-				}
-				else { //close editor
-					scrollView.SetOnTouchListener(new ScrollViewOnListener());
-					editorFade.Fade(200, 0f);
-					imageFade.Fade(200, 1f);
-					navButton.SetImageResource(Resource.Drawable.edit_button);
-					if (settingTitle.Text != "Weather")
+					//scrollView.scr
+					//3) remove module
+					Handler handler = new Handler();
+					handler.PostDelayed(delegate
 					{
-						clockHeight.expand(200, (int)(metrics.HeightPixels * .4));
-						moduleFrameHeight.expand(200, (int)(metrics.HeightPixels * .6));
-						alarmToggleFade.Fade(100, 1f);
-						addModuleBtnFade.Fade(100, 1f);
-						settingsBtnFade.Fade(100, 1f);
-					}
+						FindViewById<LinearLayout>(Resource.Id.module_layout).RemoveView(rl);
+					}, 200);
+				};
+			}
+			else
+			{
+				navButton.Click += delegate
+				{
+					AnimationHelper editorFade = new AnimationHelper(editor, null);
+					AnimationHelper imageFade = new AnimationHelper(settingImage, null);
+					AnimationHelper alarmToggleFade = new AnimationHelper(alarm_toggle, null);
+					AnimationHelper addModuleBtnFade = new AnimationHelper(addModuleBtn, null);
+					AnimationHelper settingsBtnFade = new AnimationHelper(settingsBtn, null);
 
-					View focus = CurrentFocus;
-					if (focus != null)
+					AnimationHelper clockHeight = new AnimationHelper(clock_settings_layout, new AnimationManager(clock_settings_layout.Height > 0));
+					AnimationHelper moduleFrameHeight = new AnimationHelper(moduleFrame, new AnimationManager(clock_settings_layout.Height == 0));
+					int targetHeight = (int)(metrics.HeightPixels * .6);
+
+					if (editor.Alpha < .5f
+						&& settingsContainer.Height == 0) //open editor
 					{
-						InputMethodManager imm = (InputMethodManager)ApplicationContext.GetSystemService("input_method");
-						imm.HideSoftInputFromWindow(focus.WindowToken, 0);
-					}
+						scrollView.SetOnTouchListener(new ScrollViewOffListener());
+						editorFade.Fade(200, 1f);
+						imageFade.Fade(200, 0f);
+						navButton.SetImageResource(Resource.Drawable.back_button);
+						if (settingTitle.Text != "Weather")
+						{
+							clockHeight.collapse(200, 0);
+							targetHeight = editor.Height + titleRow.Height + (int)(20 * metrics.Density);
+							moduleFrameHeight.collapse(200, targetHeight);
+							alarmToggleFade.Fade(100, 0);
+							addModuleBtnFade.Fade(100, 0);
+							settingsBtnFade.Fade(100, 0);
+						}
 
-					currentModuleNavButton = null;
-				}
-			};
+						scrollView.HorizontalScrollBarEnabled = false;
+						currentModuleNavButton = navButton;
+					}
+					else
+					{ //close editor
+						scrollView.SetOnTouchListener(new ScrollViewOnListener());
+						editorFade.Fade(200, 0f);
+						imageFade.Fade(200, 1f);
+						navButton.SetImageResource(Resource.Drawable.edit_button);
+						if (settingTitle.Text != "Weather")
+						{
+							clockHeight.expand(200, (int)(metrics.HeightPixels * .4));
+							moduleFrameHeight.expand(200, (int)(metrics.HeightPixels * .6));
+							alarmToggleFade.Fade(100, 1f);
+							addModuleBtnFade.Fade(100, 1f);
+							settingsBtnFade.Fade(100, 1f);
+						}
+
+						View focus = CurrentFocus;
+						if (focus != null)
+						{
+							InputMethodManager imm = (InputMethodManager)ApplicationContext.GetSystemService("input_method");
+							imm.HideSoftInputFromWindow(focus.WindowToken, 0);
+						}
+
+						currentModuleNavButton = null;
+					}
+				};
+			}
 
 			return rl;
 		}
@@ -620,10 +662,19 @@ namespace Clockwise.Droid
 			RefreshModules(Intent.GetIntExtra("alarm_number", 0));
 
 			scrollView.setOnScrollChangedListener(new HorizontalScrollListener());
-			if (CheckSelfPermission(Android.Manifest.Permission.ReadExternalStorage)
-			   == Permission.Granted && ManageAlarms.songsRadioGroup == null){
+			if ((int)Build.VERSION.SdkInt >= 23)
+			{
+				if (CheckSelfPermission(Android.Manifest.Permission.ReadExternalStorage)
+			   == Permission.Granted && ManageAlarms.songsRadioGroup == null)
+				{
+					new ManageAlarms.GetSongs().Execute();
+				}
+			}
+			else if (ManageAlarms.songsRadioGroup == null)
+			{
 				new ManageAlarms.GetSongs().Execute();
 			}
+				
 		}
 
 		protected override void OnDestroy()

@@ -55,9 +55,16 @@ namespace Clockwise.Droid
 
 				//Update
 				//ScrollView scroll = view.FindViewById<ScrollView>(Resource.Id.song_scrollview);
-				if (Activity.CheckSelfPermission(
+				if ((int)Build.VERSION.SdkInt >= 23)
+				{
+					if (Activity.CheckSelfPermission(
 							Android.Manifest.Permission.ReadExternalStorage)
 								== Permission.Granted && ManageAlarms.songList == null)
+					{
+						ManageAlarms.songList = ManageAlarms.sm.getSongList();
+					}
+				}
+				else if (ManageAlarms.songList == null)
 				{
 					ManageAlarms.songList = ManageAlarms.sm.getSongList();
 				}

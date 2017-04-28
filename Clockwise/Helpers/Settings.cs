@@ -392,6 +392,43 @@ namespace Clockwise.Helpers
 			RemoveModules(index);
 		}
 
+		public static void DeleteModule(int index, Modules type, int subindex = -1)
+		{
+			switch (type)
+			{
+				case Modules.COUNTDOWN:
+					DeleteCountdown(index, subindex);
+					break;
+				case Modules.FACT:
+					EditFact(index, false);
+					break;
+				case Modules.NEWS:
+					DeleteNews(index, subindex);
+					break;
+				case Modules.QUOTE:
+					EditQuote(index, false);
+					break;
+				case Modules.REDDIT:
+                    DeleteReddit(index, subindex);
+					break;
+				case Modules.REMINDERS:
+					DeleteReminders(index, subindex);
+					break;
+				case Modules.TDIH:
+					EditTDIH(index, false);
+					break;
+				case Modules.TRAFFIC:
+                    DeleteTraffic(index, subindex);
+					break;
+				case Modules.TWITTER:
+                    DeleteTwitter(index, subindex);
+					break;
+				case Modules.WEATHER:
+					DeleteWeather(index);
+					break;
+			}
+		}
+
 		public static void EditWeather(int index, bool description, bool currentTemp, bool maxTemp, bool celsius)
 		{
 			String[] weathers = Weather.Split('|');

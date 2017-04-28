@@ -34,11 +34,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_below="@+id/search_to">
-    <!--        <TextView
-            android:id="@+id/transMethodDesc"
-            android:text="@string/transportation_method_desc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />-->
         <Spinner
             android:id="@+id/transType"
             android:layout_width="match_parent"

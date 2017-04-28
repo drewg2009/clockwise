@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/create_module_bg"
+    android:weightSum="20">
+    <RelativeLayout
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/cancel_holder"
+        android:layout_weight="1">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/linearLayout1"
+            android:layout_centerInParent="true"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
+            <ImageView
+                android:src="@drawable/cancel_create_module"
+                android:id="@+id/cancel_button"
+                android:layout_width="60dp"
+                android:layout_height="60dp" />
+        </LinearLayout>
+    </RelativeLayout>
+    <TextView
+        android:text="About Clockwise"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView1"
+        android:textColor="#ffffffff"
+        android:layout_marginLeft="20dp"
+        android:textSize="30dp" />
+    <ScrollView
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView1"
+        android:layout_marginLeft="20dp">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/about_scroll_layout">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="General"
+                android:id="@+id/textView12"
+                android:textSize="18dp"
+                android:layout_marginTop="15dp"
+                android:textColor="#ffffffff" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clockwise is your smart alarm. We give you the building blocks and you make it your own. Clockwise is ad-supported, but you can upgrade for an ad-free experience with no limitations."
+                android:id="@+id/textView12"
+                android:textSize="16dp"
+                android:layout_marginTop="10dp"
+                android:textColor="#ffffffff"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Permissions"
+                android:id="@+id/textView12"
+                android:textSize="18dp"
+                android:layout_marginTop="15dp"
+                android:textColor="#ffffffff" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Location:"
+                android:id="@+id/textView13"
+                android:textSize="18dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:textColor="#ffffffff" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clockwise uses latitude and longitude coordinates to retrieve weather and traffic information."
+                android:id="@+id/textView16"
+                android:textSize="16dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="5dp"
+                android:textColor="#ffffffff"
+                android:layout_marginRight="10dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="This information is only stored on the device and is not linked to specific users."
+                android:id="@+id/textView17"
+                android:textSize="16dp"
+                android:layout_marginLeft="20dp"
+                android:textColor="#ffffffff"
+                android:layout_marginRight="10dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Storage:"
+                android:id="@+id/textView14"
+                android:textSize="18dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:textColor="#ffffffff" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="In order to personalize the alarm tone, Clockwise requests permission to access the device storage. This allows Clockwise to play user selected songs for the alarm tone."
+                android:id="@+id/textView18"
+                android:textSize="16dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="5dp"
+                android:textColor="#ffffffff"
+                android:layout_marginRight="10dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clockwise only accesses files in the device Music folder. Clockwise does not store or transmit user photos or videos."
+                android:id="@+id/textView19"
+                android:textSize="16dp"
+                android:layout_marginLeft="20dp"
+                android:textColor="#ffffffff"
+                android:layout_marginRight="10dp" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

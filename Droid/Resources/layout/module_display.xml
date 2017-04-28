@@ -14,6 +14,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/title_row">
+        <ImageView
+            android:src="@drawable/edit_button"
+            android:id="@+id/navButton"
+            android:layout_marginTop="16dp"
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="30dp"
+            android:maxHeight="30dp"
+            android:adjustViewBounds="true" />
         <TextView
             android:text="Module Title"
             android:id="@+id/setting_title"
@@ -25,17 +35,8 @@
             android:gravity="left"
             android:layout_marginLeft="0dp"
             android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true" />
-        <ImageView
-            android:src="@drawable/edit_button"
-            android:id="@+id/navButton"
-            android:layout_marginTop="16dp"
-            android:layout_alignParentEnd="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxWidth="30dp"
-            android:maxHeight="30dp"
-            android:adjustViewBounds="true" />
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@id/navButton" />
     </RelativeLayout>
     <RelativeLayout
         android:minWidth="25px"
