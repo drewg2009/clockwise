@@ -30,14 +30,19 @@ namespace Clockwise.Droid
 		EditText searchTo;
 		Button searchFromBtn;
 		Button searchToBtn;
+		Button trafficSaveBtn;
+		Button trafficCancelButton;
 		IList<Address> fromAddresses;
 		IList<Address> toAddresses;
 		Location currentLocation;
 		string provider;
+		string locationName;
 		bool loaded = false;
 		int maxResults = 1;
 		Marker fromMarker;
 		Marker toMarker;
+		AlertDialog locationDialog;
+
 
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
@@ -49,9 +54,6 @@ namespace Clockwise.Droid
 			initUI();
 			initLocationCode();
 			initMap();
-
-
-			//createLocationNameDialog("news");
 		}
 
 		private void populateLocationOnLoad()
@@ -79,7 +81,8 @@ namespace Clockwise.Droid
 
 			searchFrom = FindViewById<EditText>(Resource.Id.search_from);
 			searchTo = FindViewById<EditText>(Resource.Id.search_to);
-
+			trafficSaveBtn = FindViewById<Button>(Resource.Id.trafficSaveButton);
+			trafficCancelButton = FindViewById<Button>(Resource.Id.trafficCancelButton);
 
 			searchFromBtn = FindViewById<Button>(Resource.Id.search_from_btn);
 			searchFromBtn.Click += delegate {
@@ -91,6 +94,9 @@ namespace Clockwise.Droid
 			  updateMapToLocation(toAddresses, false, searchTo, null, toMarker);
 			};
 
+			trafficSaveBtn.Click += delegate {
+				createLocationNameDialog();
+			};
 
 		}
 
@@ -173,23 +179,20 @@ namespace Clockwise.Droid
 			return sb.ToString();
 		}
 
-		private void createLocationNameDialog(string title)
+		private void createLocationNameDialog()
 		{
-			//set alert for executing the task
-			AlertDialog.Builder alert = new AlertDialog.Builder(this);
-
-
-			View view = LayoutInflater.Inflate(Resource.Layout.traffic_location_dialog, (ViewGroup)Window.DecorView.RootView);
-
-			alert.SetTitle(title);
-
-			alert.SetView(view);
-
-			//run the alert in UI thread to display in the screen
-			RunOnUiThread(() =>
-			{
-				alert.Show();
-			});
+				var alertBuilder = new AlertDialog.Builder(this);
+				View view = LayoutInflater.Inflate(Resource.Layout.traffic_location_dialog, null);
+				alertBuilder.SetView(view);
+				Button saveLocationBtn = view.FindViewById<Button>(Resource.Id.saveLocationNameBtn);
+				EditText locationBox = view.FindViewById<EditText>(Resource.Id.locationName);
+				saveLocationBtn.Click += delegate {
+					locationName = locationBox.Text;
+					locationDialog.Dismiss();
+				};
+				alertBuilder.SetTitle("Set Trip Name");
+				locationDialog = alertBuilder.Create();
+				locationDialog.Show();
 		}
 
 		private void addPath()

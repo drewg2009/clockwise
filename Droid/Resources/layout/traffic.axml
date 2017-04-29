@@ -66,13 +66,13 @@
         android:id="@+id/bottomMapButtonsContainer"
         android:background="@android:color/white">
         <Button
-            android:id="@+id/saveButton"
+            android:id="@+id/trafficSaveButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Save"
             android:layout_below="@+id/transType" />
         <Button
-            android:id="@+id/cancelButton"
+            android:id="@+id/trafficCancelButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Cancel"
