@@ -22,18 +22,30 @@
             android:layout_height="wrap_content"
             android:text="Search" />
     </LinearLayout>
-    <EditText
-        android:id="@+id/search_to"
+    <LinearLayout
+        android:id="@+id/search_to_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/search_from_container"
-        android:hint="@string/search_to_desc" />
+        android:orientation="horizontal"
+        android:layout_below="@+id/search_from_container">
+        <EditText
+            android:id="@+id/search_to"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/search_to_desc" />
+        <Button
+            android:id="@+id/search_to_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search" />
+    </LinearLayout>
     <LinearLayout
         android:id="@+id/transTypeContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@+id/search_to">
+        android:layout_below="@+id/search_to_container">
         <Spinner
             android:id="@+id/transType"
             android:layout_width="match_parent"

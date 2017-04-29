@@ -29,6 +29,7 @@ namespace Clockwise.Droid
 		EditText searchFrom;
 		EditText searchTo;
 		Button searchFromBtn;
+		Button searchToBtn;
 		IList<Address> fromAddresses;
 		IList<Address> toAddresses;
 		Location currentLocation;
@@ -76,24 +77,20 @@ namespace Clockwise.Droid
 			adapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
 			transType.Adapter = adapter;
 
+			searchFrom = FindViewById<EditText>(Resource.Id.search_from);
+			searchTo = FindViewById<EditText>(Resource.Id.search_to);
+
+
 			searchFromBtn = FindViewById<Button>(Resource.Id.search_from_btn);
 			searchFromBtn.Click += delegate {
               updateMapToLocation(fromAddresses,true, searchFrom, null, fromMarker);
 			};
 
+			searchToBtn = FindViewById<Button>(Resource.Id.search_to_btn);
+			searchToBtn.Click += delegate {
+			  updateMapToLocation(toAddresses, false, searchTo, null, toMarker);
+			};
 
-			searchFrom = (EditText)FindViewById(Resource.Id.search_from);
-			//searchFrom.AfterTextChanged += delegate
-			//{
-
-			//};
-
-			searchTo = (EditText)FindViewById(Resource.Id.search_to);
-			//searchTo.Focus += delegate
-			//{
-			//	updateMapToLocation(toAddresses, searchTo, null, toMarker);
-			//	addPath();
-			//};
 
 		}
 
