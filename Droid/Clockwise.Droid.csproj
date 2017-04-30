@@ -134,6 +134,7 @@
     <Compile Include="Module.cs" />
     <Compile Include="ModuleOrder.cs" />
     <Compile Include="TrafficActivity.cs" />
+    <Compile Include="About.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -209,6 +210,8 @@
     <AndroidResource Include="Resources\layout\alarm_settings_layout.xml" />
     <AndroidResource Include="Resources\drawable\delete3.png" />
     <AndroidResource Include="Resources\layout\traffic.axml" />
+    <AndroidResource Include="Resources\layout\about.xml" />
+    <AndroidResource Include="Resources\drawable\pulldown2.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />

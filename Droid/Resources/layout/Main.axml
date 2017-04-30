@@ -278,7 +278,7 @@
             </LinearLayout>
         </RelativeLayout>
         <ImageView
-            android:src="@drawable/pulldown"
+            android:src="@drawable/pulldown2"
             android:id="@+id/pulldown"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
