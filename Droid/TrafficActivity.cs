@@ -26,12 +26,22 @@ namespace Clockwise.Droid
 		MapFragment mapFragment;
 		GoogleMap map;
 		LocationManager locMgr;
-		SearchView searchFrom;
-		SearchView searchTo;
+		EditText searchFrom;
+		EditText searchTo;
+		Button searchFromBtn;
+		Button searchToBtn;
+		Button trafficSaveBtn;
+		Button trafficCancelButton;
 		IList<Address> fromAddresses;
 		IList<Address> toAddresses;
-
+		Location currentLocation;
+		string provider;
+		string locationName;
+		bool loaded = false;
 		int maxResults = 1;
+		Marker fromMarker;
+		Marker toMarker;
+		AlertDialog locationDialog;
 
 
 		protected override void OnCreate(Bundle savedInstanceState)
@@ -44,7 +54,19 @@ namespace Clockwise.Droid
 			initUI();
 			initLocationCode();
 			initMap();
-			updateLocation();
+		}
+
+		private void populateLocationOnLoad()
+		{
+			Geocoder geoCoder = new Geocoder(this);
+			Location lastKnown = locMgr.GetLastKnownLocation(provider);
+
+			fromAddresses = geoCoder.GetFromLocation(lastKnown.Latitude, lastKnown.Longitude, maxResults);
+			Vector v = new Vector();
+			v.Add(lastKnown.Latitude);
+			v.Add(lastKnown.Longitude);
+			updateMapToLocation(fromAddresses,true, null, v, fromMarker);
+			searchFrom.Text= getAddressString(fromAddresses.ElementAt(0));
 		}
 
 		private void initUI()
@@ -57,28 +79,41 @@ namespace Clockwise.Droid
 			adapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
 			transType.Adapter = adapter;
 
-			searchFrom = (SearchView)FindViewById(Resource.Id.search_from);
-			searchFrom.QueryTextFocusChange += delegate
-			{
-				updateMapToLocation(fromAddresses, searchFrom);
+			searchFrom = FindViewById<EditText>(Resource.Id.search_from);
+			searchTo = FindViewById<EditText>(Resource.Id.search_to);
+			trafficSaveBtn = FindViewById<Button>(Resource.Id.trafficSaveButton);
+			trafficCancelButton = FindViewById<Button>(Resource.Id.trafficCancelButton);
+
+			searchFromBtn = FindViewById<Button>(Resource.Id.search_from_btn);
+			searchFromBtn.Click += delegate {
+              updateMapToLocation(fromAddresses,true, searchFrom, null, fromMarker);
 			};
 
-			searchTo = (SearchView)FindViewById(Resource.Id.search_to);
-			searchTo.QueryTextFocusChange += delegate
-			{
-				updateMapToLocation(toAddresses, searchTo);
-				addPath();
+			searchToBtn = FindViewById<Button>(Resource.Id.search_to_btn);
+			searchToBtn.Click += delegate {
+			  updateMapToLocation(toAddresses, false, searchTo, null, toMarker);
+			};
+
+			trafficSaveBtn.Click += delegate {
+				createLocationNameDialog();
 			};
 
 		}
 
-		private void updateMapToLocation(IList<Address> addresses, SearchView view)
+		private void updateMapToLocation(IList<Address> addresses, bool isFrom, EditText view = null, Vector v = null, Marker marker = null)
 		{
 			var thread = new Thread(new ThreadStart(() =>
 			{
 				Geocoder geocoder;
 				geocoder = new Geocoder(this);
-				addresses = geocoder.GetFromLocationName(view.Query, maxResults);
+				if (v == null)
+				{
+					addresses = geocoder.GetFromLocationName(view.Text, maxResults);
+				}
+				else
+				{
+					addresses = geocoder.GetFromLocation((double)v.Get(0), (double)v.Get(1), maxResults);
+				}
 			}));
 			thread.Start();
 
@@ -88,7 +123,7 @@ namespace Clockwise.Droid
 			}
 			if (addresses.Count > 0)
 			{
-				addMarker(addresses.ElementAt(0));
+				addMarker(addresses.ElementAt(0),isFrom);
 			}
 		}
 
@@ -98,15 +133,13 @@ namespace Clockwise.Droid
 
 		}
 
-
-
-		private void updateLocation()
+		private void initLocationUpdate()
 		{
-			string Provider = LocationManager.GpsProvider;
+			provider = LocationManager.GpsProvider;
 
-			if (locMgr.IsProviderEnabled(Provider))
+			if (locMgr.IsProviderEnabled(provider))
 			{
-				locMgr.RequestLocationUpdates(Provider, 0, 300000, this);
+				locMgr.RequestLocationUpdates(provider, 0, 300000, this);
 			}
 			else
 			{
@@ -115,11 +148,27 @@ namespace Clockwise.Droid
 
 		}
 
-		private void addMarker(Address addr)
-		{
+		private void addMarker(Address addr, bool isFrom){
 
-			MarkerOptions markerOpt1 = new MarkerOptions();
-			markerOpt1.SetPosition(new LatLng(addr.Latitude, addr.Longitude));
+			MarkerOptions markerOptions = new MarkerOptions();
+			markerOptions.SetPosition(new LatLng(addr.Latitude, addr.Longitude));
+			markerOptions.SetTitle(getAddressString(addr));
+			if (isFrom)
+			{
+				if(fromMarker != null) fromMarker.Remove();
+				fromMarker = map.AddMarker(markerOptions);
+			}
+			else
+			{
+				if (toMarker != null) toMarker.Remove();
+				toMarker = map.AddMarker(markerOptions);
+			}
+			map.AnimateCamera(CameraUpdateFactory.NewLatLngZoom(new LatLng(addr.Latitude, addr.Longitude), 13));
+
+		}
+
+		private string getAddressString(Address addr)
+		{
 			StringBuilder sb = new StringBuilder();
 
 			for (int i = 0; i < addr.MaxAddressLineIndex; i++)
@@ -127,10 +176,23 @@ namespace Clockwise.Droid
 				sb.Append(addr.GetAddressLine(i));
 				sb.Append(" ");
 			}
-			markerOpt1.SetTitle(sb.ToString());
-			map.AddMarker(markerOpt1);
-			map.AnimateCamera(CameraUpdateFactory.NewLatLngZoom(new LatLng(addr.Latitude, addr.Longitude), 13));
+			return sb.ToString();
+		}
 
+		private void createLocationNameDialog()
+		{
+				var alertBuilder = new AlertDialog.Builder(this);
+				View view = LayoutInflater.Inflate(Resource.Layout.traffic_location_dialog, null);
+				alertBuilder.SetView(view);
+				Button saveLocationBtn = view.FindViewById<Button>(Resource.Id.saveLocationNameBtn);
+				EditText locationBox = view.FindViewById<EditText>(Resource.Id.locationName);
+				saveLocationBtn.Click += delegate {
+					locationName = locationBox.Text;
+					locationDialog.Dismiss();
+				};
+				alertBuilder.SetTitle("Set Trip Name");
+				locationDialog = alertBuilder.Create();
+				locationDialog.Show();
 		}
 
 		private void addPath()
@@ -146,7 +208,6 @@ namespace Clockwise.Droid
 							   toAddresses.ElementAt(0).Longitude)
 
 														));
-
 			}
 
 		}
@@ -181,26 +242,27 @@ namespace Clockwise.Droid
 		public void OnMapReady(GoogleMap googleMap)
 		{
 			map = googleMap;
+			initLocationUpdate();
+			populateLocationOnLoad();
+
 		}
 
 		public void OnLocationChanged(Location location)
 		{
-			throw new NotImplementedException();
+			currentLocation = location;
+
 		}
 
 		public void OnProviderDisabled(string provider)
 		{
-			throw new NotImplementedException();
 		}
 
 		public void OnProviderEnabled(string provider)
 		{
-			throw new NotImplementedException();
 		}
 
 		public void OnStatusChanged(string provider, [GeneratedEnum] Availability status, Bundle extras)
 		{
-			throw new NotImplementedException();
 		}
 	}
 }

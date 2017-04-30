@@ -6,25 +6,25 @@ using Plugin.Settings.Abstractions;
 
 namespace Clockwise.Helpers
 {
-  /// <summary>
-  /// This is the Settings static class that can be used in your Core solution or in any
-  /// of your client applications. All settings are laid out the same exact way with getters
-  /// and setters. 
-  /// </summary>
-  public static class Settings
-  {
-    private static ISettings AppSettings
-    {
-      get
-      {
-        return CrossSettings.Current;
-      }
-    }
+	/// <summary>
+	/// This is the Settings static class that can be used in your Core solution or in any
+	/// of your client applications. All settings are laid out the same exact way with getters
+	/// and setters. 
+	/// </summary>
+	public static class Settings
+	{
+		private static ISettings AppSettings
+		{
+			get
+			{
+				return CrossSettings.Current;
+			}
+		}
 
-    #region Setting Constants
+		#region Setting Constants
 
-	private const string AlarmsKey = "alarms_key";
-	private static readonly string AlarmsDef = string.Empty;
+		private const string AlarmsKey = "alarms_key";
+		private static readonly string AlarmsDef = string.Empty;
 
 		private const string SongKey = "song_key";
 		private static readonly string SongDef = string.Empty;
@@ -37,7 +37,7 @@ namespace Clockwise.Helpers
 
 		private const string ModuleOrderKey = "module_order_key";
 		private static readonly string ModuleOrderDef = string.Empty;
-			
+
 		private const string SnoozeKey = "snooze_key";
 		private static readonly string SnoozeDef = string.Empty;
 
@@ -80,21 +80,21 @@ namespace Clockwise.Helpers
 		private const string AndroidStartSongUriKey = "android_start_song_uri_key";
 		private static readonly string AndroidStartSongUriDef = string.Empty;
 
-		private static string DefaultModuleOrder = 
+		private static string DefaultModuleOrder =
 			"notifications:weather:news:reddit:twitter:countdown:reminders:traffic:fact:quote:tdih";
 		public enum AlarmStatus { ALARM_ON, ALARM_OFF };
 
-		public enum Modules {WEATHER, REDDIT, TWITTER, NEWS, COUNTDOWN, REMINDERS, TRAFFIC, FACT, QUOTE, TDIH};
-		public enum AlarmField {Index, Hour, Minute, RepeatDays, Status, Snooze, Volume, Song, Name, Millis};
+		public enum Modules { WEATHER, REDDIT, TWITTER, NEWS, COUNTDOWN, REMINDERS, TRAFFIC, FACT, QUOTE, TDIH };
+		public enum AlarmField { Index, Hour, Minute, RepeatDays, Status, Snooze, Volume, Song, Name, Millis };
 		public static string EMPTY_MODULE = "null";
 		public static string SEPARATERS = "#:/;|";
 		#endregion
 
 
 		public static string Alarms
-    	{
-			get {return AppSettings.GetValueOrDefault<string>(AlarmsKey, AlarmsDef);}
-			set {AppSettings.AddOrUpdateValue<string>(AlarmsKey, value);}
+		{
+			get { return AppSettings.GetValueOrDefault<string>(AlarmsKey, AlarmsDef); }
+			set { AppSettings.AddOrUpdateValue<string>(AlarmsKey, value); }
 		}
 
 
@@ -222,7 +222,8 @@ namespace Clockwise.Helpers
 				AddModules();
 			}
 			//Change old alarm
-			else {
+			else
+			{
 				currentAlarms[index] = "" + index + "#" + hour + "#" + minute + "#" + repeatDays +
 					"#" + (int)status + "#" + GetAlarmField(index, AlarmField.Snooze) + "#" + GetAlarmField(index, AlarmField.Volume) + "#"
 					+ GetAlarmField(index, AlarmField.Song) + "#"
@@ -387,7 +388,7 @@ namespace Clockwise.Helpers
 				}
 			}
 
-			Alarms = newSetting.TrimEnd('|');;
+			Alarms = newSetting.TrimEnd('|'); ;
 			RemoveModules(index);
 		}
 
@@ -436,7 +437,7 @@ namespace Clockwise.Helpers
 				+ ((currentTemp) ? 0 : 1) + ":"
 				+ ((maxTemp) ? 0 : 1) + ":"
 				+ ((celsius) ? 0 : 1);
-			
+
 			string newWeatherSetting = "";
 			foreach (String s in weathers)
 				newWeatherSetting += s + "|";
@@ -478,7 +479,7 @@ namespace Clockwise.Helpers
 			String[] reddits = Reddit.Split('|');
 			if (reddits[index] == EMPTY_MODULE)
 				reddits[index] = "reddit:" + subreddit + ":" + count;
-			else 
+			else
 				reddits[index] += "," + subreddit + ":" + count;
 
 			string newSetting = string.Empty;
@@ -649,7 +650,7 @@ namespace Clockwise.Helpers
 		public static void EditReminders(int index, int subindex, string listName, string list)
 		{
 			string[] reminders = Reminders.Split('|');
-			string thisReminders = reminders[index]; 
+			string thisReminders = reminders[index];
 			List<string> moduleList = new List<string>(thisReminders.Substring(thisReminders.IndexOf(':') + 1).Split(','));
 			moduleList[subindex] = listName + ":" + list;
 
@@ -743,7 +744,7 @@ namespace Clockwise.Helpers
 		public static string GetNews(int index, int subindex)
 		{
 			string thisNews = News.Split('|')[index];
-			string[] moduleList = thisNews.Substring(thisNews.IndexOf(':')+1).Split(',');
+			string[] moduleList = thisNews.Substring(thisNews.IndexOf(':') + 1).Split(',');
 			return moduleList[subindex];
 		}
 
@@ -808,7 +809,7 @@ namespace Clockwise.Helpers
 
 			if (newList != string.Empty)
 				reddits[index] = "reddit:" + newList.TrimEnd(',');
-			else 
+			else
 				reddits[index] = EMPTY_MODULE;
 
 			string newSetting = string.Empty;
@@ -976,7 +977,8 @@ namespace Clockwise.Helpers
 			{
 				modules[index] = "0";
 			}
-			else {
+			else
+			{
 				modules[index] = EMPTY_MODULE;
 			}
 			string newSetting = "";
@@ -1102,5 +1104,5 @@ namespace Clockwise.Helpers
 			}
 			return final.ToArray();
 		}
-  }
+	}
 }

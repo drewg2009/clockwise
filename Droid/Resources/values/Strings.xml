@@ -34,8 +34,8 @@
 
 	<string name="search_from_desc">Where are you coming from?</string>
 	<string name="search_to_desc">Where do you want to go?</string>
-	<string name="transDescription">How are you traveling?</string>
 	<string name="transportation_prompt">Choose method of transportation</string>
+	<string name="transportation_method_desc">How are you traveling?</string>
 	<string-array name="transportation_methods">
 		<item>Driving</item>
 		<item>Bicycling</item>

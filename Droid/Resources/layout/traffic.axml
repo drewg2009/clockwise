@@ -4,30 +4,79 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/traffic">
-    <SearchView
-        android:id="@+id/searchbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <fragment
-        android:layout_below="@+id/searchbar"
-        android:id="@+id/map"
-        class="com.google.android.gms.maps.MapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="338.5dp" />
     <LinearLayout
-        android:id="@+id/mapButtonsContainer"
+        android:id="@+id/search_from_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical">
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/search_from"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/searchFromDesc"
+            android:layout_weight="1"
+            android:hint="@string/search_from_desc" />
+        <Button
+            android:id="@+id/search_from_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/search_to_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/search_from_container">
+        <EditText
+            android:id="@+id/search_to"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/search_to_desc" />
+        <Button
+            android:id="@+id/search_to_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/transTypeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/search_to_container">
         <Spinner
             android:id="@+id/transType"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:prompt="@string/transportation_prompt"
+            style="@android:style/Widget.Spinner" />
+    </LinearLayout>
+    <fragment
+        android:layout_below="@+id/transTypeContainer"
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        class="com.google.android.gms.maps.MapFragment" />
+    <RelativeLayout
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bottomMapButtonsContainer"
+        android:background="@android:color/white">
         <Button
-            android:id="@+id/saveButton"
+            android:id="@+id/trafficSaveButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Save" />
-    </LinearLayout>
+            android:text="Save"
+            android:layout_below="@+id/transType" />
+        <Button
+            android:id="@+id/trafficCancelButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:visibility="gone"
+            android:layout_below="@+id/saveButton" />
+    </RelativeLayout>
 </RelativeLayout>
