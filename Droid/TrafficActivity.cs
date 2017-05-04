@@ -9,6 +9,7 @@ using Android.Gms.Maps;
 using Android.Gms.Maps.Model;
 using Android.Locations;
 using Android.OS;
+using Android.Provider;
 using Android.Runtime;
 using Android.Support.V4.App;
 using Android.Util;
@@ -28,8 +29,8 @@ namespace Clockwise.Droid
 		LocationManager locMgr;
 		EditText searchFrom;
 		EditText searchTo;
-		Button searchFromBtn;
-		Button searchToBtn;
+		ImageView searchFromBtn;
+		ImageView searchToBtn;
 		Button trafficSaveBtn;
 		Button trafficCancelButton;
 		IList<Address> fromAddresses;
@@ -83,13 +84,23 @@ namespace Clockwise.Droid
 			searchTo = FindViewById<EditText>(Resource.Id.search_to);
 			trafficSaveBtn = FindViewById<Button>(Resource.Id.trafficSaveButton);
 			trafficCancelButton = FindViewById<Button>(Resource.Id.trafficCancelButton);
+			ImageSwitcher defaultLocToggle = FindViewById<ImageSwitcher>(Resource.Id.default_switcher_btn);
 
-			searchFromBtn = FindViewById<Button>(Resource.Id.search_from_btn);
+			defaultLocToggle.SetFactory(new Toggle());
+			defaultLocToggle.SetImageResource(Resource.Drawable.setting_toggle);
+
+			int alarmIndex = Intent.GetIntExtra("alarm_index", 0);
+
+
+			//if (Settings.GetTDIH(alarmIndex))
+			//	defaultLocToggle.ScaleX = -1;
+
+			searchFromBtn = FindViewById<ImageView>(Resource.Id.search_from_btn);
 			searchFromBtn.Click += delegate {
               updateMapToLocation(fromAddresses,true, searchFrom, null, fromMarker);
 			};
 
-			searchToBtn = FindViewById<Button>(Resource.Id.search_to_btn);
+			searchToBtn = FindViewById<ImageView>(Resource.Id.search_to_btn);
 			searchToBtn.Click += delegate {
 			  updateMapToLocation(toAddresses, false, searchTo, null, toMarker);
 			};
@@ -97,6 +108,8 @@ namespace Clockwise.Droid
 			trafficSaveBtn.Click += delegate {
 				createLocationNameDialog();
 			};
+
+
 
 		}
 
