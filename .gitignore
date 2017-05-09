@@ -2,7 +2,7 @@
 *~
 
 # Build/test output
-obj
+obj/Debug
 bin
 test-results
 
@@ -101,3 +101,5 @@ Components/xamandroidsupportdesign-25.1.1.0/samples/Cheesesquare/Cheesesquare/Re
 Components/xamandroidsupportdesign-25.1.1.0/samples/Cheesesquare/Cheesesquare/Resources/values/strings.xml
 Components/xamandroidsupportdesign-25.1.1.0/samples/Cheesesquare/Cheesesquare/Resources/values/styles.xml
 Components/xamandroidsupportdesign-25.1.1.0/samples/Cheesesquare/Cheesesquare/Resources/values-v21/styles.xml
+iOS/obj
+packages
