@@ -519,13 +519,13 @@ namespace Clockwise.Helpers
 			Reminders = newSetting.TrimEnd('|');
 		}
 
-		public static void AddTraffic(int index, string destName, string destUrl)
+		public static void AddTraffic(int index, string destName, string startUrl, string destUrl)
 		{
 			String[] traffics = Traffic.Split('|');
 			if (traffics[index] == EMPTY_MODULE)
-				traffics[index] = "traffic:" + destName + ":" + destUrl;
+				traffics[index] = "traffic:" + destName + ":" + startUrl + ":" + destUrl;
 			else
-				traffics[index] += "," + destName + ":" + destUrl;
+				traffics[index] += "," + destName + ":" + startUrl + ":" + destUrl;
 
 			string newSetting = string.Empty;
 			foreach (String s in traffics)
@@ -627,12 +627,12 @@ namespace Clockwise.Helpers
 			Countdown = newSetting.TrimEnd('|');
 		}
 
-		public static void EditTraffic(int index, int subindex, string dest, string destUrl)
+		public static void EditTraffic(int index, int subindex, string dest, string startUrl, string destUrl)
 		{
 			string[] traffics = Traffic.Split('|');
 			string thisTraffic = traffics[index]; //traffic:subreddit:count,subreddit:count, ...
 			List<string> moduleList = new List<string>(thisTraffic.Substring(thisTraffic.IndexOf(':') + 1).Split(','));
-			moduleList[subindex] = dest + ":" + destUrl;
+			moduleList[subindex] = dest + ":" + startUrl + ":" + destUrl;
 
 			string newList = string.Empty;
 			foreach (String s in moduleList)

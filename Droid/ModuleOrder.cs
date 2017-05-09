@@ -21,10 +21,12 @@ namespace Clockwise.Droid
 			base.OnCreate(savedInstanceState);
 			SetContentView(Resource.Layout.module_order);
 
-			// Create your application here
-			FindViewById<ImageView>(Resource.Id.cancel_button).Click += delegate {
-				Finish();
-			};
+			RelativeLayout.LayoutParams ll = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent);
+
+			ll.SetMargins (0,0,0,10);
+
 		}
 	}
+
+
 }
