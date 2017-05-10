@@ -81,7 +81,15 @@ namespace Clockwise.Droid
 			transType.Adapter = adapter;
 
 			searchFrom = FindViewById<EditText>(Resource.Id.search_from);
+			searchFrom.TextChanged += (object sender, Android.Text.TextChangedEventArgs e) =>
+			{
+				validateLocationInput();
+			};
 			searchTo = FindViewById<EditText>(Resource.Id.search_to);
+			searchTo.TextChanged += (object sender, Android.Text.TextChangedEventArgs e) =>
+			{
+				validateLocationInput();
+			};
 			trafficSaveBtn = FindViewById<Button>(Resource.Id.trafficSaveButton);
 			trafficCancelButton = FindViewById<Button>(Resource.Id.trafficCancelButton);
 			ImageSwitcher defaultLocToggle = FindViewById<ImageSwitcher>(Resource.Id.default_switcher_btn);
@@ -109,20 +117,7 @@ namespace Clockwise.Droid
 
 			trafficSaveBtn.Click += delegate
 			{
-				if (fromAddresses.Count > 0 && toAddresses.Count > 0)
-				{
-					trafficSaveBtn.Enabled = true;
 					createLocationNameDialog();
-
-				}
-				else
-				{
-					var alertBuilder = new AlertDialog.Builder(this);
-					alertBuilder.SetTitle("Empty Fields Error");
-					alertBuilder.SetMessage("Please search both destinations before saving.");
-					alertBuilder.Create().Show();
-
-				}
 			};
 
 
@@ -154,6 +149,7 @@ namespace Clockwise.Droid
 			{
 				addMarker(addresses.ElementAt(0), isFrom);
 			}
+			validateLocationInput();
 		}
 
 		private void initLocationCode()
@@ -262,10 +258,16 @@ namespace Clockwise.Droid
 			mapFragment.GetMapAsync(this);
 		}
 
+		private void validateLocationInput()
+		{
+			trafficSaveBtn.Enabled = toMarker != null && fromMarker != null 
+				&& searchTo.Text.Length > 0 && searchFrom.Text.Length > 0;
+		}
+
 		private void spinner_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
 		{
 			Spinner spinner = (Spinner)sender;
-
+			 
 			//string toast = string.Format("The planet is {0}", spinner.GetItemAtPosition(e.Position));
 			//Toast.MakeText(this, toast, ToastLength.Long).Show();
 		}
@@ -295,5 +297,6 @@ namespace Clockwise.Droid
 		public void OnStatusChanged(string provider, [GeneratedEnum] Availability status, Bundle extras)
 		{
 		}
+
 	}
 }
