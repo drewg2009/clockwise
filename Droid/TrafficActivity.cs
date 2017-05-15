@@ -66,8 +66,8 @@ namespace Clockwise.Droid
 			Vector v = new Vector();
 			v.Add(lastKnown.Latitude);
 			v.Add(lastKnown.Longitude);
-			updateMapToLocation(fromAddresses,true, null, v, fromMarker);
-			searchFrom.Text= getAddressString(fromAddresses.ElementAt(0));
+			updateMapToLocation(fromAddresses, true, null, v, fromMarker);
+			searchFrom.Text = getAddressString(fromAddresses.ElementAt(0));
 		}
 
 		private void initUI()
@@ -81,7 +81,15 @@ namespace Clockwise.Droid
 			transType.Adapter = adapter;
 
 			searchFrom = FindViewById<EditText>(Resource.Id.search_from);
+			searchFrom.TextChanged += (object sender, Android.Text.TextChangedEventArgs e) =>
+			{
+				validateLocationInput();
+			};
 			searchTo = FindViewById<EditText>(Resource.Id.search_to);
+			searchTo.TextChanged += (object sender, Android.Text.TextChangedEventArgs e) =>
+			{
+				validateLocationInput();
+			};
 			trafficSaveBtn = FindViewById<Button>(Resource.Id.trafficSaveButton);
 			trafficCancelButton = FindViewById<Button>(Resource.Id.trafficCancelButton);
 			ImageSwitcher defaultLocToggle = FindViewById<ImageSwitcher>(Resource.Id.default_switcher_btn);
@@ -96,17 +104,20 @@ namespace Clockwise.Droid
 			//	defaultLocToggle.ScaleX = -1;
 
 			searchFromBtn = FindViewById<ImageView>(Resource.Id.search_from_btn);
-			searchFromBtn.Click += delegate {
-              updateMapToLocation(fromAddresses,true, searchFrom, null, fromMarker);
+			searchFromBtn.Click += delegate
+			{
+				updateMapToLocation(fromAddresses, true, searchFrom, null, fromMarker);
 			};
 
 			searchToBtn = FindViewById<ImageView>(Resource.Id.search_to_btn);
-			searchToBtn.Click += delegate {
-			  updateMapToLocation(toAddresses, false, searchTo, null, toMarker);
+			searchToBtn.Click += delegate
+			{
+				updateMapToLocation(toAddresses, false, searchTo, null, toMarker);
 			};
 
-			trafficSaveBtn.Click += delegate {
-				createLocationNameDialog();
+			trafficSaveBtn.Click += delegate
+			{
+					createLocationNameDialog();
 			};
 
 
@@ -136,8 +147,9 @@ namespace Clockwise.Droid
 			}
 			if (addresses.Count > 0)
 			{
-				addMarker(addresses.ElementAt(0),isFrom);
+				addMarker(addresses.ElementAt(0), isFrom);
 			}
+			validateLocationInput();
 		}
 
 		private void initLocationCode()
@@ -161,14 +173,15 @@ namespace Clockwise.Droid
 
 		}
 
-		private void addMarker(Address addr, bool isFrom){
+		private void addMarker(Address addr, bool isFrom)
+		{
 
 			MarkerOptions markerOptions = new MarkerOptions();
 			markerOptions.SetPosition(new LatLng(addr.Latitude, addr.Longitude));
 			markerOptions.SetTitle(getAddressString(addr));
 			if (isFrom)
 			{
-				if(fromMarker != null) fromMarker.Remove();
+				if (fromMarker != null) fromMarker.Remove();
 				fromMarker = map.AddMarker(markerOptions);
 			}
 			else
@@ -194,18 +207,19 @@ namespace Clockwise.Droid
 
 		private void createLocationNameDialog()
 		{
-				var alertBuilder = new AlertDialog.Builder(this);
-				View view = LayoutInflater.Inflate(Resource.Layout.traffic_location_dialog, null);
-				alertBuilder.SetView(view);
-				Button saveLocationBtn = view.FindViewById<Button>(Resource.Id.saveLocationNameBtn);
-				EditText locationBox = view.FindViewById<EditText>(Resource.Id.locationName);
-				saveLocationBtn.Click += delegate {
-					locationName = locationBox.Text;
-					locationDialog.Dismiss();
-				};
-				alertBuilder.SetTitle("Set Trip Name");
-				locationDialog = alertBuilder.Create();
-				locationDialog.Show();
+			var alertBuilder = new AlertDialog.Builder(this);
+			View view = LayoutInflater.Inflate(Resource.Layout.traffic_location_dialog, null);
+			alertBuilder.SetView(view);
+			Button saveLocationBtn = view.FindViewById<Button>(Resource.Id.saveLocationNameBtn);
+			EditText locationBox = view.FindViewById<EditText>(Resource.Id.locationName);
+			saveLocationBtn.Click += delegate
+			{
+				locationName = locationBox.Text;
+				locationDialog.Dismiss();
+			};
+			alertBuilder.SetTitle("Set Trip Name");
+			locationDialog = alertBuilder.Create();
+			locationDialog.Show();
 		}
 
 		private void addPath()
@@ -244,10 +258,16 @@ namespace Clockwise.Droid
 			mapFragment.GetMapAsync(this);
 		}
 
+		private void validateLocationInput()
+		{
+			trafficSaveBtn.Enabled = toMarker != null && fromMarker != null 
+				&& searchTo.Text.Length > 0 && searchFrom.Text.Length > 0;
+		}
+
 		private void spinner_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
 		{
 			Spinner spinner = (Spinner)sender;
-
+			 
 			//string toast = string.Format("The planet is {0}", spinner.GetItemAtPosition(e.Position));
 			//Toast.MakeText(this, toast, ToastLength.Long).Show();
 		}
@@ -277,5 +297,6 @@ namespace Clockwise.Droid
 		public void OnStatusChanged(string provider, [GeneratedEnum] Availability status, Bundle extras)
 		{
 		}
+
 	}
 }

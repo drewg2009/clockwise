@@ -108,6 +108,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Save"
+            android:enabled="false"
             android:layout_below="@+id/transType"
             android:background="@android:color/white" />
         <Button
