@@ -1,5 +1,6 @@
 // Helpers/Settings.cs
 using System;
+
 using System.Collections.Generic;
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
@@ -1104,5 +1105,121 @@ namespace Clockwise.Helpers
 			}
 			return final.ToArray();
 		}
+
+		/*
+			{
+				"modules" : {
+					"weather": [
+				      	{
+					         "lat":-72.4,
+					         "lon": 15.2,
+					         “fahrenheit”: true
+					         “description”: true,
+					         “maxTemp”: true,
+					         “currentTemp”: true
+				      	}
+			   		],
+
+					"news": [
+				      	{
+					         "category":"science",
+					         "amount": 3
+				      	},
+				      	{
+					         "category":"business",
+					         "amount": 1
+				      	}
+			   		],
+
+					"reddit": [
+				      	{
+					         "subreddit":"worldnews",
+					         "amount": 3
+				      	}
+			   		],
+
+					"twitter": [
+				      	{
+					         "username":"nasa",
+					         "amount": 3
+				      	}
+			   		],
+
+					"traffic": [
+				      	{
+					         "startUrl":"...", #may be "null"
+					         "destUrl":"...",
+					         "mode": "drive",
+					         "name": "work"
+				      	}
+			   		],
+
+					"reminders": [
+				      	{
+					         "name":"chores"
+					         "list":[
+								"1" : "pay rent",
+								"2" : "pay electric"
+							]
+				      	}
+			   		],
+
+					"countdown": [
+				      	{
+					         "event":"your birthday",
+					         "date":"3/17/2017"
+				      	}
+			   		],
+
+					"tdih": true,
+					"fact": false,
+					"quote": true
+				}
+			}
+		*/
+
+		public static string GetJsonRequest(int index)
+		{
+			string JsonRequest = "{";
+			string moduleOrder = ModuleOrder.Split('|')[index];
+			string[] order = moduleOrder.Split(':');
+			List<string> final = new List<string>();
+			foreach (string m in order)
+			{
+				JsonRequest += "\"" + m + "\":";
+				//Build array for each module
+				string array = "[";
+				switch (m)
+				{
+					case "weather":
+						
+						break;
+					case "reddit":
+						break;
+					case "news":
+						break;
+					case "twitter":
+						break;
+					case "traffic":
+						break;
+					case "countdown":
+						break;
+					case "reminders":
+						break;
+					case "fact":
+						break;
+					case "quote":
+						break;
+					case "tdih":
+						break;
+				}
+				array += "]";
+
+			}
+
+			return "";
+		}
 	}
+
+
 }
