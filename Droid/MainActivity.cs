@@ -677,8 +677,21 @@ namespace Clockwise.Droid
 				
 		}
 
+		protected override void OnPause()
+		{
+			Console.WriteLine("pausing alarm screen");
+			base.OnPause();
+		}
+
+		protected override void OnStop()
+		{
+			Console.WriteLine("stopping alarm screen");
+			base.OnStop();
+		}
+
 		protected override void OnDestroy()
 		{
+			Console.WriteLine("destroying alarm screen");
 			instance = null;
 			base.OnDestroy();
 		}
