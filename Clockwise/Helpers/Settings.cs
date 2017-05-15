@@ -1,6 +1,6 @@
 // Helpers/Settings.cs
 using System;
-
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
@@ -520,13 +520,13 @@ namespace Clockwise.Helpers
 			Reminders = newSetting.TrimEnd('|');
 		}
 
-		public static void AddTraffic(int index, string destName, string startUrl, string destUrl)
+		public static void AddTraffic(int index, string destName, string startUrl, string destUrl, string mode)
 		{
 			String[] traffics = Traffic.Split('|');
 			if (traffics[index] == EMPTY_MODULE)
-				traffics[index] = "traffic:" + destName + ":" + startUrl + ":" + destUrl;
+				traffics[index] = "traffic:" + destName + ":" + startUrl + ":" + destUrl + ":" + mode;
 			else
-				traffics[index] += "," + destName + ":" + startUrl + ":" + destUrl;
+				traffics[index] += "," + destName + ":" + startUrl + ":" + destUrl  + ":" + mode;
 
 			string newSetting = string.Empty;
 			foreach (String s in traffics)
@@ -628,12 +628,12 @@ namespace Clockwise.Helpers
 			Countdown = newSetting.TrimEnd('|');
 		}
 
-		public static void EditTraffic(int index, int subindex, string dest, string startUrl, string destUrl)
+		public static void EditTraffic(int index, int subindex, string dest, string startUrl, string destUrl, string mode)
 		{
 			string[] traffics = Traffic.Split('|');
 			string thisTraffic = traffics[index]; //traffic:subreddit:count,subreddit:count, ...
 			List<string> moduleList = new List<string>(thisTraffic.Substring(thisTraffic.IndexOf(':') + 1).Split(','));
-			moduleList[subindex] = dest + ":" + startUrl + ":" + destUrl;
+			moduleList[subindex] = dest + ":" + startUrl + ":" + destUrl  + ":" + mode;
 
 			string newList = string.Empty;
 			foreach (String s in moduleList)
@@ -1180,6 +1180,7 @@ namespace Clockwise.Helpers
 
 		public static string GetJsonRequest(int index)
 		{
+			
 			string JsonRequest = "{";
 			string moduleOrder = ModuleOrder.Split('|')[index];
 			string[] order = moduleOrder.Split(':');
