@@ -5,6 +5,9 @@
 obj/Debug
 bin
 test-results
+Clockwise.userprefs
+packages.config
+
 
 # VS sometimes writes these for no apparent reason
 _UpgradeReport_Files

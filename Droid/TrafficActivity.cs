@@ -31,13 +31,15 @@ namespace Clockwise.Droid
 		EditText searchTo;
 		ImageView searchFromBtn;
 		ImageView searchToBtn;
+        ImageView toggleDefaultLocationImage;
 		Button trafficSaveBtn;
 		Button trafficCancelButton;
 		IList<Address> fromAddresses;
 		IList<Address> toAddresses;
 		Location currentLocation;
-		string provider;
-		string locationName;
+        string provider = "";
+        string locationName = "";
+        string transportationMethod = "";
 		bool loaded = false;
 		int maxResults = 1;
 		Marker fromMarker;
@@ -92,16 +94,7 @@ namespace Clockwise.Droid
 			};
 			trafficSaveBtn = FindViewById<Button>(Resource.Id.trafficSaveButton);
 			trafficCancelButton = FindViewById<Button>(Resource.Id.trafficCancelButton);
-			ImageSwitcher defaultLocToggle = FindViewById<ImageSwitcher>(Resource.Id.default_switcher_btn);
-
-			defaultLocToggle.SetFactory(new Toggle());
-			defaultLocToggle.SetImageResource(Resource.Drawable.setting_toggle);
-
-			int alarmIndex = Intent.GetIntExtra("alarm_index", 0);
-
-
-			//if (Settings.GetTDIH(alarmIndex))
-			//	defaultLocToggle.ScaleX = -1;
+            toggleDefaultLocationImage = FindViewById<ImageView>(Resource.Id.toggleDefaultLocation);
 
 			searchFromBtn = FindViewById<ImageView>(Resource.Id.search_from_btn);
 			searchFromBtn.Click += delegate
@@ -120,9 +113,21 @@ namespace Clockwise.Droid
 					createLocationNameDialog();
 			};
 
+            toggleDefaultLocationImage.Click += delegate {
+                toggleDefaultLocationImages();
+            };
 
 
 		}
+
+        private void toggleDefaultLocationImages(){
+            if(toggleDefaultLocationImage.Drawable.GetConstantState() == GetDrawable(Resource.Drawable.on_toggle).GetConstantState()){
+                toggleDefaultLocationImage.SetImageDrawable(GetDrawable(Resource.Drawable.off_toggle));
+            }
+            else if(toggleDefaultLocationImage.Drawable.GetConstantState() == GetDrawable(Resource.Drawable.off_toggle).GetConstantState()){
+				toggleDefaultLocationImage.SetImageDrawable(GetDrawable(Resource.Drawable.on_toggle));
+			}
+        }
 
 		private void updateMapToLocation(IList<Address> addresses, bool isFrom, EditText view = null, Vector v = null, Marker marker = null)
 		{
@@ -222,22 +227,22 @@ namespace Clockwise.Droid
 			locationDialog.Show();
 		}
 
-		private void addPath()
-		{
-			if (fromAddresses.Count > 0 && toAddresses.Count > 0)
-			{
-				Polyline polyline1 = map.AddPolyline(new PolylineOptions()
-			.Clickable(true)
-			.Add(
-					new LatLng(fromAddresses.ElementAt(0).Latitude,
-							   fromAddresses.ElementAt(0).Longitude),
-					new LatLng(toAddresses.ElementAt(0).Latitude,
-							   toAddresses.ElementAt(0).Longitude)
+		//private void addPath()
+		//{
+		//	if (fromAddresses.Count > 0 && toAddresses.Count > 0)
+		//	{
+		//		Polyline polyline1 = map.AddPolyline(new PolylineOptions()
+		//	.Clickable(true)
+		//	.Add(
+		//			new LatLng(fromAddresses.ElementAt(0).Latitude,
+		//					   fromAddresses.ElementAt(0).Longitude),
+		//			new LatLng(toAddresses.ElementAt(0).Latitude,
+		//					   toAddresses.ElementAt(0).Longitude)
 
-														));
-			}
+		//												));
+		//	}
 
-		}
+		//}
 
 		private void initMap()
 		{
@@ -267,9 +272,7 @@ namespace Clockwise.Droid
 		private void spinner_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
 		{
 			Spinner spinner = (Spinner)sender;
-			 
-			//string toast = string.Format("The planet is {0}", spinner.GetItemAtPosition(e.Position));
-			//Toast.MakeText(this, toast, ToastLength.Long).Show();
+            transportationMethod = spinner.GetItemAtPosition(e.Position).ToString();
 		}
 
 		public void OnMapReady(GoogleMap googleMap)

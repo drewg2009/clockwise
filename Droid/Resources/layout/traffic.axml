@@ -65,15 +65,16 @@
             android:textSize="14dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp" />
-        <ImageSwitcher
+        <ImageView
             android:minWidth="25px"
             android:minHeight="25px"
             android:layout_width="70dp"
             android:layout_height="35dp"
-            android:id="@+id/default_switcher_btn"
+            android:id="@+id/toggleDefaultLocation"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp" />
+            android:layout_marginRight="10dp"
+            android:src="@drawable/on_toggle" />
     </RelativeLayout>
     <LinearLayout
         android:id="@+id/transTypeContainer"
