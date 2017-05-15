@@ -40,6 +40,7 @@ namespace Clockwise.Droid
         string provider = "";
         string locationName = "";
         string transportationMethod = "";
+        string defaultLocation = "";
 		bool loaded = false;
 		int maxResults = 1;
 		Marker fromMarker;
@@ -110,17 +111,19 @@ namespace Clockwise.Droid
 
 			trafficSaveBtn.Click += delegate
 			{
-					createLocationNameDialog();
+				createLocationNameDialog();
 			};
 
             toggleDefaultLocationImage.Click += delegate {
-                toggleDefaultLocationImages();
+                toggleDefaultLocationSetting();
             };
+
+            transportationMethod = transType.GetItemAtPosition(0).ToString();
 
 
 		}
 
-        private void toggleDefaultLocationImages(){
+        private void toggleDefaultLocationSetting(){
             if(toggleDefaultLocationImage.Drawable.GetConstantState() == GetDrawable(Resource.Drawable.on_toggle).GetConstantState()){
                 toggleDefaultLocationImage.SetImageDrawable(GetDrawable(Resource.Drawable.off_toggle));
             }
@@ -266,7 +269,7 @@ namespace Clockwise.Droid
 		private void validateLocationInput()
 		{
 			trafficSaveBtn.Enabled = toMarker != null && fromMarker != null 
-				&& searchTo.Text.Length > 0 && searchFrom.Text.Length > 0;
+                && searchTo.Text.Length > 0 && searchFrom.Text.Length > 0 && transportationMethod.Length > 0;
 		}
 
 		private void spinner_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
