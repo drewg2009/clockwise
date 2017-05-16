@@ -71,7 +71,9 @@ namespace Clockwise.Droid
 			reminders.CreateSetup(this, FindViewById<ImageView>(Resource.Id.addReminders));
 
 			FindViewById(Resource.Id.addTraffic).Click += delegate {
-				StartActivity(typeof(TrafficActivity));
+				Intent i = new Intent(ApplicationContext, typeof(TrafficActivity));
+                i.PutExtra("alarm_index", alarmIndex);
+                StartActivity(i);
 			};
 
 			

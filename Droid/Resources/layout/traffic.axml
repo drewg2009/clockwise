@@ -9,7 +9,8 @@
         android:id="@+id/search_from_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
         <EditText
             android:id="@+id/search_from"
             android:layout_width="wrap_content"
@@ -18,7 +19,8 @@
             android:layout_weight="1"
             android:hint="@string/search_from_desc"
             android:textColorHint="@android:color/white"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
         <ImageView
             android:id="@+id/search_from_btn"
             android:layout_width="30dp"
@@ -27,33 +29,11 @@
             android:layout_marginRight="5dp"
             android:layout_marginTop="5dp" />
     </LinearLayout>
-    <LinearLayout
-        android:id="@+id/search_to_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@+id/search_from_container">
-        <EditText
-            android:id="@+id/search_to"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="@string/search_to_desc"
-            android:textColorHint="@android:color/white"
-            android:textColor="@android:color/white" />
-        <ImageView
-            android:id="@+id/search_to_btn"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginRight="5dp"
-            android:src="@drawable/traffic_icon"
-            android:layout_marginTop="5dp" />
-    </LinearLayout>
     <RelativeLayout
         android:minWidth="25px"
         android:minHeight="25px"
-        android:layout_below="@+id/search_to_container"
-        android:layout_width="match_parent"
+        android:layout_below="@+id/search_from_container"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/defaultLocationToggleContainer">
         <TextView
@@ -62,7 +42,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/default_toggle_desc"
             android:textColor="#ffffffff"
-            android:textSize="14dp"
+            android:textSize="14sp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp" />
         <ImageView
@@ -73,15 +53,38 @@
             android:id="@+id/toggleDefaultLocation"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/on_toggle" />
+            android:src="@drawable/on_toggle"
+            android:layout_marginRight="5dp" />
     </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/search_to_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/defaultLocationToggleContainer">
+        <EditText
+            android:id="@+id/search_to"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/search_to_desc"
+            android:textColorHint="@android:color/white"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+        <ImageView
+            android:id="@+id/search_to_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/traffic_icon"
+            android:layout_marginTop="5dp" />
+    </LinearLayout>
     <LinearLayout
         android:id="@+id/transTypeContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@+id/defaultLocationToggleContainer">
+        android:layout_below="@+id/search_to_container">
         <Spinner
             android:id="@+id/transType"
             android:layout_width="match_parent"

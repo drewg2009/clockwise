@@ -519,7 +519,11 @@ namespace Clockwise.Droid
 					editor.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent);
 					Reminders reminders = new Reminders(ApplicationContext, index, editor);
 					reminders.EditSetup(subindex, navButton);
-					break;
+                    break;
+                case "traffic":
+                    modType = Settings.Modules.TRAFFIC;
+                    settingImage.SetImageResource(Resource.Drawable.traffic_icon);
+                    break;
 			}
 
 			settingTitle.Text = title;
