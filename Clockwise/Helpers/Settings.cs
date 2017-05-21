@@ -204,7 +204,7 @@ namespace Clockwise.Helpers
 		public static void EditAlarm(int index, int hour, int minute, int repeatDays, long millis, int snooze = 10, int volume = 10, string name = "null")
 		{
 			String[] currentAlarms = Settings.Alarms.Split('|');
-
+			if (name == string.Empty) name = EMPTY_MODULE;
 			//Create new alarm
 			AlarmStatus status = AlarmStatus.ALARM_ON;
 			if (Alarms == string.Empty)
@@ -430,14 +430,14 @@ namespace Clockwise.Helpers
 			}
 		}
 
-		public static void EditWeather(int index, bool description, bool currentTemp, bool maxTemp, bool celsius)
+		public static void EditWeather(int index, bool description, bool currentTemp, bool maxTemp, bool fahren)
 		{
 			String[] weathers = Weather.Split('|');
 			weathers[index] = "weather:"
 				+ ((description) ? 0 : 1) + ":"
 				+ ((currentTemp) ? 0 : 1) + ":"
 				+ ((maxTemp) ? 0 : 1) + ":"
-				+ ((celsius) ? 0 : 1);
+				+ ((fahren) ? 0 : 1);
 
 			string newWeatherSetting = "";
 			foreach (String s in weathers)
@@ -744,44 +744,80 @@ namespace Clockwise.Helpers
 		//------
 		public static string GetNews(int index, int subindex)
 		{
-			string thisNews = News.Split('|')[index];
-			string[] moduleList = thisNews.Substring(thisNews.IndexOf(':') + 1).Split(',');
-			return moduleList[subindex];
+			if (News != EMPTY_MODULE)
+			{
+				string thisNews = News.Split('|')[index];
+				string[] moduleList = thisNews.Substring(thisNews.IndexOf(':') + 1).Split(',');
+				if (subindex < moduleList.Length)
+					return moduleList[subindex];
+				else return string.Empty;
+			}
+			else return string.Empty;
 		}
 
 		public static string GetTwitter(int index, int subindex)
 		{
-			string thisTwitter = Twitter.Split('|')[index];
-			string[] moduleList = thisTwitter.Substring(thisTwitter.IndexOf(':') + 1).Split(',');
-			return moduleList[subindex];
+			if (Twitter != EMPTY_MODULE)
+			{
+				string thisTwitter = Twitter.Split('|')[index];
+				string[] moduleList = thisTwitter.Substring(thisTwitter.IndexOf(':') + 1).Split(',');
+				if (subindex < moduleList.Length)
+					return moduleList[subindex];
+				else return string.Empty;
+			}
+			else return string.Empty;
 		}
 
 		public static string GetCountdown(int index, int subindex)
 		{
-			string thisCountdown = Countdown.Split('|')[index];
-			string[] moduleList = thisCountdown.Substring(thisCountdown.IndexOf(':') + 1).Split(',');
-			return moduleList[subindex];
+			if (Countdown != EMPTY_MODULE)
+			{
+				string thisCountdown = Countdown.Split('|')[index];
+				string[] moduleList = thisCountdown.Substring(thisCountdown.IndexOf(':') + 1).Split(',');
+				if (subindex < moduleList.Length)
+					return moduleList[subindex];
+				else return string.Empty;
+			}
+			else return string.Empty;
 		}
 
 		public static string GetTraffic(int index, int subindex)
 		{
-			string thisCountdown = Countdown.Split('|')[index];
-			string[] moduleList = thisCountdown.Substring(thisCountdown.IndexOf(':') + 1).Split(',');
-			return moduleList[subindex];
+			if (Traffic != EMPTY_MODULE)
+			{
+				string thisCountdown = Countdown.Split('|')[index];
+				string[] moduleList = thisCountdown.Substring(thisCountdown.IndexOf(':') + 1).Split(',');
+				if (subindex < moduleList.Length)
+					return moduleList[subindex];
+				else return string.Empty;
+			}
+			else return string.Empty;
 		}
 
 		public static string GetReminders(int index, int subindex)
 		{
-			string thisReminders = Reminders.Split('|')[index];
-			string[] moduleList = thisReminders.Substring(thisReminders.IndexOf(':') + 1).Split(',');
-			return moduleList[subindex];
+			if (Reminders != EMPTY_MODULE)
+			{
+				string thisReminders = Reminders.Split('|')[index];
+				string[] moduleList = thisReminders.Substring(thisReminders.IndexOf(':') + 1).Split(',');
+				if (subindex < moduleList.Length)
+					return moduleList[subindex];
+				else return string.Empty;
+			}
+			else return string.Empty;
 		}
 
 		public static string GetReddit(int index, int subindex)
 		{
-			string thisReddit = Reddit.Split('|')[index];
-			string[] moduleList = thisReddit.Substring(thisReddit.IndexOf(':') + 1).Split(',');
-			return moduleList[subindex];
+			if (Reddit != EMPTY_MODULE)
+			{
+				string thisReddit = Reddit.Split('|')[index];
+				string[] moduleList = thisReddit.Substring(thisReddit.IndexOf(':') + 1).Split(',');
+				if (subindex < moduleList.Length)
+					return moduleList[subindex];
+				else return string.Empty;
+			}
+			else return string.Empty;
 		}
 		//------
 
@@ -1181,6 +1217,8 @@ namespace Clockwise.Helpers
 		public static string GetJsonRequest(int index)
 		{
 			
+			//string json = JsonConvert.SerializeObject(test);
+
 			string JsonRequest = "{";
 			string moduleOrder = ModuleOrder.Split('|')[index];
 			string[] order = moduleOrder.Split(':');
@@ -1193,7 +1231,15 @@ namespace Clockwise.Helpers
 				switch (m)
 				{
 					case "weather":
-						
+						string[] weather = GetWeather(index).Split(':');
+						var temp = new
+						{
+							description = weather[1],
+							currentTemp = weather[2],
+							maxTemp = weather[3],
+							isFahrenheit = weather[4],
+						};
+						//string weather = Json
 						break;
 					case "reddit":
 						break;
