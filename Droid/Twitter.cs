@@ -87,7 +87,7 @@ namespace Clockwise.Droid
 
 		public void EditSetup(int subindex, ImageView navButton)
 		{
-			string savedModule = Settings.GetReddit(index, subindex);
+            string savedModule = Settings.GetTwitter(index, subindex);
 			usernameInput.Text = savedModule.Substring(0, savedModule.IndexOf(':'));
 			amountInput.Text = savedModule.Substring(savedModule.IndexOf(':') + 1);
 
