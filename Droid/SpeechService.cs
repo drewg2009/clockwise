@@ -6,6 +6,7 @@ using Geolocator.Plugin;
 using Android.Content.PM;
 using Clockwise.Helpers;
 using Android.Widget;
+using Android.Locations;
 using Java.Util;
 
 namespace Clockwise.Droid
@@ -74,7 +75,10 @@ namespace Clockwise.Droid
 		public async void MakeRequest(int index)
 		{
 			string request;
-			if (CheckSelfPermission(Android.Manifest.Permission.ReadExternalStorage) == Permission.Granted)
+			LocationManager lm = (LocationManager)ApplicationContext.GetSystemService(Context.LocationService);
+			if ((int)Build.VERSION.SdkInt >= 23 && CheckSelfPermission(Android.Manifest.Permission.AccessFineLocation) == Permission.Granted
+			    && CheckSelfPermission(Android.Manifest.Permission.AccessCoarseLocation) == Permission.Granted
+			    && lm.IsProviderEnabled(LocationManager.GpsProvider))
 			{
 				var locator = CrossGeolocator.Current;
 				locator.DesiredAccuracy = 50;

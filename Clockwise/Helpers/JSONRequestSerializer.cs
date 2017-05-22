@@ -151,16 +151,16 @@ namespace Clockwise
 		public struct Reminders
 		{
 			public string name;
-			public List<Tuple<ushort, String>> list;
+			public List<String> list;
 			public Reminders(string reminders)
 			{
 				string[] settings = reminders.Split(':');
 				name = settings[0];
 				string[] l = settings[1].Split(';');
-				list = new List<Tuple<ushort, string>>();
+				list = new List<String>();
 				for (int i = 0; i < l.Length; i++)
 				{
-					list.Add(new Tuple<ushort, String>((ushort)i, l[i]));
+					list.Add(l[i]);
 				}
 			}
 		}
