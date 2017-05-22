@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Clockwise.Helpers;
 using Newtonsoft.Json;
+
 namespace Clockwise
 {
 	public class JSONRequestSerializer
@@ -93,7 +94,7 @@ namespace Clockwise
 			this.lat = lat;
 			this.lon = lon;
 
-			return JsonConvert.SerializeObject(instance, Formatting.Indented);
+			return Newtonsoft.Json.JsonConvert.SerializeObject(instance, Formatting.Indented);
 		}
 
 
