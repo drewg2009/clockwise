@@ -35,7 +35,6 @@ namespace Clockwise
 
 		public string GetJsonRequest(int index, double lat, double lon)
 		{
-
 			weather = new Weather(Settings.GetWeather(index));
 
 			int i = 0;

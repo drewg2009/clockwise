@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using Android.App;
 using Android.OS;
 using Android.Content;
@@ -10,6 +10,7 @@ using Java.Util;
 using System.Threading.Tasks;
 using System.Net;
 using Android.Speech.Tts;
+using Android.Locations;
 
 namespace Clockwise.Droid
 {
@@ -85,7 +86,10 @@ namespace Clockwise.Droid
             string parameters = "moduleInfo=";
             string errorMsg = "Clockwise could not load your module information at this time. Please try again later.";
 			string URI = "http://phplaravel-43928-259989.cloudwaysapps.com/get/moduleData";
-			if (CheckSelfPermission(Android.Manifest.Permission.ReadExternalStorage) == Permission.Granted)
+			LocationManager lm = (LocationManager)GetSystemService(Context.LocationService);
+			if ((int)Build.VERSION.SdkInt >= 23 && CheckSelfPermission(Android.Manifest.Permission.AccessFineLocation) == Permission.Granted
+			    && CheckSelfPermission(Android.Manifest.Permission.AccessCoarseLocation) == Permission.Granted
+			    && lm.IsProviderEnabled(LocationManager.GpsProvider))
 			{
 				var locator = CrossGeolocator.Current;
 				locator.DesiredAccuracy = 50;

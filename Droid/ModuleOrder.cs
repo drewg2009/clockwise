@@ -30,14 +30,16 @@ namespace Clockwise.Droid
 			SetContentView(Resource.Layout.module_order);
 			metrics = Resources.DisplayMetrics;
 			RelativeLayout moduleList = FindViewById<RelativeLayout>(Resource.Id.module_list);
-			int selectionRegion = moduleList.LayoutParameters.Height;
-			int index = Intent.GetIntExtra("alarm_number", -1);
+			int selectionRegion = (int)(metrics.HeightPixels * .95);
+			int index = Intent.GetIntExtra("alarm_index", -1);
 			string[] moduleOrder = Settings.ModuleOrder.Split('|')[index].Split(':');
+			int moduleRowHeight = selectionRegion / 11;
+			Console.WriteLine("moduleRow: " + moduleRowHeight);
 			for (int i = 0; i < moduleList.ChildCount; i++)
 			{
 				RelativeLayout rl = (RelativeLayout)moduleList.GetChildAt(i);
 				rl.FindViewById<TextView>(Resource.Id.module_title).Text = moduleOrder[i];
-				rl.LayoutParameters.Height = selectionRegion / 11;
+				rl.LayoutParameters.Height = moduleRowHeight;
 				RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams)rl.LayoutParameters;
 				lp.SetMargins(0, i* (selectionRegion/10), 0, 0);
 				//switch (moduleOrder[i])

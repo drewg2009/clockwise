@@ -345,7 +345,9 @@ namespace Clockwise.Droid
 
 			//Module Order
 			FindViewById<ImageView>(Resource.Id.moduleOrder).Click += delegate {
-				StartActivity(typeof(ModuleOrder));
+				Intent i = new Intent(ApplicationContext, typeof(ModuleOrder));
+				i.PutExtra("alarm_index", alarm_number);
+				StartActivity(i);
 			};
 
 			//Scrollview
@@ -397,10 +399,16 @@ namespace Clockwise.Droid
 			}
 
 			//Tab holder
+			RefreshTabs(moduleLayout.ChildCount);
+		}
+
+		private void RefreshTabs(int count)
+		{
+			//Tab holder
 			moduleTabs.Clear();
 			LinearLayout tabHolder = FindViewById<LinearLayout>(Resource.Id.tab_holder);
-			tabHolder.LayoutParameters.Width = (int)(Resources.DisplayMetrics.WidthPixels * .75);
-			int numModules = moduleLayout.ChildCount;
+			tabHolder.LayoutParameters.Width = (int)(Resources.DisplayMetrics.WidthPixels* .75);
+			int numModules = count;
 			if (numModules > 0)
 			{
 				selectedTab = 0;
@@ -410,7 +418,7 @@ namespace Clockwise.Droid
 
 				Console.WriteLine("numModules: " + numModules);
 
-				for (int i = 0; i < numModules; i++)
+				for (int i = 0; i<numModules; i++)
 				{
 					View tab = new View(ApplicationContext);
 					LinearLayout.LayoutParams tabLp = new LinearLayout.LayoutParams(tabWidth, (int)(2 * Resources.DisplayMetrics.Density));
@@ -663,7 +671,7 @@ namespace Clockwise.Droid
 			instance = this;
 			LinearLayout moduleLayout = FindViewById<LinearLayout>(Resource.Id.module_layout);
 			while(moduleLayout.ChildCount > 0) moduleLayout.RemoveViewAt(0);
-			RefreshModules(Intent.GetIntExtra("alarm_number", 0));
+			RefreshModules(Intent.GetIntExtra("alarm_number", -1));
 
 			scrollView.setOnScrollChangedListener(new HorizontalScrollListener());
 			if ((int)Build.VERSION.SdkInt >= 23)
