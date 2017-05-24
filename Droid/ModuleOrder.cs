@@ -43,7 +43,7 @@ namespace Clockwise.Droid
 			Console.WriteLine("save height: {0}", saveButton.MeasuredHeight);
 			int index = Intent.GetIntExtra("alarm_index", -1);
 			string[] moduleOrder = Settings.ModuleOrder.Split('|')[index].Split(':');
-			int moduleRowHeight = selectionRegion / 10;
+			int moduleRowHeight = selectionRegion / moduleOrder.Length;
 			Console.WriteLine("moduleRow: " + moduleRowHeight);
 			int statusBarHeight = metrics.HeightPixels - root.MeasuredHeight;
 			for (int i = 0; i < moduleList.ChildCount; i++)
@@ -117,12 +117,13 @@ namespace Clockwise.Droid
 								if (isTouching)
 								{
 
-									if (y < selectionRegion && y > statusBarHeight)
+									if (y < selectionRegion)
 									{
 										//Get selection
 										y -= statusBarHeight;
-										selectionIndex = (int)(y / selectionRegion);
-										Console.WriteLine("long press at {0} / {1}", y, selectionRegion);
+										y += (int)(moduleRowHeight * .5);
+										selectionIndex = (int)(y / (float)selectionRegion * moduleOrder.Length);
+										Console.WriteLine("long press at {0}", selectionIndex);
 									}
 								}
 							}, 500);

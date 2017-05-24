@@ -7,17 +7,17 @@ namespace Clockwise
 {
 	public class JSONRequestSerializer
 	{
-		protected string time;
-		protected double lat, lon;
-		protected Weather weather;
-		protected List<News> news = new List<News>();
-		protected List<Reddit> reddit = new List<Reddit>();
-		protected List<Twitter> twitter = new List<Twitter>();
-		protected List<Traffic> traffic = new List<Traffic>();
-		protected List<Reminders> reminders = new List<Reminders>();
-		protected List<Countdown> countdown = new List<Countdown>();
-		protected bool tdih = false, quote = false, fact = false;
-		protected static JSONRequestSerializer instance;
+		public string time;
+		public double lat, lon;
+		public Weather weather;
+		public List<News> news = new List<News>();
+		public List<Reddit> reddit = new List<Reddit>();
+		public List<Twitter> twitter = new List<Twitter>();
+		public List<Traffic> traffic = new List<Traffic>();
+		public List<Reminders> reminders = new List<Reminders>();
+		public List<Countdown> countdown = new List<Countdown>();
+		public bool tdih = false, quote = false, fact = false;
+		public static JSONRequestSerializer instance;
 		private JSONRequestSerializer()
 		{
 
