@@ -20,6 +20,7 @@ namespace Clockwise.Droid
 		TextToSpeech textToSpeech;
 		Locale lang;
 		int alarm_index;
+        bool initFinished = false;
 		public override void OnCreate()
 		{
 			base.OnCreate();
@@ -27,6 +28,7 @@ namespace Clockwise.Droid
 			lang = Java.Util.Locale.Default;
 			textToSpeech.SetLanguage(lang);
 		}
+
 
 		public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
 		{
@@ -73,7 +75,7 @@ namespace Clockwise.Droid
 				Toast.MakeText(this, "bad index: " + alarm_index, ToastLength.Long).Show();
 			}
 
-
+            initFinished = true;
 			return base.OnStartCommand(intent, flags, startId);
 		}
 
@@ -124,14 +126,6 @@ namespace Clockwise.Droid
 				}
 			});
 
-			int timeout = 10000;
-			if (await Task.WhenAny(task, Task.Delay(timeout)) != task)
-			{
-				errorMsg = "Clockwise timed out with your current connection. Please try again later.";
-				textToSpeech.Speak(errorMsg, QueueMode.Flush, null, null);
-				return;
-			}
-
 			Console.WriteLine("\nrequest: " + request);
 
 		}
@@ -146,9 +140,34 @@ namespace Clockwise.Droid
 			if (status == OperationResult.Success)
 				textToSpeech.SetLanguage(lang);
 
-			MakeRequest(alarm_index);
+            double interval = 1000;
+            double elapsedTime = 0;
+            System.Timers.Timer timer = new System.Timers.Timer(interval);
+            timer.Elapsed += async (sender, e) => await Task.Factory.StartNew(() =>
+            {
+                if (elapsedTime > 10000)
+                {
+                    string errorMsg = "Clockwise timed out with your current connection. Please try again later.";
+                    textToSpeech.Speak(errorMsg, QueueMode.Flush, null, null);
+                    timer.Stop();
+                }
+                else
+                {
+                    if (initFinished)
+                    {
+                        MakeRequest(alarm_index);
+                        timer.Stop();
+                    }
+                }
+                elapsedTime += interval;
+
+            });
+			timer.Start();
+
 			StopSelf();
+
 		}
+
 
 		public override IBinder OnBind(Intent intent)
 		{
