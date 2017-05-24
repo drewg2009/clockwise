@@ -15,26 +15,22 @@ using Android.Locations;
 namespace Clockwise.Droid
 {
 	[Service]
-    public class SpeechService : Service, TextToSpeech.IOnInitListener
+	public class SpeechService : Service, TextToSpeech.IOnInitListener
 	{
-        TextToSpeech textToSpeech;
-        Locale lang;
+		TextToSpeech textToSpeech;
+		Locale lang;
+		int alarm_index;
 		public override void OnCreate()
 		{
 			base.OnCreate();
-            textToSpeech = new TextToSpeech(this, this, "com.google.android.tts");
+			textToSpeech = new TextToSpeech(this, this, "com.google.android.tts");
 			lang = Java.Util.Locale.Default;
 			textToSpeech.SetLanguage(lang);
-			//Cancel notification
-
-			//Stop song
-
-
 		}
 
 		public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
 		{
-			int alarm_index = intent.GetIntExtra("alarm_index", -1);
+			alarm_index = intent.GetIntExtra("alarm_index", -1);
 
 			if (alarm_index >= 0)
 			{
@@ -43,7 +39,7 @@ namespace Clockwise.Droid
 				//Turn of alarm tone
 				//if(ServiceHelper.isMyServiceRunning(SongService.class, this)
 				if (SongService.intent != null)
-                    StopService(SongService.intent);
+					StopService(SongService.intent);
 				if (AlarmReceiver.player != null && AlarmReceiver.player.IsPlaying)
 				{
 					AlarmReceiver.player.Stop();
@@ -60,10 +56,11 @@ namespace Clockwise.Droid
 					if (int.Parse(Settings.GetAlarmField(alarm_index, Settings.AlarmField.RepeatDays)) > 0)
 					{
 						AlarmUtils.SetTime(this, int.Parse(Settings.GetAlarmField(alarm_index, Settings.AlarmField.Hour)),
-						                   int.Parse(Settings.GetAlarmField(alarm_index, Settings.AlarmField.Minute)),
-						                   alarm_index, int.Parse(Settings.GetAlarmField(alarm_index, Settings.AlarmField.RepeatDays)), false);
+										   int.Parse(Settings.GetAlarmField(alarm_index, Settings.AlarmField.Minute)),
+										   alarm_index, int.Parse(Settings.GetAlarmField(alarm_index, Settings.AlarmField.RepeatDays)), false);
 					}
-					else {
+					else
+					{
 						Settings.SetAlarmField(alarm_index, Settings.AlarmField.Status, "" + (int)Settings.AlarmStatus.ALARM_OFF);
 						if (ManageAlarms.instance != null)
 							ManageAlarms.instance.RefreshAlarms();
@@ -71,25 +68,32 @@ namespace Clockwise.Droid
 				}
 
 			}
-			else {
+			else
+			{
 				Toast.MakeText(this, "bad index: " + alarm_index, ToastLength.Long).Show();
 			}
 
-			MakeRequest(alarm_index);
-			StopSelf();
+
 			return base.OnStartCommand(intent, flags, startId);
 		}
 
 		public async void MakeRequest(int index)
 		{
+
+			await Task.Factory.StartNew(() =>
+			{
+				string introMsg = "Hello. Clockwise is collecting your module info. Please wait one moment.";
+				textToSpeech.Speak(introMsg, QueueMode.Flush, null, null);
+			});
+
 			string request;
-            string parameters = "moduleInfo=";
-            string errorMsg = "Clockwise could not load your module information at this time. Please try again later.";
+			string parameters = "moduleInfo=";
+			string errorMsg = "Clockwise could not load your module information at this time. Please try again later.";
 			string URI = "http://phplaravel-43928-259989.cloudwaysapps.com/get/moduleData";
 			LocationManager lm = (LocationManager)GetSystemService(Context.LocationService);
 			if ((int)Build.VERSION.SdkInt >= 23 && CheckSelfPermission(Android.Manifest.Permission.AccessFineLocation) == Permission.Granted
-			    && CheckSelfPermission(Android.Manifest.Permission.AccessCoarseLocation) == Permission.Granted
-			    && lm.IsProviderEnabled(LocationManager.GpsProvider))
+				&& CheckSelfPermission(Android.Manifest.Permission.AccessCoarseLocation) == Permission.Granted
+				&& lm.IsProviderEnabled(LocationManager.GpsProvider))
 			{
 				var locator = CrossGeolocator.Current;
 				locator.DesiredAccuracy = 50;
@@ -97,26 +101,36 @@ namespace Clockwise.Droid
 				Console.WriteLine("Lat:{0}, Lon:{1}", position.Latitude, position.Longitude);
 				request = JSONRequestSerializer.GetInstance().GetJsonRequest(index, position.Latitude, position.Longitude);
 
-            }
+			}
 			else
 			{
 				request = JSONRequestSerializer.GetInstance().GetJsonRequest(index, 0, 0);
 			}
-            parameters += request;
-            await Task.Factory.StartNew( () => {
+			parameters += request;
+			var task = Task.Factory.StartNew(() =>
+			{
 				using (WebClient wc = new WebClient())
 				{
 					wc.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-                    string result = wc.UploadString(new Uri(URI), parameters);
-                    if(!string.IsNullOrEmpty(result)){
+					string result = wc.UploadString(new Uri(URI), parameters);
+					if (!string.IsNullOrEmpty(result))
+					{
 						textToSpeech.Speak(result, QueueMode.Flush, null, null);
 					}
-                    else{
-                        textToSpeech.Speak(errorMsg, QueueMode.Flush, null, null);
+					else
+					{
+						textToSpeech.Speak(errorMsg, QueueMode.Flush, null, null);
 					}
 				}
-            });
+			});
 
+			int timeout = 10000;
+			if (await Task.WhenAny(task, Task.Delay(timeout)) != task)
+			{
+				errorMsg = "Clockwise timed out with your current connection. Please try again later.";
+				textToSpeech.Speak(errorMsg, QueueMode.Flush, null, null);
+				return;
+			}
 
 			Console.WriteLine("\nrequest: " + request);
 
@@ -131,11 +145,14 @@ namespace Clockwise.Droid
 			// if the listener is ok, set the lang
 			if (status == OperationResult.Success)
 				textToSpeech.SetLanguage(lang);
+
+			MakeRequest(alarm_index);
+			StopSelf();
 		}
 
-        public override IBinder OnBind(Intent intent)
-        {
-            return null;
-        }
+		public override IBinder OnBind(Intent intent)
+		{
+			return null;
+		}
 	}
 }
