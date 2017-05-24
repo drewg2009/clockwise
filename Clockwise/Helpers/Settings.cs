@@ -430,14 +430,14 @@ namespace Clockwise.Helpers
 			}
 		}
 
-		public static void EditWeather(int index, bool description, bool currentTemp, bool maxTemp, bool fahren)
+		public static void EditWeather(int index, bool fahren, bool currentTemp, bool maxTemp, bool description)
 		{
 			String[] weathers = Weather.Split('|');
 			weathers[index] = "weather:"
-				+ ((description) ? 0 : 1) + ":"
+				+ ((fahren) ? 0 : 1) + ":"
 				+ ((currentTemp) ? 0 : 1) + ":"
 				+ ((maxTemp) ? 0 : 1) + ":"
-				+ ((fahren) ? 0 : 1);
+				+ ((description) ? 0 : 1);
 
 			string newWeatherSetting = "";
 			foreach (String s in weathers)

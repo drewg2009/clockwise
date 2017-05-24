@@ -9,7 +9,7 @@ namespace Clockwise
 	{
 		public string time;
 		public double lat, lon;
-		public List<News> weather = new List<Weather>();
+		public List<Weather> weather = new List<Weather>();
 		public List<News> news = new List<News>();
 		public List<Reddit> reddit = new List<Reddit>();
 		public List<Twitter> twitter = new List<Twitter>();
@@ -46,8 +46,8 @@ namespace Clockwise
 
 			string weatherString = Settings.GetWeather(index);
 			if (weatherString != Settings.EMPTY_MODULE)
-				weather.add(new Weather(false, Settings.GetWeather(index)));
-			else weather.add(new Weather(true, null));
+				weather.Add(new Weather(false, Settings.GetWeather(index)));
+			else weather.Add(new Weather(true, null));
 
 
 			int i = 0;
@@ -126,10 +126,10 @@ namespace Clockwise
 				else
 				{
 					string[] settings = weather.Split(':');
-					description = settings[1] == "0";
+					fahrenheit = settings[1] == "0";
 					currentTemp = settings[2] == "0";
 					maxTemp = settings[3] == "0";
-					fahrenheit = settings[4] == "0";
+					description = settings[4] == "0";
 				}
 			}
 		}
