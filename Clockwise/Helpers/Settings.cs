@@ -747,9 +747,13 @@ namespace Clockwise.Helpers
 			if (News != EMPTY_MODULE)
 			{
 				string thisNews = News.Split('|')[index];
-				string[] moduleList = thisNews.Substring(thisNews.IndexOf(':') + 1).Split(',');
-				if (subindex < moduleList.Length)
-					return moduleList[subindex];
+				if (thisNews != EMPTY_MODULE)
+				{
+					string[] moduleList = thisNews.Substring(thisNews.IndexOf(':') + 1).Split(',');
+					if (subindex<moduleList.Length)
+						return moduleList[subindex];
+					else return string.Empty;
+				}
 				else return string.Empty;
 			}
 			else return string.Empty;
@@ -760,9 +764,13 @@ namespace Clockwise.Helpers
 			if (Twitter != EMPTY_MODULE)
 			{
 				string thisTwitter = Twitter.Split('|')[index];
-				string[] moduleList = thisTwitter.Substring(thisTwitter.IndexOf(':') + 1).Split(',');
-				if (subindex < moduleList.Length)
-					return moduleList[subindex];
+				if (thisTwitter != EMPTY_MODULE)
+				{
+					string[] moduleList = thisTwitter.Substring(thisTwitter.IndexOf(':') + 1).Split(',');
+					if (subindex<moduleList.Length)
+						return moduleList[subindex];
+					else return string.Empty;
+				}
 				else return string.Empty;
 			}
 			else return string.Empty;
@@ -773,9 +781,13 @@ namespace Clockwise.Helpers
 			if (Countdown != EMPTY_MODULE)
 			{
 				string thisCountdown = Countdown.Split('|')[index];
-				string[] moduleList = thisCountdown.Substring(thisCountdown.IndexOf(':') + 1).Split(',');
-				if (subindex < moduleList.Length)
-					return moduleList[subindex];
+				if (thisCountdown != EMPTY_MODULE)
+				{
+					string[] moduleList = thisCountdown.Substring(thisCountdown.IndexOf(':') + 1).Split(',');
+					if (subindex < moduleList.Length)
+						return moduleList[subindex];
+					else return string.Empty;
+				}
 				else return string.Empty;
 			}
 			else return string.Empty;
@@ -785,10 +797,14 @@ namespace Clockwise.Helpers
 		{
 			if (Traffic != EMPTY_MODULE)
 			{
-				string thisCountdown = Countdown.Split('|')[index];
-				string[] moduleList = thisCountdown.Substring(thisCountdown.IndexOf(':') + 1).Split(',');
-				if (subindex < moduleList.Length)
-					return moduleList[subindex];
+				string thisTraffic = Traffic.Split('|')[index];
+				if (thisTraffic != EMPTY_MODULE)
+				{
+					string[] moduleList = thisTraffic.Substring(thisTraffic.IndexOf(':') + 1).Split(',');
+					if (subindex < moduleList.Length)
+						return moduleList[subindex];
+					else return string.Empty;
+				}
 				else return string.Empty;
 			}
 			else return string.Empty;
@@ -799,10 +815,15 @@ namespace Clockwise.Helpers
 			if (Reminders != EMPTY_MODULE)
 			{
 				string thisReminders = Reminders.Split('|')[index];
-				string[] moduleList = thisReminders.Substring(thisReminders.IndexOf(':') + 1).Split(',');
-				if (subindex < moduleList.Length)
-					return moduleList[subindex];
+				if (thisReminders != EMPTY_MODULE)
+				{
+					string[] moduleList = thisReminders.Substring(thisReminders.IndexOf(':') + 1).Split(',');
+					if (subindex < moduleList.Length)
+						return moduleList[subindex];
+					else return string.Empty;
+				}
 				else return string.Empty;
+
 			}
 			else return string.Empty;
 		}
@@ -812,10 +833,15 @@ namespace Clockwise.Helpers
 			if (Reddit != EMPTY_MODULE)
 			{
 				string thisReddit = Reddit.Split('|')[index];
-				string[] moduleList = thisReddit.Substring(thisReddit.IndexOf(':') + 1).Split(',');
-				if (subindex < moduleList.Length)
-					return moduleList[subindex];
+				if (thisReddit != EMPTY_MODULE)
+				{
+					string[] moduleList = thisReddit.Substring(thisReddit.IndexOf(':') + 1).Split(',');
+					if (subindex < moduleList.Length)
+						return moduleList[subindex];
+					else return string.Empty;
+				}
 				else return string.Empty;
+
 			}
 			else return string.Empty;
 		}
