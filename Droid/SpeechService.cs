@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿﻿using System;
 using Android.App;
 using Android.OS;
 using Android.Content;
@@ -19,22 +19,18 @@ namespace Clockwise.Droid
 	{
         TextToSpeech textToSpeech;
         Locale lang;
-		public override void OnCreate()
-		{
-			base.OnCreate();
+        int alarm_index;
+        public override void OnCreate()
+        {
+            base.OnCreate();
             textToSpeech = new TextToSpeech(this, this, "com.google.android.tts");
-			lang = Java.Util.Locale.Default;
-			textToSpeech.SetLanguage(lang);
-			//Cancel notification
-
-			//Stop song
-
-
-		}
+            lang = Java.Util.Locale.Default;
+            textToSpeech.SetLanguage(lang);
+        }
 
 		public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
 		{
-			int alarm_index = intent.GetIntExtra("alarm_index", -1);
+			alarm_index = intent.GetIntExtra("alarm_index", -1);
 
 			if (alarm_index >= 0)
 			{
@@ -75,13 +71,15 @@ namespace Clockwise.Droid
 				Toast.MakeText(this, "bad index: " + alarm_index, ToastLength.Long).Show();
 			}
 
-			MakeRequest(alarm_index);
-			StopSelf();
+
 			return base.OnStartCommand(intent, flags, startId);
 		}
 
 		public async void MakeRequest(int index)
 		{
+			string introMsg = "Hello. We are collecting your module info. Give us one moment.";
+			textToSpeech.Speak(introMsg, QueueMode.Flush, null, null);
+
 			string request;
             string parameters = "moduleInfo=";
             string errorMsg = "Clockwise could not load your module information at this time. Please try again later.";
@@ -103,7 +101,7 @@ namespace Clockwise.Droid
 				request = JSONRequestSerializer.GetInstance().GetJsonRequest(index, 0, 0);
 			}
             parameters += request;
-            await Task.Factory.StartNew( () => {
+           var task = Task.Factory.StartNew( () => {
 				using (WebClient wc = new WebClient())
 				{
 					wc.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
@@ -117,6 +115,12 @@ namespace Clockwise.Droid
 				}
             });
 
+            int timeout = 10000;
+            if(await Task.WhenAny(task,Task.Delay(timeout)) != task){
+                errorMsg = "Clockwise timed out with your current connection. Please try again later.";
+                textToSpeech.Speak(errorMsg, QueueMode.Flush, null, null);
+                return;
+			}
 
 			Console.WriteLine("\nrequest: " + request);
 
@@ -131,6 +135,9 @@ namespace Clockwise.Droid
 			// if the listener is ok, set the lang
 			if (status == OperationResult.Success)
 				textToSpeech.SetLanguage(lang);
+
+			MakeRequest(alarm_index);
+			StopSelf();
 		}
 
         public override IBinder OnBind(Intent intent)
