@@ -82,7 +82,7 @@ namespace Clockwise.Helpers
 		private static readonly string AndroidStartSongUriDef = string.Empty;
 
 		private static string DefaultModuleOrder =
-			"notifications:weather:news:reddit:twitter:countdown:reminders:traffic:fact:quote:tdih";
+			"weather:news:reddit:twitter:countdown:reminders:traffic:fact:quote:tdih";
 		public enum AlarmStatus { ALARM_ON, ALARM_OFF };
 
 		public enum Modules { WEATHER, REDDIT, TWITTER, NEWS, COUNTDOWN, REMINDERS, TRAFFIC, FACT, QUOTE, TDIH };

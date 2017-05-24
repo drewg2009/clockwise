@@ -7,18 +7,17 @@ namespace Clockwise
 {
 	public class JSONRequestSerializer
 	{
-		public string time;
-		public double lat, lon;
-		public Weather weather;
-		public List<News> news = new List<News>();
-		public List<Reddit> reddit = new List<Reddit>();
-		public List<Twitter> twitter = new List<Twitter>();
-		public List<Traffic> traffic = new List<Traffic>();
-		public List<Reminders> reminders = new List<Reminders>();
-		public List<Countdown> countdown = new List<Countdown>();
-
-		public bool tdih = false, quote = false, fact = false;
-		private static JSONRequestSerializer instance;
+		protected string time;
+		protected double lat, lon;
+		protected Weather weather;
+		protected List<News> news = new List<News>();
+		protected List<Reddit> reddit = new List<Reddit>();
+		protected List<Twitter> twitter = new List<Twitter>();
+		protected List<Traffic> traffic = new List<Traffic>();
+		protected List<Reminders> reminders = new List<Reminders>();
+		protected List<Countdown> countdown = new List<Countdown>();
+		protected bool tdih = false, quote = false, fact = false;
+		protected static JSONRequestSerializer instance;
 		private JSONRequestSerializer()
 		{
 
@@ -30,14 +29,24 @@ namespace Clockwise
 			{
 				instance = new JSONRequestSerializer();
 			}
+
 			return instance;
 		}
 
 		public string GetJsonRequest(int index, double lat, double lon)
 		{
+			//Reset
+			news = new List<News>();
+			reddit = new List<Reddit>();
+			twitter = new List<Twitter>();
+			traffic = new List<Traffic>();
+			reminders = new List<Reminders>();
+			countdown = new List<Countdown>();
+
 			string weatherString = Settings.GetWeather(index);
-			if(weatherString != Settings.EMPTY_MODULE)
-				weather = new Weather(Settings.GetWeather(index));
+			if (weatherString != Settings.EMPTY_MODULE)
+				weather = new Weather(false, Settings.GetWeather(index));
+			else weather = new Weather(true, null);
 
 			int i = 0;
 			string subnews = Settings.GetNews(index, i);
@@ -103,13 +112,23 @@ namespace Clockwise
 		public struct Weather
 		{
 			public bool fahrenheit, maxTemp, description, currentTemp;
-			public Weather(string weather)
+			public Weather(bool isDefault, string weather)
 			{
-				string[] settings = weather.Split(':');
-				description = settings[1] == "0";
-				currentTemp = settings[2] == "0";
-				maxTemp = settings[3] == "0";
-				fahrenheit = settings[4] == "0";
+				if (isDefault)
+				{
+					description = false;
+					currentTemp = false;
+					maxTemp = false;
+					fahrenheit = false;
+				}
+				else
+				{
+					string[] settings = weather.Split(':');
+					description = settings[1] == "0";
+					currentTemp = settings[2] == "0";
+					maxTemp = settings[3] == "0";
+					fahrenheit = settings[4] == "0";
+				}
 			}
 		}
 
