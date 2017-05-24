@@ -9,7 +9,7 @@ namespace Clockwise
 	{
 		public string time;
 		public double lat, lon;
-		public Weather weather;
+		public List<News> weather = new List<Weather>();
 		public List<News> news = new List<News>();
 		public List<Reddit> reddit = new List<Reddit>();
 		public List<Twitter> twitter = new List<Twitter>();
@@ -36,6 +36,7 @@ namespace Clockwise
 		public string GetJsonRequest(int index, double lat, double lon)
 		{
 			//Reset
+			weather = new List<Weather>();
 			news = new List<News>();
 			reddit = new List<Reddit>();
 			twitter = new List<Twitter>();
@@ -45,8 +46,9 @@ namespace Clockwise
 
 			string weatherString = Settings.GetWeather(index);
 			if (weatherString != Settings.EMPTY_MODULE)
-				weather = new Weather(false, Settings.GetWeather(index));
-			else weather = new Weather(true, null);
+				weather.add(new Weather(false, Settings.GetWeather(index)));
+			else weather.add(new Weather(true, null));
+
 
 			int i = 0;
 			string subnews = Settings.GetNews(index, i);
