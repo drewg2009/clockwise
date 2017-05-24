@@ -77,8 +77,11 @@ namespace Clockwise.Droid
 
 		public async void MakeRequest(int index)
 		{
-			string introMsg = "Hello. We are collecting your module info. Give us one moment.";
-			textToSpeech.Speak(introMsg, QueueMode.Flush, null, null);
+
+          await Task.Factory.StartNew( () => {
+				string introMsg = "Hello. We are collecting your module info. Give us one moment.";
+				textToSpeech.Speak(introMsg, QueueMode.Flush, null, null); 
+            });
 
 			string request;
             string parameters = "moduleInfo=";

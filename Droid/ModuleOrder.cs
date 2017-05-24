@@ -48,8 +48,8 @@ namespace Clockwise.Droid
 				//}
 				rows.Add(rl);
 			}
-			LinearLayout root = FindViewById<LinearLayout>(Resource.Id.module_order_root);
-
+            //LinearLayout root = FindViewById<LinearLayout>(Resource.Id.module_order_row);
+            LinearLayout root = null;
 			root.Touch += (object sender, View.TouchEventArgs e) =>
 			{
 				float y = e.Event.GetY();
