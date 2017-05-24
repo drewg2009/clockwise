@@ -29,34 +29,82 @@ namespace Clockwise.Droid
 			base.OnCreate(savedInstanceState);
 			SetContentView(Resource.Layout.module_order);
 			metrics = Resources.DisplayMetrics;
+			LinearLayout root = FindViewById<LinearLayout>(Resource.Id.module_order_root);
+			root.Measure(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent);
+			Console.WriteLine("root height: {0}", root.MeasuredHeight);
 			RelativeLayout moduleList = FindViewById<RelativeLayout>(Resource.Id.module_list);
-			int selectionRegion = (int)(metrics.HeightPixels * .95);
+
+			Console.WriteLine("screen height: {0}", metrics.HeightPixels);
+			RelativeLayout saveButton = FindViewById<RelativeLayout>(Resource.Id.save_button);
+			saveButton.Measure(ViewGroup.LayoutParams.MatchParent , ViewGroup.LayoutParams.WrapContent);
+			int selectionRegion = root.MeasuredHeight - saveButton.MeasuredHeight;
+			Console.WriteLine("selectionRegion: {0}", selectionRegion);
+
+			Console.WriteLine("save height: {0}", saveButton.MeasuredHeight);
 			int index = Intent.GetIntExtra("alarm_index", -1);
 			string[] moduleOrder = Settings.ModuleOrder.Split('|')[index].Split(':');
-			int moduleRowHeight = selectionRegion / 11;
+			int moduleRowHeight = selectionRegion / 10;
 			Console.WriteLine("moduleRow: " + moduleRowHeight);
+			int statusBarHeight = metrics.HeightPixels - root.MeasuredHeight;
 			for (int i = 0; i < moduleList.ChildCount; i++)
 			{
 				RelativeLayout rl = (RelativeLayout)moduleList.GetChildAt(i);
 				rl.FindViewById<TextView>(Resource.Id.module_title).Text = moduleOrder[i];
-				rl.LayoutParameters.Height = moduleRowHeight;
+				rl.LayoutParameters.Height = (int)(moduleRowHeight * .95);
 				RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams)rl.LayoutParameters;
-				lp.SetMargins(0, i* (selectionRegion/10), 0, 0);
-				//switch (moduleOrder[i])
-				//{
-
-				//}
+				/*
+					0 -> moduleHeight*.05
+					1 -> moduleHeight + moduleHeight*.05
+					2 -> 2*moduleHeight + moduleHeight*.05
+				*/
+				lp.SetMargins(0, (i * moduleRowHeight) + (int)(moduleRowHeight * .05), 0, 0);
+				ImageView iv = rl.FindViewById<ImageView>(Resource.Id.module_icon);
+				iv.LayoutParameters.Width = (int)(moduleRowHeight * .5);
+				iv.LayoutParameters.Height = (int)(moduleRowHeight * .5);
+				switch (moduleOrder[i])
+				{
+					case "weather":
+						iv.SetImageResource(Resource.Drawable.weather_icon);
+						break;
+					case "news":
+						iv.SetImageResource(Resource.Drawable.news_icon);
+						break;
+					case "reddit":
+						iv.SetImageResource(Resource.Drawable.reddit_icon);
+						break;
+					case "twitter":
+						iv.SetImageResource(Resource.Drawable.twitter_icon);
+						break;
+					case "traffic":
+						iv.SetImageResource(Resource.Drawable.traffic_icon);
+						break;
+					case "reminders":
+						iv.SetImageResource(Resource.Drawable.todo_icon);
+						break;
+					case "countdown":
+						iv.SetImageResource(Resource.Drawable.countdown_icon);
+						break;
+					case "fact":
+						iv.SetImageResource(Resource.Drawable.countdown_icon);
+						break;
+					case "quote":
+						iv.SetImageResource(Resource.Drawable.countdown_icon);
+						break;
+					case "tdih":
+						iv.SetImageResource(Resource.Drawable.countdown_icon);
+						break;
+				}
 				rows.Add(rl);
 			}
-			LinearLayout root = FindViewById<LinearLayout>(Resource.Id.module_order_root);
+
 
 			root.Touch += (object sender, View.TouchEventArgs e) =>
 			{
 				float y = e.Event.GetY();
 				switch (e.Event.Action)
-			    {
+				{
 					case MotionEventActions.Down:
-						
+
 						if (e.Event.GetPointerId(e.Event.ActionIndex) == 0)
 						{
 							touchTime = JavaSystem.CurrentTimeMillis();
@@ -64,23 +112,26 @@ namespace Clockwise.Droid
 							isTouching = true;
 							Console.WriteLine("down: " + touchTime);
 							Handler handler = new Handler();
-							handler.PostDelayed(delegate {
+							handler.PostDelayed(delegate
+							{
 								if (isTouching)
 								{
-									Console.WriteLine("long press");
-									if (y < selectionRegion)
+
+									if (y < selectionRegion && y > statusBarHeight)
 									{
 										//Get selection
-										//selectionIndex = 
+										y -= statusBarHeight;
+										selectionIndex = (int)(y / selectionRegion);
+										Console.WriteLine("long press at {0} / {1}", y, selectionRegion);
 									}
 								}
 							}, 500);
 						}
-			        	break;
+						break;
 					case MotionEventActions.Move:
 						if (e.Event.GetPointerId(e.Event.ActionIndex) == 0)
 						{
-							Console.WriteLine("moving: " + e.Event.GetY());
+							Console.WriteLine("moving: " + y);
 						}
 						break;
 					case MotionEventActions.Up:
@@ -90,8 +141,8 @@ namespace Clockwise.Droid
 							originalY = touchTime = 0;
 							isTouching = false;
 						}
-			        	break;			     
-			    }
+						break;
+				}
 			};
 		}
 	}
