@@ -35,7 +35,9 @@ namespace Clockwise
 
 		public string GetJsonRequest(int index, double lat, double lon)
 		{
-			weather = new Weather(Settings.GetWeather(index));
+			string weatherString = Settings.GetWeather(index);
+			if(weatherString != Settings.EMPTY_MODULE)
+				weather = new Weather(Settings.GetWeather(index));
 
 			int i = 0;
 			string subnews = Settings.GetNews(index, i);
@@ -85,7 +87,7 @@ namespace Clockwise
 				subcountdown = Settings.GetCountdown(index, ++i);
 			}
 
-			tdih = Settings.GetFact(index);
+			fact = Settings.GetFact(index);
 			quote = Settings.GetQuote(index);
 			tdih = Settings.GetTDIH(index);
 
@@ -103,7 +105,6 @@ namespace Clockwise
 			public bool fahrenheit, maxTemp, description, currentTemp;
 			public Weather(string weather)
 			{
-				if (weather == Settings.EMPTY_MODULE) weather = "weather:0:0:0:0";
 				string[] settings = weather.Split(':');
 				description = settings[1] == "0";
 				currentTemp = settings[2] == "0";
@@ -157,11 +158,7 @@ namespace Clockwise
 				string[] settings = reminders.Split(':');
 				name = settings[0];
 				string[] l = settings[1].Split(';');
-				list = new List<String>();
-				for (int i = 0; i < l.Length; i++)
-				{
-					list.Add(l[i]);
-				}
+				list = new List<String>(l);
 			}
 		}
 
