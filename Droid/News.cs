@@ -103,6 +103,7 @@ namespace Clockwise.Droid
 					int.Parse(amountInput.Text) > 0 && int.Parse(amountInput.Text) <= 10)
 				{
 					navButton.PerformClick();
+					Settings.EditNews(index, subindex, spinner.SelectedItem.ToString(), int.Parse(amountInput.Text));
 					Toast.MakeText(context, "News module saved.", ToastLength.Short).Show();
 				}
 				else

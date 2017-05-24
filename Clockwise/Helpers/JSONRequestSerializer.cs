@@ -47,8 +47,6 @@ namespace Clockwise
 			string weatherString = Settings.GetWeather(index);
 			if (weatherString != Settings.EMPTY_MODULE)
 				weather.Add(new Weather(false, Settings.GetWeather(index)));
-			else weather.Add(new Weather(true, null));
-
 
 			int i = 0;
 			string subnews = Settings.GetNews(index, i);
@@ -114,23 +112,13 @@ namespace Clockwise
 		public struct Weather
 		{
 			public bool fahrenheit, maxTemp, description, currentTemp;
-			public Weather(bool isDefault, string weather)
+			public Weather(string weather)
 			{
-				if (isDefault)
-				{
-					description = false;
-					currentTemp = false;
-					maxTemp = false;
-					fahrenheit = false;
-				}
-				else
-				{
-					string[] settings = weather.Split(':');
-					fahrenheit = settings[1] == "0";
-					currentTemp = settings[2] == "0";
-					maxTemp = settings[3] == "0";
-					description = settings[4] == "0";
-				}
+				string[] settings = weather.Split(':');
+				fahrenheit = settings[1] == "0";
+				currentTemp = settings[2] == "0";
+				maxTemp = settings[3] == "0";
+				description = settings[4] == "0";
 			}
 		}
 
