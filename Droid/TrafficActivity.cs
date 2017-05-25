@@ -50,7 +50,8 @@ namespace Clockwise.Droid
         Marker fromMarker;
         Marker toMarker;
         AlertDialog locationDialog;
-		int subIndex;
+        int subIndex;
+        Spinner transType;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -58,29 +59,63 @@ namespace Clockwise.Droid
             fromAddresses = new List<Address>();
             toAddresses = new List<Address>();
             RequestedOrientation = Android.Content.PM.ScreenOrientation.Portrait;
-			SetContentView(Resource.Layout.traffic);
-			initLocationCode();
-			initUI();
-			initMap();
-			subIndex = Intent.GetIntExtra("subindex", -1);
+            SetContentView(Resource.Layout.traffic);
+            initLocationCode();
+            initUI();
+            initMap();
+            subIndex = Intent.GetIntExtra("subindex", -1);
+            if (subIndex != -1)
+            {
+                LoadExistingTraffic();
+            }
         }
 
-        private void populateLocationOnLoad()
+        private void LoadExistingTraffic()
         {
-            Geocoder geoCoder = new Geocoder(this);
-            Location lastKnown = locMgr.GetLastKnownLocation(provider);
+            int alarmIndex = Intent.GetIntExtra("alarm_index", -1);
+            string trafficString = Helpers.Settings.GetTraffic(alarmIndex, subIndex);
+            string[] tripAndRestSplit;
+            string[] locationsSplit;
 
-            fromAddresses = geoCoder.GetFromLocation(lastKnown.Latitude, lastKnown.Longitude, maxResults);
-            Vector v = new Vector();
-            v.Add(lastKnown.Latitude);
-            v.Add(lastKnown.Longitude);
-            updateMapToLocation(fromAddresses, true, null, v, fromMarker);
-            searchFrom.Text = getAddressString(fromAddresses.ElementAt(0));
+            //from location is null
+            if (trafficString.Contains("::"))
+            {
+                tripAndRestSplit = trafficString.Split(new string[] { "::" }, StringSplitOptions.None);
+                locationsSplit = tripAndRestSplit[1].Split(':');
+                toLocation = locationsSplit[0];
+                transportationMethod = locationsSplit[1];
+
+            }
+            //from location exists
+            else
+            {
+                tripAndRestSplit = trafficString.Split(new string[] { ":" }, StringSplitOptions.None);
+                fromLocation = tripAndRestSplit[1];
+                toLocation = tripAndRestSplit[2];
+                transportationMethod = tripAndRestSplit[3];
+				searchFromContainer.Visibility = ViewStates.Visible;
+				searchFrom.Text = fromLocation;
+				toggleDefaultLocationImage.SetImageResource(Resource.Drawable.off_toggle);
+			}
+            locationName = tripAndRestSplit[0];
+            searchTo.Text = toLocation;
+            string[] transMethods = Resources.GetStringArray(Resource.Array.transportation_methods);
+            int index = 0;
+            for (int i = 0; i < transMethods.Length; i++)
+            {
+                if (transMethods[i].Equals(transportationMethod))
+                {
+                    index = i;
+                    break;
+                }
+            }
+            transType.SetSelection(index);
+            trafficSaveBtn.Enabled = true;
         }
 
         private void initUI()
         {
-            Spinner transType = FindViewById<Spinner>(Resource.Id.transType);
+            transType = FindViewById<Spinner>(Resource.Id.transType);
             transType.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spinner_ItemSelected);
             var adapter = ArrayAdapter.CreateFromResource(
                     this, Resource.Array.transportation_methods, Android.Resource.Layout.SimpleSpinnerItem);
@@ -92,15 +127,15 @@ namespace Clockwise.Droid
             searchFrom.TextChanged += (object sender, Android.Text.TextChangedEventArgs e) =>
             {
                 validateLocationInput();
-				fromLocation = searchFrom.Text;
-			};
+                fromLocation = searchFrom.Text;
+            };
             searchTo = FindViewById<EditText>(Resource.Id.search_to);
             searchTo.TextChanged += (object sender, Android.Text.TextChangedEventArgs e) =>
             {
                 validateLocationInput();
-				toLocation = searchTo.Text;
+                toLocation = searchTo.Text;
 
-			};
+            };
             trafficSaveBtn = FindViewById<Button>(Resource.Id.trafficSaveButton);
             trafficCancelButton = FindViewById<Button>(Resource.Id.trafficCancelButton);
             toggleDefaultLocationImage = FindViewById<ImageView>(Resource.Id.toggleDefaultLocation);
@@ -135,7 +170,16 @@ namespace Clockwise.Droid
         private void saveSettings()
         {
             int index = Intent.GetIntExtra("alarm_index", -1);
-            Helpers.Settings.AddTraffic(index, locationName, fromLocation, toLocation, transportationMethod);
+            //if there is no saved module, add new traffic module
+            if (subIndex == -1)
+            {
+                Helpers.Settings.AddTraffic(index, locationName, fromLocation, toLocation, transportationMethod);
+            }
+            else
+            {
+                Helpers.Settings.EditTraffic(index, subIndex, locationName, fromLocation, toLocation, transportationMethod);
+
+            }
         }
 
         private void toggleDefaultLocationSetting()
@@ -148,36 +192,37 @@ namespace Clockwise.Droid
             else if (toggleDefaultLocationImage.Drawable.GetConstantState() == GetDrawable(Resource.Drawable.off_toggle).GetConstantState())
             {
                 toggleDefaultLocationImage.SetImageDrawable(GetDrawable(Resource.Drawable.on_toggle));
-				fromLocation = "";
+                fromLocation = "";
                 searchFrom.Text = "";
-                if (fromMarker != null) {
+                if (fromMarker != null)
+                {
                     fromMarker.Remove();
                     fromMarker = null;
                 }
-				searchFromContainer.Visibility = ViewStates.Gone;
-			}
-			validateLocationInput();
+                searchFromContainer.Visibility = ViewStates.Gone;
+            }
+            validateLocationInput();
 
-		}
+        }
 
         private void updateMapToLocation(IList<Address> addresses, bool isFrom, EditText view = null, Vector v = null, Marker marker = null)
         {
 
-                Geocoder geocoder;
-                geocoder = new Geocoder(this);
-                if (v == null)
-                {
-                    addresses = geocoder.GetFromLocationName(view.Text, maxResults);
-                }
-                else
-                {
-                    addresses = geocoder.GetFromLocation((double)v.Get(0), (double)v.Get(1), maxResults);
-                }
-                if (addresses.Count > 0)
-                {
-                    addMarker(addresses.ElementAt(0), isFrom);
-                }
-                validateLocationInput();
+            Geocoder geocoder;
+            geocoder = new Geocoder(this);
+            if (v == null)
+            {
+                addresses = geocoder.GetFromLocationName(view.Text, maxResults);
+            }
+            else
+            {
+                addresses = geocoder.GetFromLocation((double)v.Get(0), (double)v.Get(1), maxResults);
+            }
+            if (addresses.Count > 0)
+            {
+                addMarker(addresses.ElementAt(0), isFrom);
+            }
+            validateLocationInput();
         }
 
         private void initLocationCode()
@@ -240,7 +285,7 @@ namespace Clockwise.Droid
             {
                 locationName = locationBox.Text;
                 locationDialog.Dismiss();
-				saveSettings();
+                saveSettings();
                 Finish();
             };
             alertBuilder.SetTitle("Set Trip Name");
@@ -269,16 +314,17 @@ namespace Clockwise.Droid
 
         private void validateLocationInput()
         {
-			if (toggleDefaultLocationImage.Drawable.GetConstantState() == GetDrawable(Resource.Drawable.on_toggle).GetConstantState())
-			{
+            if (toggleDefaultLocationImage.Drawable.GetConstantState() == GetDrawable(Resource.Drawable.on_toggle).GetConstantState())
+            {
                 trafficSaveBtn.Enabled = toMarker != null && toLocation.Length > 0 && transportationMethod.Length > 0
                     && searchTo.Text.Length > 0;
             }
-            else if (toggleDefaultLocationImage.Drawable.GetConstantState() == GetDrawable(Resource.Drawable.off_toggle).GetConstantState()){
+            else if (toggleDefaultLocationImage.Drawable.GetConstantState() == GetDrawable(Resource.Drawable.off_toggle).GetConstantState())
+            {
                 trafficSaveBtn.Enabled = toMarker != null && fromMarker != null && toLocation.Length > 0 && transportationMethod.Length > 0
                     && searchTo.Text.Length > 0 && searchFrom.Length() > 0 && fromLocation.Length > 0;
 
-			}
+            }
         }
 
         private void spinner_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)

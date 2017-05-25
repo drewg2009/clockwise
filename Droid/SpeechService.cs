@@ -85,7 +85,7 @@ namespace Clockwise.Droid
 			await Task.Factory.StartNew(() =>
 			{
 				string introMsg = "Hello. Clockwise is collecting your module info. Please wait one moment.";
-				textToSpeech.Speak(introMsg, QueueMode.Flush, null, null);
+                textToSpeech.Speak(introMsg, QueueMode.Add, null, null);
 			});
 
 			string request;
@@ -117,11 +117,11 @@ namespace Clockwise.Droid
 					string result = wc.UploadString(new Uri(URI), parameters);
 					if (!string.IsNullOrEmpty(result))
 					{
-						textToSpeech.Speak(result, QueueMode.Flush, null, null);
+                        textToSpeech.Speak(result, QueueMode.Add, null, null);
 					}
 					else
 					{
-						textToSpeech.Speak(errorMsg, QueueMode.Flush, null, null);
+                        textToSpeech.Speak(errorMsg, QueueMode.Add, null, null);
 					}
 				}
 			});
@@ -148,7 +148,7 @@ namespace Clockwise.Droid
                 if (elapsedTime > 10000)
                 {
                     string errorMsg = "Clockwise timed out with your current connection. Please try again later.";
-                    textToSpeech.Speak(errorMsg, QueueMode.Flush, null, null);
+                    textToSpeech.Speak(errorMsg, QueueMode.Add, null, null);
                     timer.Stop();
                 }
                 else
