@@ -42,10 +42,8 @@ namespace Clockwise.Droid
         string provider = "";
         string locationName = "";
         string transportationMethod = "";
-        string defaultLocation = "";
-        string fromLocation = "";
+        string fromLocation = Helpers.Settings.EMPTY_MODULE;
         string toLocation = "";
-        bool loaded = false;
         int maxResults = 1;
         Marker fromMarker;
         Marker toMarker;
@@ -75,29 +73,20 @@ namespace Clockwise.Droid
             int alarmIndex = Intent.GetIntExtra("alarm_index", -1);
             string trafficString = Helpers.Settings.GetTraffic(alarmIndex, subIndex);
             string[] tripAndRestSplit;
-            string[] locationsSplit;
 
-            //from location is null
-            if (trafficString.Contains("::"))
-            {
-                tripAndRestSplit = trafficString.Split(new string[] { "::" }, StringSplitOptions.None);
-                locationsSplit = tripAndRestSplit[1].Split(':');
-                toLocation = locationsSplit[0];
-                transportationMethod = locationsSplit[1];
-
-            }
-            //from location exists
-            else
-            {
-                tripAndRestSplit = trafficString.Split(new string[] { ":" }, StringSplitOptions.None);
-                fromLocation = tripAndRestSplit[1];
-                toLocation = tripAndRestSplit[2];
-                transportationMethod = tripAndRestSplit[3];
-				searchFromContainer.Visibility = ViewStates.Visible;
-				searchFrom.Text = fromLocation;
-				toggleDefaultLocationImage.SetImageResource(Resource.Drawable.off_toggle);
-			}
+            tripAndRestSplit = trafficString.Split(':');
             locationName = tripAndRestSplit[0];
+            fromLocation = tripAndRestSplit[1];
+            toLocation = tripAndRestSplit[2];
+            transportationMethod = tripAndRestSplit[3];
+            //from location exists
+            if (!fromLocation.Equals(Helpers.Settings.EMPTY_MODULE))
+            {
+                searchFromContainer.Visibility = ViewStates.Visible;
+                searchFrom.Text = fromLocation;
+                toggleDefaultLocationImage.SetImageResource(Resource.Drawable.off_toggle);
+            }
+
             searchTo.Text = toLocation;
             string[] transMethods = Resources.GetStringArray(Resource.Array.transportation_methods);
             int index = 0;
