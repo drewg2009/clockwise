@@ -385,12 +385,13 @@ namespace Clockwise.Droid
 						case "twitter":
 						case "countdown":
 						case "reminders":
+						case "traffic":
 						{ //news:cat:count,cat:count, ...
 							string[] moduleList = m.Substring(m.IndexOf(':') + 1).Split(',');
-								for (int i = 0; i < moduleList.Length; i++)
+							for (int i = 0; i < moduleList.Length; i++)
 							{
-									string[] settings = moduleList[i].Split(':');
-									moduleLayout.AddView(CreateModuleDisplay(type, settings[0], index, i));
+								string[] settings = moduleList[i].Split(':');
+								moduleLayout.AddView(CreateModuleDisplay(type, settings[0], index, i));
 							}
 							break;
 						}
@@ -469,6 +470,7 @@ namespace Clockwise.Droid
 			RelativeLayout displayRow = module.FindViewById<RelativeLayout>(Resource.Id.display_row);
 			LinearLayout editor = null;
 			bool isToggle = false;
+			bool isSeparateActivity = false;
 			Settings.Modules modType = 0;
 			switch (type)
 			{
@@ -531,6 +533,13 @@ namespace Clockwise.Droid
                 case "traffic":
                     modType = Settings.Modules.TRAFFIC;
                     settingImage.SetImageResource(Resource.Drawable.traffic_icon);
+					isSeparateActivity = true;
+					navButton.Click += delegate {
+						Intent i = new Intent(ApplicationContext, typeof(TrafficActivity));
+						i.PutExtra("alarm_index", index);
+						i.PutExtra("subindex", subindex);
+						StartActivity(i);
+					};
                     break;
 			}
 
@@ -573,7 +582,7 @@ namespace Clockwise.Droid
 					}, 200);
 				};
 			}
-			else
+			else if(!isSeparateActivity)
 			{
 				navButton.Click += delegate
 				{

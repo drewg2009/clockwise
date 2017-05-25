@@ -46,7 +46,7 @@ namespace Clockwise
 
 			string weatherString = Settings.GetWeather(index);
 			if (weatherString != Settings.EMPTY_MODULE)
-				weather.Add(new Weather(false, Settings.GetWeather(index)));
+				weather.Add(new Weather(Settings.GetWeather(index)));
 
 			int i = 0;
 			string subnews = Settings.GetNews(index, i);

@@ -50,7 +50,7 @@ namespace Clockwise.Droid
         Marker fromMarker;
         Marker toMarker;
         AlertDialog locationDialog;
-
+		int subIndex;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -62,21 +62,21 @@ namespace Clockwise.Droid
 			initLocationCode();
 			initUI();
 			initMap();
-
+			subIndex = Intent.GetIntExtra("subindex", -1);
         }
 
-        //private void populateLocationOnLoad()
-        //{
-        //    Geocoder geoCoder = new Geocoder(this);
-        //    Location lastKnown = locMgr.GetLastKnownLocation(provider);
+        private void populateLocationOnLoad()
+        {
+            Geocoder geoCoder = new Geocoder(this);
+            Location lastKnown = locMgr.GetLastKnownLocation(provider);
 
-        //    fromAddresses = geoCoder.GetFromLocation(lastKnown.Latitude, lastKnown.Longitude, maxResults);
-        //    Vector v = new Vector();
-        //    v.Add(lastKnown.Latitude);
-        //    v.Add(lastKnown.Longitude);
-        //    updateMapToLocation(fromAddresses, true, null, v, fromMarker);
-        //    searchFrom.Text = getAddressString(fromAddresses.ElementAt(0));
-        //}
+            fromAddresses = geoCoder.GetFromLocation(lastKnown.Latitude, lastKnown.Longitude, maxResults);
+            Vector v = new Vector();
+            v.Add(lastKnown.Latitude);
+            v.Add(lastKnown.Longitude);
+            updateMapToLocation(fromAddresses, true, null, v, fromMarker);
+            searchFrom.Text = getAddressString(fromAddresses.ElementAt(0));
+        }
 
         private void initUI()
         {
