@@ -157,14 +157,13 @@ namespace Clockwise.Droid
                     {
                         MakeRequest(alarm_index);
                         timer.Stop();
-                    }
+						StopSelf();
+					}
                 }
                 elapsedTime += interval;
 
             });
 			timer.Start();
-
-			StopSelf();
 
 		}
 
