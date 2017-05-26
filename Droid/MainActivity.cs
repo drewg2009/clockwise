@@ -13,6 +13,7 @@ using Clockwise.Helpers;
 using Android.Content;
 using Android.Util;
 using Android.Views.InputMethods;
+using Android.Gms.Ads;
 
 namespace Clockwise.Droid
 {
@@ -39,9 +40,14 @@ namespace Clockwise.Droid
 		public static MainActivity instance;
 		static private List<View> moduleTabs = new List<View>();
 		static private int selectedTab = -1;
+
+
+
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
+
+
 			fontLight = Typeface.CreateFromAsset(Resources.Assets, "HelveticaNeueLight.ttf");
 			// Set our view from the "main" layout resource
 			SetContentView(Resource.Layout.Main);
@@ -441,6 +447,8 @@ namespace Clockwise.Droid
 			}
 		}
 
+
+
 		private RelativeLayout CreateModuleDisplay(string type, string title, int index, int subindex)
 		{
 			var metrics = Resources.DisplayMetrics;
@@ -829,13 +837,15 @@ namespace Clockwise.Droid
 			}
 		}
 
-		public void ToggleScrolling(bool enabled)
-		{
-			if(enabled)
-				scrollView.SetOnTouchListener(new MainActivity.ScrollViewOnListener());
-			else
-				scrollView.SetOnTouchListener(new MainActivity.ScrollViewOffListener());
-		}                        
-	}
+public void ToggleScrolling(bool enabled)
+{
+    if (enabled)
+        scrollView.SetOnTouchListener(new MainActivity.ScrollViewOnListener());
+    else
+        scrollView.SetOnTouchListener(new MainActivity.ScrollViewOffListener());
+}
+
+}
+
 }
 

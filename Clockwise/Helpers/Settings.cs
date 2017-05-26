@@ -24,6 +24,9 @@ namespace Clockwise.Helpers
 
 		#region Setting Constants
 
+		private const string AdsKey = "ads_key";
+        private static readonly int AdsDef = 0;
+
 		private const string AlarmsKey = "alarms_key";
 		private static readonly string AlarmsDef = string.Empty;
 
@@ -98,6 +101,10 @@ namespace Clockwise.Helpers
 			set { AppSettings.AddOrUpdateValue<string>(AlarmsKey, value); }
 		}
 
+        public static int Ads{
+            get { return AppSettings.GetValueOrDefault<int>(AdsKey, AdsDef); }
+            set { AppSettings.AddOrUpdateValue<int>(AdsKey, value); }
+        }
 
 		public static string AndroidStartSong
 		{
