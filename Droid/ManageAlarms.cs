@@ -37,11 +37,9 @@ namespace Clockwise.Droid
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-            // Create your application here
-            SetContentView(Resource.Layout.manage_alarms);
+			// Create your application here
+			SetContentView(Resource.Layout.manage_alarms);
             instance = this;
-
-            AdCheck();
 
             View view = FindViewById<LinearLayout>(Resource.Id.root);
 
@@ -390,7 +388,9 @@ namespace Clockwise.Droid
         protected override void OnResume()
         {
             base.OnResume();
-            RefreshAlarms();
+			AdCheck();
+
+			RefreshAlarms();
 
             TextView[] repeatDays = new TextView[7];
             repeatDays[0] = FindViewById<TextView>(Resource.Id.sundayInput);
