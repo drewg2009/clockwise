@@ -6,6 +6,7 @@ using System.Text;
 
 using Android.App;
 using Android.Content;
+using Android.Gms.Ads;
 using Android.Graphics;
 using Android.OS;
 using Android.Runtime;
@@ -18,6 +19,8 @@ namespace Clockwise.Droid
 	[Activity(Label = "CreateModule")]
 	public class CreateModule : Activity
 	{
+		private InterstitialAd mInterstitialAd;
+
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
@@ -118,6 +121,50 @@ namespace Clockwise.Droid
 				Settings.EditTDIH(alarmIndex, tdihToggle.ScaleX < 0);
 			};
 		}
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+            AdCheck();
+        }
+
+		private void AdCheck()
+		{
+			mInterstitialAd = new InterstitialAd(this);
+			mInterstitialAd.AdUnitId = GetString(Resource.String.interstitial_ad_unit_id);
+
+			if (!mInterstitialAd.IsLoaded)
+			{
+				RequestNewInterstitial();
+			}
+
+			var adListener = new CustomAdlistener();
+			mInterstitialAd.AdListener = adListener;
+			adListener.AdLoaded += () =>
+			{
+                if (Helpers.Settings.AdsCreateModule > 2)
+				{
+					if (mInterstitialAd.IsLoaded)
+					{
+						mInterstitialAd.Show();
+					}
+
+                    Helpers.Settings.AdsCreateModule = 0;
+				}
+				else
+				{
+                    Helpers.Settings.AdsCreateModule += 1;
+				}
+			};
+
+
+		}
+
+		private void RequestNewInterstitial()
+		{
+			AdRequest adRequest = new AdRequest.Builder().Build();
+			mInterstitialAd.LoadAd(adRequest);
+		}
 	}
 
 	public class Toggle : Java.Lang.Object, ViewSwitcher.IViewFactory
@@ -129,4 +176,6 @@ namespace Clockwise.Droid
 		}
 
 	}
+
+
 }

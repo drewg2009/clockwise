@@ -683,18 +683,18 @@ namespace Clockwise.Droid
 			var adListener = new CustomAdlistener();
 			mInterstitialAd.AdListener = adListener;
 			adListener.AdLoaded += () => {
-				if (Helpers.Settings.Ads == 5)
+				if (Helpers.Settings.AdsHomeScreen > 4)
 				{
 					if (mInterstitialAd.IsLoaded)
 					{
 						mInterstitialAd.Show();
 					}
 
-					Helpers.Settings.Ads = 0;
+					Helpers.Settings.AdsHomeScreen = 0;
 				}
 				else
 				{
-					Helpers.Settings.Ads += 1;
+					Helpers.Settings.AdsHomeScreen += 1;
 				}
             };
 
@@ -703,31 +703,7 @@ namespace Clockwise.Droid
 
 	}
 
-	class CustomAdlistener : AdListener
-	{
-		// Declare the delegate (if using non-generic pattern).
-		public delegate void AdLoadedEvent();
-		public delegate void AdClosedEvent();
-		public delegate void AdOpenedEvent();
-		// Declare the event.
-		public event AdLoadedEvent AdLoaded;
-		public event AdClosedEvent AdClosed;
-		public event AdOpenedEvent AdOpened;
-		public override void OnAdLoaded()
-		{
-			if (AdLoaded != null) this.AdLoaded();
-			base.OnAdLoaded();
-		}
-		public override void OnAdClosed()
-		{
 
-		}
-		public override void OnAdOpened()
-		{
-			if (AdOpened != null) this.AdOpened();
-			base.OnAdOpened();
-		}
-	}
 
 
 }
