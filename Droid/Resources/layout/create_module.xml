@@ -429,7 +429,7 @@
                 android:paddingTop="7dp"
                 android:paddingBottom="7dp">
                 <ImageView
-                    android:src="@drawable/traffic_icon"
+                    android:src="@drawable/fact_icon"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:id="@+id/imageView1"
@@ -466,11 +466,11 @@
                 android:minHeight="25px"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/factRow"
+                android:id="@+id/quoteRow"
                 android:paddingTop="7dp"
                 android:paddingBottom="7dp">
                 <ImageView
-                    android:src="@drawable/traffic_icon"
+                    android:src="@drawable/quote_icon"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:id="@+id/imageView1"
@@ -507,11 +507,11 @@
                 android:minHeight="25px"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/factRow"
+                android:id="@+id/tdihRow"
                 android:paddingTop="7dp"
                 android:paddingBottom="7dp">
                 <ImageView
-                    android:src="@drawable/traffic_icon"
+                    android:src="@drawable/tdih_icon"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:id="@+id/imageView1"

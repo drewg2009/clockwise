@@ -85,13 +85,13 @@ namespace Clockwise.Droid
 						iv.SetImageResource(Resource.Drawable.countdown_icon);
 						break;
 					case "fact":
-						iv.SetImageResource(Resource.Drawable.countdown_icon);
+						iv.SetImageResource(Resource.Drawable.fact_icon);
 						break;
 					case "quote":
-						iv.SetImageResource(Resource.Drawable.countdown_icon);
+						iv.SetImageResource(Resource.Drawable.quote_icon);
 						break;
 					case "tdih":
-						iv.SetImageResource(Resource.Drawable.countdown_icon);
+						iv.SetImageResource(Resource.Drawable.tdih_icon);
 						break;
 				}
 				rows.Add(rl);

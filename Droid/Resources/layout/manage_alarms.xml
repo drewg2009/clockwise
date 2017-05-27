@@ -45,6 +45,14 @@
                     android:layout_height="25dp"
                     android:id="@+id/about_button"
                     android:layout_centerVertical="true" />
+                <ImageView
+                    android:src="@drawable/settings_order"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:id="@+id/module_order_button"
+                    android:layout_toRightOf="@id/about_button"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp" />
                 <RelativeLayout
                     android:minWidth="25px"
                     android:minHeight="25px"

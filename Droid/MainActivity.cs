@@ -23,13 +23,13 @@ namespace Clockwise.Droid
 		private int repeatDaysResult = 0;
 		RelativeLayout settingsContainer;
 		LinearLayout snoozeRow;
-		LinearLayout buttonRow;
 		Typeface fontLight;
 		View parent;
-		ImageView settingsBtn;
 		//bool moduleSettingOpen = false;
 		public static RelativeLayout clock_settings_layout;
 		ImageView addModuleBtn;
+		ImageView snoozeButton;
+		ImageView toneButton;
 		ImageSwitcher alarm_toggle;
 		public static CustomHorizontalScrollView scrollView;
 		LinearLayout scroll_layout;
@@ -219,12 +219,12 @@ namespace Clockwise.Droid
 			clock_settings_layout = FindViewById<RelativeLayout>(Resource.Id.clock_settings);
 			settingsContainer = FindViewById<RelativeLayout>(Resource.Id.settings_container);
 			snoozeRow = FindViewById<LinearLayout>(Resource.Id.snooze_row);
-			buttonRow = FindViewById<LinearLayout>(Resource.Id.settings_row);
-			settingsBtn = FindViewById<ImageView>(Resource.Id.settings);
 			AnimationManager settingsAnimationManager = new AnimationManager(false);
 			AnimationHelper settingsHelper = new AnimationHelper(settingsContainer, settingsAnimationManager);
 
-			settingsBtn.Click += delegate
+			toneButton = FindViewById<ImageView>(Resource.Id.tone);
+			snoozeButton = FindViewById<ImageView>(Resource.Id.snooze);
+			snoozeButton.Click += delegate
 			{
 				if (!settingsAnimationManager.Animating)
 				{
@@ -238,7 +238,7 @@ namespace Clockwise.Droid
 						//Expand
 						int targetHeight = (int)(80 * settingsContainer.Context.Resources.DisplayMetrics.Density);
 						settingsHelper.expand((int)(200), targetHeight);
-						settingsBtn.SetImageResource(Resource.Drawable.settings_cancel);
+						snoozeButton.SetImageResource(Resource.Drawable.settings_cancel);
 						scrollView.SetOnTouchListener(new ScrollViewOffListener());
 
 						//Fade nav button for current module
@@ -254,7 +254,7 @@ namespace Clockwise.Droid
 					else {
 						//Collapse
 						settingsHelper.collapse((int)(200), 0);
-						settingsBtn.SetImageResource(Resource.Drawable.settings_button);
+						snoozeButton.SetImageResource(Resource.Drawable.settings_snooze);
 						scrollView.SetOnTouchListener(new ScrollViewOnListener());
 
 						//Fade nav button for current module
@@ -266,20 +266,20 @@ namespace Clockwise.Droid
 						}
 						
 
-						if (buttonRow.Alpha < .5f)
-						{
-							//Fade in settings
-							buttonRow.Enabled = true;
-							buttonRow.Clickable = true;
-							AnimationHelper buttonHolderFade = new AnimationHelper(buttonRow, null);
+						//if (buttonRow.Alpha < .5f)
+						//{
+						//	//Fade in settings
+						//	buttonRow.Enabled = true;
+						//	buttonRow.Clickable = true;
+						//	AnimationHelper buttonHolderFade = new AnimationHelper(buttonRow, null);
 
-							//Fade out snooze
-							snoozeRow.Enabled = false;
-							snoozeRow.Clickable = false;
-							AnimationHelper snoozeRowFade = new AnimationHelper(snoozeRow, null);
-							buttonHolderFade.Fade(100, 1.0f);
-							snoozeRowFade.Fade(100, 0f);
-						}
+						//	//Fade out snooze
+						//	snoozeRow.Enabled = false;
+						//	snoozeRow.Clickable = false;
+						//	AnimationHelper snoozeRowFade = new AnimationHelper(snoozeRow, null);
+						//	buttonHolderFade.Fade(100, 1.0f);
+						//	snoozeRowFade.Fade(100, 0f);
+						//}
 					}
 				}
 			};
@@ -304,21 +304,8 @@ namespace Clockwise.Droid
 			//Snooze
 			FindViewById<ImageView>(Resource.Id.snooze).Click += delegate {
 				Console.WriteLine("clicked snooze");
-				if (buttonRow.Alpha > .5f)
-				{
-					Console.WriteLine("fading in");
-					//Fade in snooze
-					buttonRow.Enabled = false;
-					buttonRow.Clickable = false;
+				//Expand settings conatiner
 
-					AnimationHelper buttonHolderFade = new AnimationHelper(buttonRow, null);
-					snoozeRow.Enabled = true;
-					snoozeRow.Clickable = true;
-
-					AnimationHelper snoozeRowFade = new AnimationHelper(snoozeRow, null);
-					buttonHolderFade.Fade(100, 0f);
-					snoozeRowFade.Fade(100, 1.0f);
-				}
 			};
 
 			SeekBar snoozeBar = FindViewById<SeekBar>(Resource.Id.snoozeBar);
@@ -345,13 +332,6 @@ namespace Clockwise.Droid
 			//Song select
 			FindViewById<ImageView>(Resource.Id.tone).Click += delegate {
 				Intent i = new Intent(ApplicationContext, typeof(SongSelect));
-				i.PutExtra("alarm_index", alarm_number);
-				StartActivity(i);
-			};
-
-			//Module Order
-			FindViewById<ImageView>(Resource.Id.moduleOrder).Click += delegate {
-				Intent i = new Intent(ApplicationContext, typeof(ModuleOrder));
 				i.PutExtra("alarm_index", alarm_number);
 				StartActivity(i);
 			};
@@ -484,14 +464,17 @@ namespace Clockwise.Droid
 			{
 				case "fact":
 					modType = Settings.Modules.FACT;
+					settingImage.SetImageResource(Resource.Drawable.fact_icon);
 					isToggle = true;
 					break;
 				case "quote":
 					modType = Settings.Modules.QUOTE;
+					settingImage.SetImageResource(Resource.Drawable.quote_icon);
 					isToggle = true;
 					break;
 				case "tdih":
 					modType = Settings.Modules.TDIH;
+					settingImage.SetImageResource(Resource.Drawable.tdih_icon);
 					isToggle = true;
 					break;
 				case "weather":
@@ -598,7 +581,9 @@ namespace Clockwise.Droid
 					AnimationHelper imageFade = new AnimationHelper(settingImage, null);
 					AnimationHelper alarmToggleFade = new AnimationHelper(alarm_toggle, null);
 					AnimationHelper addModuleBtnFade = new AnimationHelper(addModuleBtn, null);
-					AnimationHelper settingsBtnFade = new AnimationHelper(settingsBtn, null);
+					AnimationHelper snoozeBtnFade = new AnimationHelper(snoozeButton, null);
+					AnimationHelper toneBtnFade = new AnimationHelper(toneButton, null);
+
 
 					AnimationHelper clockHeight = new AnimationHelper(clock_settings_layout, new AnimationManager(clock_settings_layout.Height > 0));
 					AnimationHelper moduleFrameHeight = new AnimationHelper(moduleFrame, new AnimationManager(clock_settings_layout.Height == 0));
@@ -618,7 +603,10 @@ namespace Clockwise.Droid
 							moduleFrameHeight.collapse(200, targetHeight);
 							alarmToggleFade.Fade(100, 0);
 							addModuleBtnFade.Fade(100, 0);
-							settingsBtnFade.Fade(100, 0);
+							snoozeBtnFade.Fade(100, 0);
+							snoozeButton.Enabled = false;
+							toneBtnFade.Fade(100, 0);
+							snoozeButton.Enabled = false;
 						}
 
 						scrollView.HorizontalScrollBarEnabled = false;
@@ -636,7 +624,10 @@ namespace Clockwise.Droid
 							moduleFrameHeight.expand(200, (int)(metrics.HeightPixels * .6));
 							alarmToggleFade.Fade(100, 1f);
 							addModuleBtnFade.Fade(100, 1f);
-							settingsBtnFade.Fade(100, 1f);
+							snoozeBtnFade.Fade(100, 1f);
+							snoozeButton.Enabled = true;
+							toneBtnFade.Fade(100, 1f);
+							toneButton.Enabled = true;
 						}
 
 						View focus = CurrentFocus;
@@ -656,21 +647,14 @@ namespace Clockwise.Droid
 
 		public override void OnBackPressed()
 		{
-			if (buttonRow.Alpha < .5f)
+			if (settingsContainer.Height > 0)
 			{
+				//Collapse
 				Console.WriteLine("fading out");
-				settingsBtn.SetImageResource(Resource.Drawable.settings_button);
-				//Fade in settings
-				buttonRow.Enabled = true;
-				buttonRow.Clickable = true;
-				AnimationHelper buttonHolderFade = new AnimationHelper(buttonRow, null);
+				snoozeButton.SetImageResource(Resource.Drawable.settings_snooze);
+				AnimationHelper settingsCollapse = new AnimationHelper(settingsContainer, new AnimationManager(true));
+				settingsCollapse.collapse(100, 0);
 
-				//Fade out snooze
-				snoozeRow.Enabled = false;
-				snoozeRow.Clickable = false;
-				AnimationHelper snoozeRowFade = new AnimationHelper(snoozeRow, null);
-				buttonHolderFade.Fade(100, 1.0f);
-				snoozeRowFade.Fade(100, 0f);
 			}
 			else if (currentModuleNavButton != null)
 			{

@@ -228,8 +228,7 @@
                 android:enabled="false"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:clickable="false"
-                android:alpha="0">
+                android:clickable="false">
                 <SeekBar
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -242,39 +241,6 @@
                     android:id="@+id/snoozeOutput"
                     android:textSize="20dp"
                     android:layout_marginLeft="5dp" />
-            </LinearLayout>
-            <LinearLayout
-                android:orientation="horizontal"
-                android:minWidth="25px"
-                android:minHeight="25px"
-                android:layout_width="match_parent"
-                android:id="@+id/settings_row"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_below="@id/clock_settings"
-                android:layout_height="wrap_content"
-                android:paddingTop="40dp"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:enabled="true">
-                <ImageView
-                    android:src="@drawable/settings_tone"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:id="@+id/tone"
-                    android:layout_weight="1" />
-                <ImageView
-                    android:src="@drawable/settings_snooze"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:id="@+id/snooze"
-                    android:layout_weight="1" />
-                <ImageView
-                    android:src="@drawable/settings_order"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:id="@+id/moduleOrder"
-                    android:layout_weight="1" />
             </LinearLayout>
         </RelativeLayout>
         <ImageView
@@ -304,16 +270,25 @@
             android:layout_marginBottom="-25dp"
             android:src="@drawable/add_module_button" />
         <ImageView
-            android:src="@drawable/settings_button"
+            android:src="@drawable/settings_tone"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:id="@+id/settings"
+            android:id="@+id/tone"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
             android:layout_above="@id/settings_container"
             android:layout_alignParentRight="true"
             android:layout_marginRight="35dp"
             android:layout_marginBottom="-10dp" />
+        <ImageView
+            android:src="@drawable/settings_snooze"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:id="@+id/snooze"
+            android:layout_above="@id/settings_container"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="-10dp"
+            android:layout_marginRight="90dp" />
         <ImageSwitcher xmlns:tools="http://schemas.android.com/tools"
             android:src="@drawable/on_toggle"
             android:layout_width="108dp"

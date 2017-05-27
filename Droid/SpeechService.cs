@@ -2,7 +2,7 @@
 using Android.App;
 using Android.OS;
 using Android.Content;
-using Geolocator.Plugin;
+using Plugin.Geolocator;
 using Android.Content.PM;
 using Clockwise.Helpers;
 using Android.Widget;
