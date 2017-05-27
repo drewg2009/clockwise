@@ -42,7 +42,7 @@ namespace Clockwise.Droid
 
 			Console.WriteLine("save height: {0}", saveButton.MeasuredHeight);
 			int index = Intent.GetIntExtra("alarm_index", -1);
-			string[] moduleOrder = Settings.ModuleOrder.Split('|')[index].Split(':');
+			string[] moduleOrder = Settings.ModuleOrder.Split(':');
 			int moduleRowHeight = selectionRegion / moduleOrder.Length;
 			Console.WriteLine("moduleRow: " + moduleRowHeight);
 			int statusBarHeight = metrics.HeightPixels - root.MeasuredHeight;

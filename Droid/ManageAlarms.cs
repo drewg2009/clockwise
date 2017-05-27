@@ -382,6 +382,11 @@ namespace Clockwise.Droid
             {
                 StartActivity(typeof(About));
             };
+
+			//Module Order
+			FindViewById<ImageView>(Resource.Id.module_order_button).Click += delegate {
+				StartActivity(typeof(ModuleOrder));
+			};
         }
 
 

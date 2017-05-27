@@ -235,7 +235,6 @@ namespace Clockwise.Helpers
 				string newAlarm = "" + index + "#" + hour + "#" + minute + "#" + repeatDays + "#"
 					+ (int)status + "#" + snooze + "#" + volume + "#" + EMPTY_MODULE + "#" + name + "#" + millis;
 				Alarms += "|" + newAlarm;
-				ModuleOrder += "|" + DefaultModuleOrder;
 				AddModules();
 			}
 			//Change old alarm
@@ -1099,15 +1098,9 @@ namespace Clockwise.Helpers
 			}
 		}
 
-		public static void EditModuleOrder(int index, string newOrder)
+		public static void EditModuleOrder(string newOrder)
 		{
-			String[] moduleOrders = ModuleOrder.Split('|');
-			moduleOrders[index] = newOrder;
-
-			string newModuleOrder = "";
-			foreach (String s in moduleOrders)
-				newModuleOrder += s + "|";
-			ModuleOrder = newModuleOrder.TrimEnd('|');
+			ModuleOrder = newOrder;
 		}
 
 		public static void SetAlarmField(int index, AlarmField field, string newValue)
@@ -1139,7 +1132,7 @@ namespace Clockwise.Helpers
 
 		public static string[] GetActiveModules(int index)
 		{
-			string moduleOrder = ModuleOrder.Split('|')[index];
+			string moduleOrder = ModuleOrder;
 			string[] order = moduleOrder.Split(':');
 			List<string> final = new List<string>();
 			foreach (string m in order)
@@ -1183,132 +1176,5 @@ namespace Clockwise.Helpers
 			}
 			return final.ToArray();
 		}
-
-		/*
-			{
-				"modules" : {
-					"weather": [
-				      	{
-					         "lat":-72.4,
-					         "lon": 15.2,
-					         “fahrenheit”: true
-					         “description”: true,
-					         “maxTemp”: true,
-					         “currentTemp”: true
-				      	}
-			   		],
-
-					"news": [
-				      	{
-					         "category":"science",
-					         "amount": 3
-				      	},
-				      	{
-					         "category":"business",
-					         "amount": 1
-				      	}
-			   		],
-
-					"reddit": [
-				      	{
-					         "subreddit":"worldnews",
-					         "amount": 3
-				      	}
-			   		],
-
-					"twitter": [
-				      	{
-					         "username":"nasa",
-					         "amount": 3
-				      	}
-			   		],
-
-					"traffic": [
-				      	{
-					         "startUrl":"...", #may be "null"
-					         "destUrl":"...",
-					         "mode": "drive",
-					         "name": "work"
-				      	}
-			   		],
-
-					"reminders": [
-				      	{
-					         "name":"chores"
-					         "list":[
-								"1" : "pay rent",
-								"2" : "pay electric"
-							]
-				      	}
-			   		],
-
-					"countdown": [
-				      	{
-					         "event":"your birthday",
-					         "date":"3/17/2017"
-				      	}
-			   		],
-
-					"tdih": true,
-					"fact": false,
-					"quote": true
-				}
-			}
-		*/
-
-		public static string GetJsonRequest(int index)
-		{
-			
-			//string json = JsonConvert.SerializeObject(test);
-
-			string JsonRequest = "{";
-			string moduleOrder = ModuleOrder.Split('|')[index];
-			string[] order = moduleOrder.Split(':');
-			List<string> final = new List<string>();
-			foreach (string m in order)
-			{
-				JsonRequest += "\"" + m + "\":";
-				//Build array for each module
-				string array = "[";
-				switch (m)
-				{
-					case "weather":
-						string[] weather = GetWeather(index).Split(':');
-						var temp = new
-						{
-							description = weather[1],
-							currentTemp = weather[2],
-							maxTemp = weather[3],
-							isFahrenheit = weather[4],
-						};
-						//string weather = Json
-						break;
-					case "reddit":
-						break;
-					case "news":
-						break;
-					case "twitter":
-						break;
-					case "traffic":
-						break;
-					case "countdown":
-						break;
-					case "reminders":
-						break;
-					case "fact":
-						break;
-					case "quote":
-						break;
-					case "tdih":
-						break;
-				}
-				array += "]";
-
-			}
-
-			return "";
-		}
 	}
-
-
 }
