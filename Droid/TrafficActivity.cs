@@ -217,18 +217,27 @@ namespace Clockwise.Droid
         private void initLocationCode()
         {
             locMgr = GetSystemService(Context.LocationService) as LocationManager;
-            initLocationUpdate();
         }
 
-        private void initLocationUpdate()
+        protected override void OnResume()
         {
-            provider = LocationManager.GpsProvider;
+            base.OnResume();
+            string Provider = LocationManager.GpsProvider;
 
-            if (locMgr.IsProviderEnabled(provider))
+            if (locMgr.IsProviderEnabled(Provider))
             {
-                locMgr.RequestLocationUpdates(provider, 0, 2000, this);
+                locMgr.RequestLocationUpdates(Provider, 2000, 1, this);
             }
+            else
+            {
+                //Log.Info(tag, Provider + " is not available. Does the device have location services enabled?");
+            }
+        }
 
+        protected override void OnPause()
+        {
+            base.OnPause();
+            locMgr.RemoveUpdates(this);
         }
 
         private void addMarker(Address addr, bool isFrom)
