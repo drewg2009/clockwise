@@ -88,10 +88,11 @@ namespace Clockwise.Droid
                 textToSpeech.Speak(introMsg, QueueMode.Add, null, null);
 			});
 
-			string request;
+			string request = string.Empty;
 			string parameters = "moduleInfo=";
 			string errorMsg = "Clockwise could not load your module information at this time. Please try again later.";
 			string URI = "http://phplaravel-43928-259989.cloudwaysapps.com/get/moduleData";
+
 			LocationManager lm = (LocationManager)GetSystemService(Context.LocationService);
 			if ((int)Build.VERSION.SdkInt >= 23 && CheckSelfPermission(Android.Manifest.Permission.AccessFineLocation) == Permission.Granted
 				&& CheckSelfPermission(Android.Manifest.Permission.AccessCoarseLocation) == Permission.Granted
@@ -127,7 +128,7 @@ namespace Clockwise.Droid
 			});
 
 			Console.WriteLine("\nrequest: " + request);
-
+			StopSelf();
 		}
 
 
