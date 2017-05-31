@@ -98,11 +98,19 @@ namespace Clockwise.Droid
 				&& CheckSelfPermission(Android.Manifest.Permission.AccessCoarseLocation) == Permission.Granted
 				&& lm.IsProviderEnabled(LocationManager.GpsProvider))
 			{
-				var locator = CrossGeolocator.Current;
-				locator.DesiredAccuracy = 50;
-				var position = await locator.GetPositionAsync(timeoutMilliseconds: 10000);
-				Console.WriteLine("Lat:{0}, Lon:{1}", position.Latitude, position.Longitude);
-				request = JSONRequestSerializer.GetInstance().GetJsonRequest(index, position.Latitude, position.Longitude);
+				try
+				{
+					var locator = CrossGeolocator.Current;
+					locator.DesiredAccuracy = 50;
+					var position = await locator.GetPositionAsync(timeoutMilliseconds: 15000);
+					Console.WriteLine("Lat:{0}, Lon:{1}", position.Latitude, position.Longitude);
+					request = JSONRequestSerializer.GetInstance().GetJsonRequest(index, position.Latitude, position.Longitude);
+				}
+				catch (TaskCanceledException e)
+				{
+					textToSpeech.Speak("Unfortunately, Clockwise wasn't able to find your location. ", QueueMode.Add, null, null);
+					request = JSONRequestSerializer.GetInstance().GetJsonRequest(index, 0, 0);
+				}
 
 			}
 			else
