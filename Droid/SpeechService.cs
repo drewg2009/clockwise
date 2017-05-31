@@ -15,6 +15,7 @@ using Android.Gms.Location;
 using Android.Runtime;
 using Android.Media;
 using System.IO;
+using Java.IO;
 
 namespace Clockwise.Droid
 {
@@ -26,6 +27,7 @@ namespace Clockwise.Droid
         int alarm_index;
         bool initFinished = false;
         Location location;
+
 
 		public override void OnCreate()
         {
@@ -108,7 +110,7 @@ namespace Clockwise.Droid
             || lm.IsProviderEnabled(LocationManager.GpsProvider))
             {
                 location = lm.GetLastKnownLocation(provider);
-                Console.WriteLine("Lat:{0}, Lon:{1}", location.Latitude, location.Longitude);
+                System.Console.WriteLine("Lat:{0}, Lon:{1}", location.Latitude, location.Longitude);
                 request = JSONRequestSerializer.GetInstance().GetJsonRequest(index, location.Latitude, location.Longitude);
 
             }
@@ -126,11 +128,8 @@ namespace Clockwise.Droid
                     if (!string.IsNullOrEmpty(result))
                     {
                         
-						MediaPlayer _player;
-                        byte[] data = Convert.FromBase64String(Base64Decode(result));
-						File.WriteAllBytes("file.mp3", data);
-                        _player = MediaPlayer.Create(this, Android.Net.Uri.Parse("file.mp3"));
-                        _player.Start();
+                        byte[] data = System.Convert.FromBase64String(result);
+                        PlayMp3(data);
 						//textToSpeech.Speak(result, QueueMode.Add, null, null);
                     }
                     else
@@ -140,13 +139,41 @@ namespace Clockwise.Droid
                 }
             });
 
-            Console.WriteLine("\nrequest: " + request);
+            //Console.WriteLine("\nrequest: " + request);
         }
 
-		public static string Base64Decode(string base64EncodedData)
+
+		private void PlayMp3(byte[] mp3SoundByteArray)
 		{
-			var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
-			return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+			try
+			{
+                // create temp file that will hold byte array
+                Java.IO.File tempMp3 = Java.IO.File.CreateTempFile("file.mp3", "mp3", CacheDir);
+				tempMp3.DeleteOnExit();
+				FileOutputStream fos = new FileOutputStream(tempMp3);
+				fos.Write(mp3SoundByteArray);
+				fos.Close();
+
+                // resetting mediaplayer instance to evade problems
+                //_player.Reset();
+
+				// In case you run into issues with threading consider new instance like:
+				 MediaPlayer mediaPlayer = new MediaPlayer();                     
+
+				// Tried passing path directly, but kept getting 
+				// "Prepare failed.: status=0x1"
+				// so using file descriptor instead
+				FileInputStream fis = new FileInputStream(tempMp3);
+                mediaPlayer.SetDataSource(fis.FD);
+
+                mediaPlayer.Prepare();
+                mediaPlayer.Start();
+			}
+			catch (Java.IO.IOException ex)
+			{
+				string s = ex.ToString();
+				ex.PrintStackTrace();
+			}
 		}
 
 
