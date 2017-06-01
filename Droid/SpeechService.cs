@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using Android.App;
 using Android.OS;
 using Android.Content;
@@ -8,8 +8,6 @@ using Java.Util;
 using System.Threading.Tasks;
 using System.Net;
 using Android.Locations;
-using Android.Gms.Common.Apis;
-using Android.Gms.Common;
 using Android.Gms.Location;
 using Android.Runtime;
 using Android.Media;
