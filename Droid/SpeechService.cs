@@ -7,7 +7,6 @@ using Android.Widget;
 using Java.Util;
 using System.Threading.Tasks;
 using System.Net;
-using Android.Speech.Tts;
 using Android.Locations;
 using Android.Gms.Common.Apis;
 using Android.Gms.Common;
@@ -16,31 +15,24 @@ using Android.Runtime;
 using Android.Media;
 using System.IO;
 using Java.IO;
+using Newtonsoft.Json;
 
 namespace Clockwise.Droid
 {
     [Service]
-    public class SpeechService : Service, TextToSpeech.IOnInitListener
-	{
-        TextToSpeech textToSpeech;
-        Locale lang;
-        int alarm_index;
-        bool initFinished = false;
+    public class SpeechService : Service
+    {
         Location location;
 
 
-		public override void OnCreate()
+        public override void OnCreate()
         {
             base.OnCreate();
-            textToSpeech = new TextToSpeech(this, this, "com.google.android.tts");
-            lang = Java.Util.Locale.Default;
-            textToSpeech.SetLanguage(lang);
         }
-
 
         public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
         {
-            alarm_index = intent.GetIntExtra("alarm_index", -1);
+            int alarm_index = intent.GetIntExtra("alarm_index", -1);
 
             if (alarm_index >= 0)
             {
@@ -83,23 +75,19 @@ namespace Clockwise.Droid
                 Toast.MakeText(this, "bad index: " + alarm_index, ToastLength.Long).Show();
             }
 
-            initFinished = true;
+
+            MakeRequest(alarm_index);
+
             return base.OnStartCommand(intent, flags, startId);
         }
 
-        public async void MakeRequest(int index)
-        {
 
-            await Task.Factory.StartNew(() =>
-            {
-                string introMsg = "Hello. Clockwise is collecting your module info. Please wait one moment.";
-                textToSpeech.Speak(introMsg, QueueMode.Add, null, null);
-            });
+        public void MakeRequest(int index)
+        {
 
             string request = string.Empty;
             string parameters = "moduleInfo=";
-            string errorMsg = "Clockwise could not load your module information at this time. Please try again later.";
-            string URI = "http://phplaravel-43928-259989.cloudwaysapps.com/get/moduleData";
+            string getModuleDataURI = "http://phplaravel-43928-259989.cloudwaysapps.com/get/moduleData";
 
             LocationManager lm = GetSystemService(Context.LocationService) as LocationManager;
             Criteria locationCriteria = new Criteria();
@@ -118,104 +106,95 @@ namespace Clockwise.Droid
             {
                 request = JSONRequestSerializer.GetInstance().GetJsonRequest(index, 0, 0);
             }
-            parameters += request;
-            var task = Task.Factory.StartNew(() =>
+
+            Task.Factory.StartNew(() =>
             {
-                using (WebClient wc = new WebClient())
+                string introURI = "http://phplaravel-43928-259989.cloudwaysapps.com/get/introMessage";
+                string introMessage = GetApiData(introURI, "");
+                byte[] introData = System.Convert.FromBase64String(introMessage);
+                MediaPlayer m = PlayMp3(introData);
+
+                m.Completion += delegate
                 {
-                    wc.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-                    string result = wc.UploadString(new Uri(URI), parameters);
-                    if (!string.IsNullOrEmpty(result))
+					parameters += request;
+					string content = GetApiData(getModuleDataURI, parameters);
+					string errorURI = "http://phplaravel-43928-259989.cloudwaysapps.com/get/errorMessage";
+                    if (!string.IsNullOrEmpty(content))
                     {
                         
-                        byte[] data = System.Convert.FromBase64String(result);
-                        PlayMp3(data);
-						//textToSpeech.Speak(result, QueueMode.Add, null, null);
+                        byte[] data = System.Convert.FromBase64String(content);
+                        MediaPlayer m2 = PlayMp3(data);
                     }
                     else
                     {
-                        textToSpeech.Speak(errorMsg, QueueMode.Add, null, null);
+
+						string errorParams = "";
+						string errorMessage = GetApiData(errorURI, "");
+                        byte[] data = System.Convert.FromBase64String(errorMessage);
+                        MediaPlayer m2 = PlayMp3(data);
                     }
-                }
+                    StopSelf();
+
+                };
+
             });
+
 
             //Console.WriteLine("\nrequest: " + request);
         }
 
+        private string GetApiData(string URI, string reqParams)
+        {
+            string content = "";
+            using (WebClient wc = new WebClient())
+            {
+                wc.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+                string result = wc.UploadString(new Uri(URI), reqParams);
+                dynamic decodedResult = JsonConvert.DeserializeObject(result);
+                content = (string)decodedResult;
 
-		private void PlayMp3(byte[] mp3SoundByteArray)
-		{
-			try
-			{
+            }
+
+            return content;
+
+        }
+
+
+        private MediaPlayer PlayMp3(byte[] mp3SoundByteArray)
+        {
+
+            MediaPlayer mediaPlayer = null;
+            try
+            {
                 // create temp file that will hold byte array
                 Java.IO.File tempMp3 = Java.IO.File.CreateTempFile("file.mp3", "mp3", CacheDir);
-				tempMp3.DeleteOnExit();
-				FileOutputStream fos = new FileOutputStream(tempMp3);
-				fos.Write(mp3SoundByteArray);
-				fos.Close();
+                tempMp3.DeleteOnExit();
+                FileOutputStream fos = new FileOutputStream(tempMp3);
+                fos.Write(mp3SoundByteArray);
+                fos.Close();
 
                 // resetting mediaplayer instance to evade problems
                 //_player.Reset();
 
-				// In case you run into issues with threading consider new instance like:
-				 MediaPlayer mediaPlayer = new MediaPlayer();                     
+                // In case you run into issues with threading consider new instance like:
+                mediaPlayer = new MediaPlayer();
 
-				// Tried passing path directly, but kept getting 
-				// "Prepare failed.: status=0x1"
-				// so using file descriptor instead
-				FileInputStream fis = new FileInputStream(tempMp3);
+                // Tried passing path directly, but kept getting 
+                // "Prepare failed.: status=0x1"
+                // so using file descriptor instead
+                FileInputStream fis = new FileInputStream(tempMp3);
                 mediaPlayer.SetDataSource(fis.FD);
 
                 mediaPlayer.Prepare();
                 mediaPlayer.Start();
-			}
-			catch (Java.IO.IOException ex)
-			{
-				string s = ex.ToString();
-				ex.PrintStackTrace();
-			}
-		}
 
-
-        void TextToSpeech.IOnInitListener.OnInit(OperationResult status)
-        {
-            // if we get an error, default to the default language
-            if (status == OperationResult.Error)
-                textToSpeech.SetLanguage(Java.Util.Locale.Default);
-            // if the listener is ok, set the lang
-            if (status == OperationResult.Success)
-                textToSpeech.SetLanguage(lang);
-
-            double interval = 1000;
-            double timeout = 5000;
-            double elapsedTime = 0;
-            System.Timers.Timer timer = new System.Timers.Timer(interval);
-            timer.Elapsed += async (sender, e) => await Task.Factory.StartNew(() =>
+            }
+            catch (Java.IO.IOException ex)
             {
-                if (elapsedTime > timeout)
-                {
-                    string errorMsg = "Clockwise timed out with your current connection. Please try again later.";
-                    textToSpeech.Speak(errorMsg, QueueMode.Add, null, null);
-                    timer.Stop();
-                    StopSelf();
-                }
-                else
-                {
-                    if (initFinished)
-                    {
-                        MakeRequest(alarm_index);
-                        timer.Stop();
-                        StopSelf();
-                    }
-                }
-                elapsedTime += interval;
-
-            });
-            timer.Start();
-
-
-		
-
+                string s = ex.ToString();
+                ex.PrintStackTrace();
+            }
+            return mediaPlayer;
         }
 
 
