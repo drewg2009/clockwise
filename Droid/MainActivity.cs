@@ -30,7 +30,7 @@ namespace Clockwise.Droid
 		ImageView addModuleBtn;
 		ImageView snoozeButton;
 		ImageView toneButton;
-		ImageSwitcher alarm_toggle;
+		public ImageSwitcher alarm_toggle;
 		public static CustomHorizontalScrollView scrollView;
 		LinearLayout scroll_layout;
 		public static DisplayMetrics DisplayMetrics;
@@ -40,13 +40,13 @@ namespace Clockwise.Droid
 		public static MainActivity instance;
 		static private List<View> moduleTabs = new List<View>();
 		static private int selectedTab = -1;
-
-
+		static LinearLayout tabHolder = null;
+		List<Module> modules = new List<Module>();
 
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
-
+			RequestedOrientation = ScreenOrientation.Portrait;
 
 			fontLight = Typeface.CreateFromAsset(Resources.Assets, "HelveticaNeueLight.ttf");
 			// Set our view from the "main" layout resource
@@ -264,22 +264,6 @@ namespace Clockwise.Droid
 								currentModuleLayout.FindViewById(Resource.Id.navButton), null);
 							navButtonFader.Fade(100, 1f);
 						}
-						
-
-						//if (buttonRow.Alpha < .5f)
-						//{
-						//	//Fade in settings
-						//	buttonRow.Enabled = true;
-						//	buttonRow.Clickable = true;
-						//	AnimationHelper buttonHolderFade = new AnimationHelper(buttonRow, null);
-
-						//	//Fade out snooze
-						//	snoozeRow.Enabled = false;
-						//	snoozeRow.Clickable = false;
-						//	AnimationHelper snoozeRowFade = new AnimationHelper(snoozeRow, null);
-						//	buttonHolderFade.Fade(100, 1.0f);
-						//	snoozeRowFade.Fade(100, 0f);
-						//}
 					}
 				}
 			};
@@ -393,17 +377,17 @@ namespace Clockwise.Droid
 		{
 			//Tab holder
 			moduleTabs.Clear();
-			LinearLayout tabHolder = FindViewById<LinearLayout>(Resource.Id.tab_holder);
+			tabHolder = FindViewById<LinearLayout>(Resource.Id.tab_holder);
 			tabHolder.LayoutParameters.Width = (int)(Resources.DisplayMetrics.WidthPixels* .75);
 			int numModules = count;
 			if (numModules > 0)
 			{
 				selectedTab = 0;
-				int spaceWidth = (int)(tabHolder.Width * .05);
+				int spaceWidth = (int)((tabHolder.LayoutParameters.Width * .75) * .05);
 				int totalSpaceSize = spaceWidth * (numModules - 1);
-				int tabWidth = (tabHolder.Width - totalSpaceSize) / numModules;
+				int tabWidth = (tabHolder.LayoutParameters.Width - totalSpaceSize) / numModules;
 
-				Console.WriteLine("numModules: " + numModules);
+				Console.WriteLine("\n[Alarm Screen] numModules: " + numModules);
 
 				for (int i = 0; i<numModules; i++)
 				{
@@ -463,65 +447,80 @@ namespace Clockwise.Droid
 			switch (type)
 			{
 				case "fact":
+					settingTitle.Text = title;
 					modType = Settings.Modules.FACT;
 					settingImage.SetImageResource(Resource.Drawable.fact_icon);
 					isToggle = true;
 					break;
 				case "quote":
+					settingTitle.Text = title;
 					modType = Settings.Modules.QUOTE;
 					settingImage.SetImageResource(Resource.Drawable.quote_icon);
 					isToggle = true;
 					break;
 				case "tdih":
+					settingTitle.Text = title;
 					modType = Settings.Modules.TDIH;
 					settingImage.SetImageResource(Resource.Drawable.tdih_icon);
 					isToggle = true;
 					break;
 				case "weather":
+					settingTitle.Text = title;
 					modType = Settings.Modules.WEATHER;
 					settingImage.SetImageResource(Resource.Drawable.weather_icon);
 					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.weather, null);
 					Weather weather = new Weather(ApplicationContext, index, editor);
 					weather.EditSetup(navButton);
+					modules.Add(weather);
 					break;
 				case "news":
+					settingTitle.Text = title;
 					modType = Settings.Modules.NEWS;
 					settingImage.SetImageResource(Resource.Drawable.news_icon);
 					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.news, null);
 					News news = new News(ApplicationContext, index, editor);
 					news.EditSetup(subindex, navButton);
+					modules.Add(news);
 					break;
 				case "reddit":
 					modType = Settings.Modules.REDDIT;
-					settingTitle.Text = "r/" + settingTitle.Text;
+					//settingTitle.Text = "r/" + title;
 					settingImage.SetImageResource(Resource.Drawable.reddit_icon);
 					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.reddit, null);
-					Reddit reddit = new Reddit(ApplicationContext, index, editor);
+					Reddit reddit = new Reddit(ApplicationContext, index, editor, settingTitle);
 					reddit.EditSetup(subindex, navButton);
+					modules.Add(reddit);
 					break;
 				case "twitter":
+					settingTitle.Text = title;
 					modType = Settings.Modules.TWITTER;
 					settingImage.SetImageResource(Resource.Drawable.twitter_icon);
 					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.twitter, null);
 					Twitter twitter = new Twitter(ApplicationContext, index, editor);
 					twitter.EditSetup(subindex, navButton);
+					modules.Add(twitter);
 					break;
 				case "countdown":
+					settingTitle.Text = title;
 					modType = Settings.Modules.COUNTDOWN;
 					settingImage.SetImageResource(Resource.Drawable.countdown_icon);
 					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.countdown, null);
 					Countdown countdown = new Countdown(ApplicationContext, index, editor);
 					countdown.EditSetup(subindex, navButton);
+					modules.Add(countdown);
 					break;
 				case "reminders":
+					settingTitle.Text = title;
 					modType = Settings.Modules.REMINDERS;
 					settingImage.SetImageResource(Resource.Drawable.todo_icon);
 					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.reminders, null);
 					editor.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent);
 					Reminders reminders = new Reminders(ApplicationContext, index, editor);
 					reminders.EditSetup(subindex, navButton);
+					modules.Add(reminders);
                     break;
                 case "traffic":
+					settingTitle.Text = title;
                     modType = Settings.Modules.TRAFFIC;
                     settingImage.SetImageResource(Resource.Drawable.traffic_icon);
 					isSeparateActivity = true;
@@ -533,8 +532,6 @@ namespace Clockwise.Droid
 					};
                     break;
 			}
-
-			settingTitle.Text = title;
 
 			settingImage.LayoutParameters.Width = (int)((double)parent.MeasuredHeight * .4);
 			settingImage.LayoutParameters.Height = (int)((double)parent.MeasuredHeight * .4);
@@ -638,6 +635,32 @@ namespace Clockwise.Droid
 						}
 
 						currentModuleNavButton = null;
+						Module currentModuleTab = modules[selectedTab];
+
+						if (currentModuleTab.GetType() == typeof(Weather))
+						{
+							((Weather)currentModuleTab).EditSetup(navButton);
+						}
+						else if (currentModuleTab.GetType() == typeof(Reddit))
+						{
+							((Reddit)currentModuleTab).EditSetup(subindex, navButton);
+						}
+						else if (currentModuleTab.GetType() == typeof(News))
+						{
+							((News)currentModuleTab).EditSetup(subindex, navButton);
+						}
+						else if (currentModuleTab.GetType() == typeof(Countdown))
+						{
+							((Countdown)currentModuleTab).EditSetup(subindex, navButton);
+						}
+						else if (currentModuleTab.GetType() == typeof(Reminders))
+						{
+							((Reminders)currentModuleTab).EditSetup(subindex, navButton);
+						}
+						else if (currentModuleTab.GetType() == typeof(Twitter))
+						{
+							((Twitter)currentModuleTab).EditSetup(subindex, navButton);
+						}
 					}
 				};
 			}
@@ -668,7 +691,7 @@ namespace Clockwise.Droid
 		protected override void OnResume()
 		{
 			base.OnResume();
-			Console.WriteLine("resuming alarm screen");
+			Console.WriteLine("\n[Alarm Screen]resuming alarm screen");
 			instance = this;
 			LinearLayout moduleLayout = FindViewById<LinearLayout>(Resource.Id.module_layout);
 			while(moduleLayout.ChildCount > 0) moduleLayout.RemoveViewAt(0);
@@ -766,15 +789,17 @@ namespace Clockwise.Droid
 				LinearLayout scroll_layout = (LinearLayout)((ViewGroup)scrollView).GetChildAt(0);
 				int moduleWidth = DisplayMetrics.WidthPixels;
 				int numModules = scroll_layout.Width / moduleWidth;
-				Console.WriteLine("num modules: " + numModules);
-
 				currentModule = (scrollView.ScrollX + (moduleWidth/2))/ moduleWidth;
-
 				int target = currentModule * moduleWidth;
 				scrollView.AnimateScrollTo(target);
 
-				if (selectedTab != -1) moduleTabs[selectedTab].Animate().Alpha(.15f).SetDuration(100).Start();
-				moduleTabs[currentModule].Animate().Alpha(.4f).SetDuration(100).Start();
+				if (selectedTab != -1)
+				{
+					View oldTab = tabHolder.GetChildAt(selectedTab * 2);
+					oldTab.Animate().Alpha(.15f).SetDuration(100).Start();
+				}
+				View newTab = tabHolder.GetChildAt(currentModule * 2);
+				newTab.Animate().Alpha(.4f).SetDuration(100).Start();
 				selectedTab = currentModule;
 			}
 
@@ -783,14 +808,6 @@ namespace Clockwise.Droid
 				Console.WriteLine("scroll started");
 			}
 		}
-
-		//public class Hou : Java.Lang.Object, View.IOnDragListener
-		//{
-		//	public bool OnDrag(View v, DragEvent e)
-		//	{
-		//		return true;
-		//	}
-		//}
 
 		public override async void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
 		{

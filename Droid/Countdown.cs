@@ -15,7 +15,7 @@ namespace Clockwise.Droid
 	{
 		private EditText eventNameInput;
 		private EditText eventDateInput;
-		public Countdown(Context c, int index, View v) : base(c, index, v)
+		public Countdown(Context c, int index, View v, TextView tv = null) : base(c, index, v, tv)
 		{
 			Typeface font = Typeface.CreateFromAsset(c.Resources.Assets, "HelveticaNeueLight.ttf");
 			view.FindViewById<TextView>(Resource.Id.eventDateText).Typeface = font;

@@ -93,7 +93,7 @@ namespace Clockwise.Droid
             await Task.Factory.StartNew(() =>
             {
                 string introMsg = "Hello. Clockwise is collecting your module info. Please wait one moment.";
-                textToSpeech.Speak(introMsg, QueueMode.Add, null, null);
+                //textToSpeech.Speak(introMsg, QueueMode.Add, null, null);
             });
 
             string request = string.Empty;
@@ -168,6 +168,9 @@ namespace Clockwise.Droid
 
                 mediaPlayer.Prepare();
                 mediaPlayer.Start();
+				mediaPlayer.Completion += delegate {
+					StopSelf();
+				};
 			}
 			catch (Java.IO.IOException ex)
 			{

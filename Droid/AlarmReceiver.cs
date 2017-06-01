@@ -134,6 +134,20 @@ namespace Clockwise.Droid
 			sm.setVolume((float)volume / 15f);
 
 			AlarmUtils.PostNotification(context, alarm_index);
+
+			if (Int32.Parse(Helpers.Settings.GetAlarmField(alarm_index, Helpers.Settings.AlarmField.RepeatDays)) == 0
+			    && MainActivity.instance != null)
+			{
+				if(MainActivity.instance !=null)
+					MainActivity.instance.alarm_toggle.PerformClick();
+				if (ManageAlarms.instance != null)
+				{
+					LinearLayout alarmRow = ManageAlarms.instance.GetAlarmRow(alarm_index);
+					ImageView iv = alarmRow.FindViewById<ImageView>(Resource.Id.alarm_status);
+					iv.SetImageResource(Resource.Drawable.alarm_off);
+				}
+
+			}
 		}
 	}
 }

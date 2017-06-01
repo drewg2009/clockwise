@@ -20,11 +20,11 @@
         android:textSize="15dp"
         android:layout_weight="1"
         android:textColor="#ffffff"
-        android:backgroundTint="#8e8e8e" />
+        android:backgroundTint="#ffffffff" />
     <ImageView
         android:id="@+id/reminderDeleteButton"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:src="@drawable/delete2"
-        android:layout_marginLeft="5dp" />
+        android:layout_marginLeft="7dp" />
 </LinearLayout>

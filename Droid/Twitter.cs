@@ -13,7 +13,7 @@ namespace Clockwise.Droid
 	{
 		private EditText amountInput;
 		private EditText usernameInput;
-		public Twitter(Context c, int index, View v) : base(c, index, v)
+		public Twitter(Context c, int index, View v, TextView tv = null) : base(c, index, v, tv)
 		{
 			Typeface font = Typeface.CreateFromAsset(c.Resources.Assets, "HelveticaNeueLight.ttf");
 			v.FindViewById<TextView>(Resource.Id.usernameText).Typeface = font;
@@ -54,7 +54,7 @@ namespace Clockwise.Droid
 
 						//Clear
 						usernameInput.Text = string.Empty;
-						amountInput.Text = string.Empty;
+						amountInput.Text = "1";
 					}
 				}
 			};

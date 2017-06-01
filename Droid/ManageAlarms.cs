@@ -33,12 +33,14 @@ namespace Clockwise.Droid
 		private int selectedMonth;
         private int selectedDayOfMonth;
         private int selectedYear;
-
+		public List<LinearLayout> alarmRows = null;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
 			// Create your application here
 			SetContentView(Resource.Layout.manage_alarms);
+			RequestedOrientation = ScreenOrientation.Portrait;
+
             instance = this;
 
             View view = FindViewById<LinearLayout>(Resource.Id.root);
@@ -393,6 +395,7 @@ namespace Clockwise.Droid
         protected override void OnResume()
         {
             base.OnResume();
+			instance = this;
 			AdCheck();
 
 			RefreshAlarms();
@@ -411,19 +414,19 @@ namespace Clockwise.Droid
                 tv.SetTextColor(Color.ParseColor("#CCCCCC"));
                 tv.Typeface = Typeface.CreateFromAsset(Resources.Assets, "HelveticaNeueLight.ttf");
             }
-
-            instance = this;
         }
 
         protected override void OnStop()
         {
-            //instance = null;
+            instance = null;
+			alarmRows = null;
             base.OnStop();
         }
 
         public void RefreshAlarms()
         {
             Console.Write("New alarms: " + Settings.Alarms);
+			alarmRows = new List<LinearLayout>();
             LinearLayout alarmViewer = FindViewById<LinearLayout>(Resource.Id.alarm_viewer);
             while (alarmViewer.ChildCount > 0) alarmViewer.RemoveViewAt(0);
             string alarmSettings = Settings.Alarms;
@@ -525,7 +528,15 @@ namespace Clockwise.Droid
             gap.LayoutParameters = gap_params;
             alarmViewer.AddView(gap);
             alarmViewer.AddView(alarmRow);
+			alarmRows.Add(alarmRow);
         }
+
+		public LinearLayout GetAlarmRow(int index)
+		{
+			return alarmRows[index];
+		}
+
+
 
         public override async void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
         {

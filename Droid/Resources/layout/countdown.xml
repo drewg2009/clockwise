@@ -27,7 +27,9 @@
             android:id="@+id/eventNameInput"
             android:layout_weight="1"
             android:textSize="15dp"
-            android:textColor="#ffffffff" />
+            android:textColor="#ffffffff"
+            android:textColorHint="#ffffff"
+            android:backgroundTint="#ffffff" />
     </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
@@ -50,7 +52,9 @@
             android:hint="Select date here"
             android:textSize="15dp"
             android:textColor="#ffffffff"
-            android:focusableInTouchMode="false" />
+            android:focusableInTouchMode="false"
+            android:textColorHint="#ffffff"
+            android:backgroundTint="#ffffff" />
     </LinearLayout>
 <!--<RelativeLayout
         android:layout_width="match_parent"

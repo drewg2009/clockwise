@@ -11,13 +11,13 @@ namespace Clockwise.Droid
 		protected int index;
 		protected View view;
 		protected LinearLayout saveBtn;
-
-		public Module(Context c, int index, View v)
+		protected TextView title;
+		public Module(Context c, int index, View v, TextView tv)
 		{
 			this.context = c;
 			this.index = index;
 			this.view = v;
-
+			this.title = tv;
 			saveBtn = v.FindViewById<LinearLayout>(Resource.Id.save_button);
 		}
 	}

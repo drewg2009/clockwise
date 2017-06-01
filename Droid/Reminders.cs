@@ -17,7 +17,7 @@ namespace Clockwise.Droid
 		private List<View> reminderViews;
 		private LinearLayout parent;
 		private Button addReminderBtn;
-		public Reminders(Context c, int index, View v) : base(c, index, v)
+		public Reminders(Context c, int index, View v, TextView tv = null) : base(c, index, v, tv)
 		{
 			//ClearSettings();
 			Typeface font = Typeface.CreateFromAsset(c.Resources.Assets, "HelveticaNeueLight.ttf");

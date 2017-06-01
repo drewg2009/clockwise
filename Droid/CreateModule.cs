@@ -25,7 +25,7 @@ namespace Clockwise.Droid
 		{
 			base.OnCreate(savedInstanceState);
 			SetContentView(Resource.Layout.create_module);
-
+			RequestedOrientation = Android.Content.PM.ScreenOrientation.Portrait;
 			Typeface boldFont = Typeface.CreateFromAsset(Resources.Assets, "HelveticaNeueBold.ttf");
 			Typeface lightFont = Typeface.CreateFromAsset(Resources.Assets, "HelveticaNeueLight.ttf");
 
@@ -65,7 +65,7 @@ namespace Clockwise.Droid
 			Twitter twitter = new Twitter(ApplicationContext, alarmIndex, FindViewById<LinearLayout>(Resource.Id.twitter_settings));
 			twitter.CreateSetup(this, FindViewById<ImageView>(Resource.Id.addTwitter));
 
-			Countdown countdown = new Countdown(ApplicationContext, alarmIndex, 
+			Countdown countdown = new Countdown(this, alarmIndex, 
 			                                    FindViewById<LinearLayout>(Resource.Id.countdown_settings));
 			countdown.CreateSetup(this, FindViewById<ImageView>(Resource.Id.addCountdown));
 

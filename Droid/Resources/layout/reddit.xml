@@ -15,7 +15,7 @@
         android:paddingTop="3dp"
         android:paddingBottom="3dp">
         <TextView
-            android:text="Category"
+            android:text="Subreddit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/subredditText"
@@ -36,6 +36,15 @@
             android:backgroundTint="#ffffff"
             android:textColorHint="#ffffff"
             android:textColor="#ffffff" />
+        <TextView
+            android:text="r/"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView1"
+            android:layout_toLeftOf="@id/subredditInput"
+            android:textSize="15sp"
+            android:layout_centerVertical="true"
+            android:textColor="#ffffffff" />
     </RelativeLayout>
     <RelativeLayout
         android:minWidth="25px"
