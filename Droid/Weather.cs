@@ -11,7 +11,7 @@ namespace Clockwise.Droid
 	{
 		ImageSwitcher s1, s2, s3, s4;
 		LinearLayout saveButton;
-		public Weather(Context c, int index, View v) : base(c, index, v)
+		public Weather(Context c, int index, View v, TextView tv = null) : base(c, index, v, tv)
 		{
 			Typeface font = Typeface.CreateFromAsset(c.Resources.Assets, "HelveticaNeueLight.ttf");
 
@@ -148,6 +148,26 @@ namespace Clockwise.Droid
 					Toast.MakeText(context, "Please turn on at least one setting", ToastLength.Long).Show();
 				}
 			};
+
+			s1 = view.FindViewById<ImageSwitcher>(Resource.Id.fahrenheitToggle);
+			s2 = view.FindViewById<ImageSwitcher>(Resource.Id.currentTempToggle);
+			s3 = view.FindViewById<ImageSwitcher>(Resource.Id.maxTempToggle);
+			s4 = view.FindViewById<ImageSwitcher>(Resource.Id.descriptionToggle);
+
+			s1.SetImageResource(Resource.Drawable.setting_toggle);
+			s2.SetImageResource(Resource.Drawable.setting_toggle);
+			s3.SetImageResource(Resource.Drawable.setting_toggle);
+			s4.SetImageResource(Resource.Drawable.setting_toggle);
+
+			string weatherSettings = Settings.Weather.Split('|')[index];
+			if (weatherSettings != Settings.EMPTY_MODULE)
+			{
+				string[] settings = weatherSettings.Split(':');
+				s1.ScaleX = settings[1] == "1" ? 1 : -1;
+				s2.ScaleX = settings[2] == "1" ? 1 : -1;
+				s3.ScaleX = settings[3] == "1" ? 1 : -1;
+				s4.ScaleX = settings[4] == "1" ? 1 : -1;
+			}
 		}
 
 		public class Toggle : Java.Lang.Object, ViewSwitcher.IViewFactory

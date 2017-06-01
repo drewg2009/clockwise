@@ -85,6 +85,7 @@ namespace Clockwise.Droid
         public void MakeRequest(int index)
         {
 
+
             string request = string.Empty;
             string parameters = "moduleInfo=";
             string getModuleDataURI = "http://phplaravel-43928-259989.cloudwaysapps.com/get/moduleData";
@@ -116,20 +117,20 @@ namespace Clockwise.Droid
 
                 m.Completion += delegate
                 {
-					parameters += request;
-					string content = GetApiData(getModuleDataURI, parameters);
-					string errorURI = "http://phplaravel-43928-259989.cloudwaysapps.com/get/errorMessage";
+                    parameters += request;
+                    string content = GetApiData(getModuleDataURI, parameters);
+                    string errorURI = "http://phplaravel-43928-259989.cloudwaysapps.com/get/errorMessage";
                     if (!string.IsNullOrEmpty(content))
                     {
-                        
+
                         byte[] data = System.Convert.FromBase64String(content);
                         MediaPlayer m2 = PlayMp3(data);
                     }
                     else
                     {
 
-						string errorParams = "";
-						string errorMessage = GetApiData(errorURI, "");
+                        string errorParams = "";
+                        string errorMessage = GetApiData(errorURI, "");
                         byte[] data = System.Convert.FromBase64String(errorMessage);
                         MediaPlayer m2 = PlayMp3(data);
                     }

@@ -13,7 +13,7 @@ namespace Clockwise.Droid
 	{
 		private EditText amountInput;
 		private EditText subredditInput;
-		public Reddit(Context c, int index, View v) : base(c, index, v)
+		public Reddit(Context c, int index, View v, TextView tv = null) : base(c, index, v, tv)
 		{
 			Typeface font = Typeface.CreateFromAsset(c.Resources.Assets, "HelveticaNeueLight.ttf");
 			view.FindViewById<TextView>(Resource.Id.subredditText).Typeface = font;
@@ -51,7 +51,7 @@ namespace Clockwise.Droid
 						addButton.SetImageResource(Resource.Drawable.plus);
 						//Clear
 						subredditInput.Text = string.Empty;
-						amountInput.Text = string.Empty;
+						amountInput.Text = "1";
 					}
 				}
 			};
@@ -88,7 +88,7 @@ namespace Clockwise.Droid
 			string savedModule = Settings.GetReddit(index, subindex);
 			subredditInput.Text = savedModule.Substring(0, savedModule.IndexOf(':'));
 			amountInput.Text = savedModule.Substring(savedModule.IndexOf(':') + 1);
-
+			title.Text = "r/" + subredditInput.Text;
 			saveBtn.Click += delegate
 			{
 				int result = 0;

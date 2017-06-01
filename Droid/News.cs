@@ -14,7 +14,7 @@ namespace Clockwise.Droid
 		private Spinner spinner;
 		private EditText amountInput;
 
-		public News(Context c, int index, View v) : base(c, index, v)
+		public News(Context c, int index, View v, TextView tv = null) : base(c, index, v, tv)
 		{
 			Typeface font = Typeface.CreateFromAsset(c.Resources.Assets, "HelveticaNeueLight.ttf");
 			v.FindViewById<TextView>(Resource.Id.categoryText).Typeface = font;
@@ -56,7 +56,7 @@ namespace Clockwise.Droid
 
 						//Clear
 						spinner.SetSelection(0);
-						amountInput.Text = string.Empty;
+						amountInput.Text = "1";
 					}
 				}
 			};
