@@ -41,7 +41,7 @@ namespace Clockwise.Droid
         Location currentLocation;
         string provider = "";
         string locationName = "";
-        string transportationMethod = "";
+        string transportationMethod = "driving";
         string fromLocation = Helpers.Settings.EMPTY_MODULE;
         string toLocation = "";
         int maxResults = 1;
@@ -92,7 +92,7 @@ namespace Clockwise.Droid
             int index = 0;
             for (int i = 0; i < transMethods.Length; i++)
             {
-                if (transMethods[i].Equals(transportationMethod))
+                if (transMethods[i].ToLower().Equals(transportationMethod))
                 {
                     index = i;
                     break;
@@ -328,7 +328,7 @@ namespace Clockwise.Droid
         private void spinner_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
             Spinner spinner = (Spinner)sender;
-            transportationMethod = spinner.GetItemAtPosition(e.Position).ToString();
+            transportationMethod = spinner.GetItemAtPosition(e.Position).ToString().ToLower();
         }
 
         public void OnMapReady(GoogleMap googleMap)
