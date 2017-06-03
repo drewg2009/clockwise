@@ -393,6 +393,12 @@
                     android:layout_marginLeft="50dp"
                     android:layout_centerVertical="true" />
             </RelativeLayout>
+            <include
+                layout="@layout/new_traffic"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginLeft="50dp"
+                android:id="@+id/traffic_settings" />
             <View
                 android:layout_height="1dp"
                 android:layout_width="match_parent"
