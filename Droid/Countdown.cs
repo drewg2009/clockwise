@@ -123,11 +123,16 @@ namespace Clockwise.Droid
 			};
 		}
 
-		public void EditSetup(int subindex, ImageView navButton)
+		public void Reset(int subindex)
 		{
 			string[] savedModuleSettings = Settings.GetCountdown(index, subindex).Split(':');
 			eventNameInput.Text = savedModuleSettings[0];
-			eventDateInput.Text = savedModuleSettings[1];
+			eventDateInput.Text = savedModuleSettings[1];	
+		}
+
+		public void EditSetup(int subindex, ImageView navButton)
+		{
+			Reset(subindex);
 
 			saveBtn.Click += delegate
 			{

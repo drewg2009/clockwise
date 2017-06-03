@@ -378,6 +378,7 @@ namespace Clockwise.Droid
 			//Tab holder
 			moduleTabs.Clear();
 			tabHolder = FindViewById<LinearLayout>(Resource.Id.tab_holder);
+			while (tabHolder.ChildCount > 0) tabHolder.RemoveViewAt(0);
 			tabHolder.LayoutParameters.Width = (int)(Resources.DisplayMetrics.WidthPixels* .75);
 			int numModules = count;
 			if (numModules > 0)
@@ -484,7 +485,6 @@ namespace Clockwise.Droid
 					break;
 				case "reddit":
 					modType = Settings.Modules.REDDIT;
-					//settingTitle.Text = "r/" + title;
 					settingImage.SetImageResource(Resource.Drawable.reddit_icon);
 					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.reddit, null);
 					Reddit reddit = new Reddit(ApplicationContext, index, editor, settingTitle);
@@ -505,7 +505,7 @@ namespace Clockwise.Droid
 					modType = Settings.Modules.COUNTDOWN;
 					settingImage.SetImageResource(Resource.Drawable.countdown_icon);
 					editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.countdown, null);
-					Countdown countdown = new Countdown(ApplicationContext, index, editor);
+					Countdown countdown = new Countdown(this, index, editor);
 					countdown.EditSetup(subindex, navButton);
 					modules.Add(countdown);
 					break;
@@ -639,27 +639,27 @@ namespace Clockwise.Droid
 
 						if (currentModuleTab.GetType() == typeof(Weather))
 						{
-							((Weather)currentModuleTab).EditSetup(navButton);
+							((Weather)currentModuleTab).Reset();
 						}
 						else if (currentModuleTab.GetType() == typeof(Reddit))
 						{
-							((Reddit)currentModuleTab).EditSetup(subindex, navButton);
+							((Reddit)currentModuleTab).Reset(subindex);
 						}
 						else if (currentModuleTab.GetType() == typeof(News))
 						{
-							((News)currentModuleTab).EditSetup(subindex, navButton);
+							((News)currentModuleTab).Reset(subindex);
 						}
 						else if (currentModuleTab.GetType() == typeof(Countdown))
 						{
-							((Countdown)currentModuleTab).EditSetup(subindex, navButton);
+							((Countdown)currentModuleTab).Reset(subindex);
 						}
 						else if (currentModuleTab.GetType() == typeof(Reminders))
 						{
-							((Reminders)currentModuleTab).EditSetup(subindex, navButton);
+							((Reminders)currentModuleTab).Reset(subindex);
 						}
 						else if (currentModuleTab.GetType() == typeof(Twitter))
 						{
-							((Twitter)currentModuleTab).EditSetup(subindex, navButton);
+							((Twitter)currentModuleTab).Reset(subindex);
 						}
 					}
 				};

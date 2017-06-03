@@ -85,7 +85,7 @@ namespace Clockwise.Droid
 			};
 		}
 
-		public void EditSetup(int subindex, ImageView navButton)
+		public void Reset(int subindex)
 		{
 			string savedModule = Settings.GetNews(index, subindex);
 			string category = savedModule.Substring(0, savedModule.IndexOf(':'));
@@ -95,7 +95,11 @@ namespace Clockwise.Droid
 				spinner.SetSelection(i + 1);
 
 			amountInput.Text = numPosts;
+		}
 
+		public void EditSetup(int subindex, ImageView navButton)
+		{
+			Reset(subindex);
 			saveBtn.Click += delegate
 			{
 				int result = 0;

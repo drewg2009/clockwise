@@ -30,6 +30,7 @@ namespace Clockwise.Droid
 			view.Measure(RelativeLayout.LayoutParams.MatchParent, RelativeLayout.LayoutParams.MatchParent);
 			int expandedHeight = view.MeasuredHeight;
 
+
 			addButton.Click += delegate
 			{
 				if (!am.Animating)
@@ -82,12 +83,16 @@ namespace Clockwise.Droid
 			};
 		}
 
-
-		public void EditSetup(int subindex, ImageView navButton)
+		public void Reset(int subindex)
 		{
 			string savedModule = Settings.GetReddit(index, subindex);
 			subredditInput.Text = savedModule.Substring(0, savedModule.IndexOf(':'));
 			amountInput.Text = savedModule.Substring(savedModule.IndexOf(':') + 1);
+		}
+
+		public void EditSetup(int subindex, ImageView navButton)
+		{
+			Reset(subindex);
 			title.Text = "r/" + subredditInput.Text;
 			saveBtn.Click += delegate
 			{

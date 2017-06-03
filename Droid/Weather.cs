@@ -128,27 +128,8 @@ namespace Clockwise.Droid
 			};
 		}
 
-		public void EditSetup(ImageView navButton)
+		public void Reset()
 		{
-			saveButton.Click += delegate
-			{
-				if (s1.ScaleX < 0 || s2.ScaleX < 0 || s3.ScaleX < 0)
-				{
-					Settings.EditWeather(index,
-						(s1.ScaleX < 0),
-						(s2.ScaleX < 0),
-						(s3.ScaleX < 0),
-						(s4.ScaleX < 0));
-
-					navButton.PerformClick();
-					Toast.MakeText(context, "Weather module saved.", ToastLength.Short).Show();
-				}
-				else
-				{
-					Toast.MakeText(context, "Please turn on at least one setting", ToastLength.Long).Show();
-				}
-			};
-
 			s1 = view.FindViewById<ImageSwitcher>(Resource.Id.fahrenheitToggle);
 			s2 = view.FindViewById<ImageSwitcher>(Resource.Id.currentTempToggle);
 			s3 = view.FindViewById<ImageSwitcher>(Resource.Id.maxTempToggle);
@@ -168,6 +149,29 @@ namespace Clockwise.Droid
 				s3.ScaleX = settings[3] == "1" ? 1 : -1;
 				s4.ScaleX = settings[4] == "1" ? 1 : -1;
 			}
+		}
+
+		public void EditSetup(ImageView navButton)
+		{
+			Reset();
+			saveButton.Click += delegate
+			{
+				if (s1.ScaleX < 0 || s2.ScaleX < 0 || s3.ScaleX < 0)
+				{
+					Settings.EditWeather(index,
+						(s1.ScaleX < 0),
+						(s2.ScaleX < 0),
+						(s3.ScaleX < 0),
+						(s4.ScaleX < 0));
+
+					navButton.PerformClick();
+					Toast.MakeText(context, "Weather module saved.", ToastLength.Short).Show();
+				}
+				else
+				{
+					Toast.MakeText(context, "Please turn on at least one setting", ToastLength.Long).Show();
+				}
+			};
 		}
 
 		public class Toggle : Java.Lang.Object, ViewSwitcher.IViewFactory

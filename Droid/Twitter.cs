@@ -85,12 +85,16 @@ namespace Clockwise.Droid
 			};
 		}
 
-		public void EditSetup(int subindex, ImageView navButton)
+		public void Reset(int subindex)
 		{
-            string savedModule = Settings.GetTwitter(index, subindex);
+			string savedModule = Settings.GetTwitter(index, subindex);
 			usernameInput.Text = savedModule.Substring(0, savedModule.IndexOf(':'));
 			amountInput.Text = savedModule.Substring(savedModule.IndexOf(':') + 1);
+		}
 
+		public void EditSetup(int subindex, ImageView navButton)
+		{
+			Reset(subindex);
 			saveBtn.Click += delegate
 			{
 				int result = 0;

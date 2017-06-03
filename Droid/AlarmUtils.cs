@@ -75,8 +75,8 @@ namespace Clockwise.Droid
 
 			//Toast
 			string toast2 = "Clockwise set for ";
-			int diff = (int)(calendar.Time.Time - Java.Lang.JavaSystem.CurrentTimeMillis());
-			Console.WriteLine("diff: " + diff);
+			int diff = (int)(calendar.Time.Time - Java.Lang.JavaSystem.CurrentTimeMillis()) + 60000;
+			Console.WriteLine("\ndiff: " + diff);
 			if (diff < DayLength)
 			{
 				diff /= 60000; //Now diff is in minutes
@@ -167,7 +167,7 @@ namespace Clockwise.Droid
 
 			//Toast
 			string toast2 = "Clockwise set for ";
-			int diff = (int)(calendar.Time.Time - Java.Lang.JavaSystem.CurrentTimeMillis());
+			int diff = (int)(calendar.Time.Time - Java.Lang.JavaSystem.CurrentTimeMillis()) + 60000;
 			Console.WriteLine("diff: " + diff);
 			if (diff < DayLength)
 			{
@@ -253,7 +253,8 @@ namespace Clockwise.Droid
 				.SetContentTitle("Clockwise" + alarmNamePart)
 				.SetDefaults(NotificationDefaults.All)
 				.SetPriority((int)NotificationPriority.Max)
-				.SetStyle(new Notification.BigTextStyle().BigText("Click Play to hear your modules."));
+				.SetStyle(new Notification.BigTextStyle().BigText("Click Play to hear your modules."))
+				.SetDeleteIntent(piClose);
 
 			//Add actions
 			if ((int)Build.VERSION.SdkInt >= 23)

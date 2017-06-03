@@ -13,8 +13,16 @@
     <ManifestDocument>obj/Debug/__library_projects__/Xamarin.Android.Support.v4/library_project_imports/AndroidManifest.xml</ManifestDocument>
     <ManifestDocument>obj/Debug/__library_projects__/Xamarin.Android.Support.v7.AppCompat/library_project_imports/AndroidManifest.xml</ManifestDocument>
     <ManifestDocument>obj/Debug/__library_projects__/Xamarin.Android.Support.v7.RecyclerView/library_project_imports/AndroidManifest.xml</ManifestDocument>
+    <ManifestDocument>obj/Debug/__library_projects__/Xamarin.Firebase.Analytics/library_project_imports/AndroidManifest.xml</ManifestDocument>
+    <ManifestDocument>obj/Debug/__library_projects__/Xamarin.Firebase.Analytics.Impl/library_project_imports/AndroidManifest.xml</ManifestDocument>
+    <ManifestDocument>obj/Debug/__library_projects__/Xamarin.Firebase.Common/library_project_imports/AndroidManifest.xml</ManifestDocument>
+    <ManifestDocument>obj/Debug/__library_projects__/Xamarin.Firebase.Iid/library_project_imports/AndroidManifest.xml</ManifestDocument>
+    <ManifestDocument>obj/Debug/__library_projects__/Xamarin.GooglePlayServices.Ads/library_project_imports/AndroidManifest.xml</ManifestDocument>
+    <ManifestDocument>obj/Debug/__library_projects__/Xamarin.GooglePlayServices.Ads.Lite/library_project_imports/AndroidManifest.xml</ManifestDocument>
     <ManifestDocument>obj/Debug/__library_projects__/Xamarin.GooglePlayServices.Base/library_project_imports/AndroidManifest.xml</ManifestDocument>
     <ManifestDocument>obj/Debug/__library_projects__/Xamarin.GooglePlayServices.Basement/library_project_imports/AndroidManifest.xml</ManifestDocument>
+    <ManifestDocument>obj/Debug/__library_projects__/Xamarin.GooglePlayServices.Clearcut/library_project_imports/AndroidManifest.xml</ManifestDocument>
+    <ManifestDocument>obj/Debug/__library_projects__/Xamarin.GooglePlayServices.Gass/library_project_imports/AndroidManifest.xml</ManifestDocument>
     <ManifestDocument>obj/Debug/__library_projects__/Xamarin.GooglePlayServices.Maps/library_project_imports/AndroidManifest.xml</ManifestDocument>
     <ManifestDocument>obj/Debug/__library_projects__/Xamarin.GooglePlayServices.Tasks/library_project_imports/AndroidManifest.xml</ManifestDocument>
   </ManifestDocuments>
@@ -33,8 +41,16 @@
     <Jar>obj/Debug/__library_projects__/Xamarin.Android.Support.v4/library_project_imports/classes.jar</Jar>
     <Jar>obj/Debug/__library_projects__/Xamarin.Android.Support.v7.AppCompat/library_project_imports/classes.jar</Jar>
     <Jar>obj/Debug/__library_projects__/Xamarin.Android.Support.v7.RecyclerView/library_project_imports/classes.jar</Jar>
+    <Jar>obj/Debug/__library_projects__/Xamarin.Firebase.Analytics/library_project_imports/classes.jar</Jar>
+    <Jar>obj/Debug/__library_projects__/Xamarin.Firebase.Analytics.Impl/library_project_imports/classes.jar</Jar>
+    <Jar>obj/Debug/__library_projects__/Xamarin.Firebase.Common/library_project_imports/classes.jar</Jar>
+    <Jar>obj/Debug/__library_projects__/Xamarin.Firebase.Iid/library_project_imports/classes.jar</Jar>
+    <Jar>obj/Debug/__library_projects__/Xamarin.GooglePlayServices.Ads/library_project_imports/classes.jar</Jar>
+    <Jar>obj/Debug/__library_projects__/Xamarin.GooglePlayServices.Ads.Lite/library_project_imports/classes.jar</Jar>
     <Jar>obj/Debug/__library_projects__/Xamarin.GooglePlayServices.Base/library_project_imports/classes.jar</Jar>
     <Jar>obj/Debug/__library_projects__/Xamarin.GooglePlayServices.Basement/library_project_imports/classes.jar</Jar>
+    <Jar>obj/Debug/__library_projects__/Xamarin.GooglePlayServices.Clearcut/library_project_imports/classes.jar</Jar>
+    <Jar>obj/Debug/__library_projects__/Xamarin.GooglePlayServices.Gass/library_project_imports/classes.jar</Jar>
     <Jar>obj/Debug/__library_projects__/Xamarin.GooglePlayServices.Maps/library_project_imports/classes.jar</Jar>
     <Jar>obj/Debug/__library_projects__/Xamarin.GooglePlayServices.Tasks/library_project_imports/classes.jar</Jar>
   </Jars>

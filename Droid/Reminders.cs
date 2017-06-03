@@ -124,7 +124,7 @@ namespace Clockwise.Droid
 			};
 		}
 
-		public void EditSetup(int subindex, ImageView navButton)
+		public void Reset(int subindex)
 		{
 			string savedModule = Settings.GetReminders(index, subindex);
 			string[] splitSettings = savedModule.Split(':');
@@ -133,17 +133,17 @@ namespace Clockwise.Droid
 			listTitleInput.Text = listTitle;
 			string[] list = splitSettings[1].Split(';');
 			//If building the layout
-			for (int i = 0; i < list.Length; i++)
+			for (int i = 0; i<list.Length; i++)
 			{
 				View v = AddReminderView(list[i]);
-				//EditText et = v.FindViewById<EditText>(Resource.Id.reminderInput);
-				//et.Focusable = true;
-				//et.Focus
 			}
 
-			//ScrollView scrollView = view.FindViewById<ScrollView>(Resource.Id.reminderScrollView);
 			view.LayoutParameters.Height = ViewGroup.LayoutParams.MatchParent;
+		}
 
+		public void EditSetup(int subindex, ImageView navButton)
+		{
+			Reset(subindex);
 			saveBtn.Click += delegate
 			{
 				//build string of reminders to add to shared preferences
