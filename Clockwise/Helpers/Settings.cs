@@ -535,13 +535,13 @@ namespace Clockwise.Helpers
 			Reminders = newSetting.TrimEnd('|');
 		}
 
-		public static void AddTraffic(int index, string destName, string startUrl, string destUrl, string mode)
+		public static void AddTraffic(int index, string destName, float startLat, float startLon, float destLat, float destLon, string mode)
 		{
 			String[] traffics = Traffic.Split('|');
 			if (traffics[index] == EMPTY_MODULE)
-				traffics[index] = "traffic:" + destName + ":" + startUrl + ":" + destUrl + ":" + mode;
+				traffics[index] = "traffic:" + destName + ":" + startLat + ":" + startLon + ":" + destLat + ":" +destLon + ":" + mode;
 			else
-				traffics[index] += "," + destName + ":" + startUrl + ":" + destUrl  + ":" + mode;
+				traffics[index] += "," + destName + ":" + startLat + ":" + startLon + ":" + destLat + ":" +destLon + ":" + mode;
 
 			string newSetting = string.Empty;
 			foreach (String s in traffics)
@@ -643,12 +643,12 @@ namespace Clockwise.Helpers
 			Countdown = newSetting.TrimEnd('|');
 		}
 
-		public static void EditTraffic(int index, int subindex, string dest, string startUrl, string destUrl, string mode)
+		public static void EditTraffic(int index, int subindex, string destName, float startLat, float startLon, float destLat, float destLon, string mode)
 		{
 			string[] traffics = Traffic.Split('|');
 			string thisTraffic = traffics[index]; //traffic:subreddit:count,subreddit:count, ...
 			List<string> moduleList = new List<string>(thisTraffic.Substring(thisTraffic.IndexOf(':') + 1).Split(','));
-			moduleList[subindex] = dest + ":" + startUrl + ":" + destUrl  + ":" + mode;
+			moduleList[subindex] = destName + ":" + startLat + ":" + startLon + ":" + destLat + ":" +destLon + ":" + mode;
 
 			string newList = string.Empty;
 			foreach (String s in moduleList)
