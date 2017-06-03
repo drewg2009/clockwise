@@ -1,11 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using Android.App;
 using Android.Content;
+using Android.Gms.Common;
+using Android.Gms.Common.Apis;
+using Android.Gms.Location;
 using Android.Graphics;
+using Android.Locations;
+using Android.OS;
+using Android.Runtime;
 using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using Clockwise.Helpers;
+using Geolocator.Plugin;
+
 
 namespace Clockwise.Droid
 {
@@ -19,31 +29,85 @@ namespace Clockwise.Droid
         private RelativeLayout fromLocationContainer;
         string travelModeString = "driving";
         bool useCurrentLocation;
+        GoogleApiClient apiClient;
+        LocationRequest locRequest;
+        Location location;
+        bool _isGooglePlayServicesInstalled;
 
-
-        public NewTraffic(Context c, int index, View v, TextView tv = null) : base(c, index, v, tv)
+		public NewTraffic(Context c, int index, View v, TextView tv = null) : base(c, index, v, tv)
         {
+            
             Typeface font = Typeface.CreateFromAsset(c.Resources.Assets, "HelveticaNeueLight.ttf");
             view.FindViewById<TextView>(Resource.Id.currentLocLabel).Typeface = font;
             view.FindViewById<TextView>(Resource.Id.fromLocLabel).Typeface = font;
-			view.FindViewById<TextView>(Resource.Id.destLocLabel).Typeface = font;
+            view.FindViewById<TextView>(Resource.Id.destLocLabel).Typeface = font;
             view.FindViewById<EditText>(Resource.Id.fromLocationInput).Typeface = font;
+            view.FindViewById<TextView>(Resource.Id.tripNameLabel).Typeface = font;
+			view.FindViewById<EditText>(Resource.Id.tripNameInput).Typeface = font;
 			view.FindViewById<EditText>(Resource.Id.destinationLocationInput).Typeface = font;
+            view.FindViewById<TextView>(Resource.Id.travelModeLabel).Typeface = font;
+
 			startUrl = v.FindViewById<EditText>(Resource.Id.fromLocationInput);
             destUrl = v.FindViewById<EditText>(Resource.Id.destinationLocationInput);
-            currentLocationToggle = v.FindViewById<ImageView>(Resource.Id.locationToggleBtn);
+            tripName = v.FindViewById<EditText>(Resource.Id.tripNameInput);
+
+			currentLocationToggle = v.FindViewById<ImageView>(Resource.Id.locationToggleBtn);
             travelModeSpinner = v.FindViewById<Spinner>(Resource.Id.travelModeSpinner);
-			var adapter = ArrayAdapter.CreateFromResource(
+            var adapter = ArrayAdapter.CreateFromResource(
                 c, Resource.Array.transportation_methods, Android.Resource.Layout.SimpleSpinnerItem);
-			adapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
+            adapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
             travelModeSpinner.Adapter = adapter;
-            travelModeSpinner.ItemSelected += (object sender, AdapterView.ItemSelectedEventArgs e) => {
-				Spinner spinner = (Spinner)sender;
+            travelModeSpinner.ItemSelected += (object sender, AdapterView.ItemSelectedEventArgs e) =>
+            {
+                Spinner spinner = (Spinner)sender;
                 travelModeString = spinner.GetItemAtPosition(e.Position).ToString().ToLower();
             };
             saveBtn.FindViewById<TextView>(Resource.Id.save_text).Typeface = font;
-        }
+			GetLocation();
 
+
+		}
+
+
+        private async void GetLocation(){
+            var locator = CrossGeolocator.Current;
+			locator.DesiredAccuracy = 50;
+			var position = await locator.GetPositionAsync(timeoutMilliseconds: 10000);
+
+			if (position == null)
+			{
+                Toast.MakeText(context, "GPS not currently working. Please try again later", ToastLength.Long).Show();
+			}
+
+			try
+			{
+                Geocoder geocoder = new Geocoder(context);
+                var addresses = await geocoder.GetFromLocationAsync(position.Latitude, position.Longitude, 1);
+				if (addresses == null)
+					Console.WriteLine("No address found for position.");
+                else{
+                    startUrl.Text = GetAddressString(addresses[0]);
+				}
+
+			}
+			catch (Exception ex)
+			{
+                string error = ex.ToString();
+				Toast.MakeText(context, "Could Not Retrieve Address. Please try again later", ToastLength.Long).Show();
+			}
+		}
+
+		private string GetAddressString(Address addr)
+		{
+			StringBuilder sb = new StringBuilder();
+
+			for (int i = 0; i < addr.MaxAddressLineIndex; i++)
+			{
+				sb.Append(addr.GetAddressLine(i));
+				sb.Append(" ");
+			}
+			return sb.ToString();
+		}
 
         public void CreateSetup(Activity activity, ImageView addButton)
         {
@@ -90,14 +154,18 @@ namespace Clockwise.Droid
                     }
                     else
                     {
-                        if (startUrl.Text.Length > 0)
+                        if (startUrl.Text.Length == 0)
                         {
-                            SaveModule(addButton, activity, tripName.Text, startUrl.Text, destUrl.Text, travelModeString);
+							Toast.MakeText(context, "Please enter a from location.", ToastLength.Long).Show();
+                                             
                         }
+                        else if(tripName.Text.Length == 0){
+							Toast.MakeText(context, "Please enter a trip name.", ToastLength.Long).Show();
+						}
                         else
                         {
-                            Toast.MakeText(context, "Please enter a from location.", ToastLength.Long).Show();
-                        }
+							SaveModule(addButton, activity, tripName.Text, startUrl.Text, destUrl.Text, travelModeString);
+						}
                     }
 
                 }
@@ -151,15 +219,15 @@ namespace Clockwise.Droid
             }
 
             string[] transMethods = context.Resources.GetStringArray(Resource.Array.transportation_methods);
-			int transIndex = 0;
-			for (int i = 0; i < transMethods.Length; i++)
-			{
-				if (transMethods[i].ToLower().Equals(transportationMethod))
-				{
-					transIndex = i;
-					break;
-				}
-			}
+            int transIndex = 0;
+            for (int i = 0; i < transMethods.Length; i++)
+            {
+                if (transMethods[i].ToLower().Equals(transportationMethod))
+                {
+                    transIndex = i;
+                    break;
+                }
+            }
             travelModeSpinner.SetSelection(transIndex);
 
             title.Text = locationName;
@@ -193,9 +261,7 @@ namespace Clockwise.Droid
             };
 
 
-
-
-
         }
+
     }
 }

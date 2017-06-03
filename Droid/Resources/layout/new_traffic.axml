@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:minWidth="25px"
     android:minHeight="25px"
     android:background="#00000000"
@@ -11,12 +11,46 @@
         android:minHeight="25px"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/relativeLayout2"
+        android:id="@+id/tripNameContainer"
         android:paddingTop="3dp"
-        android:paddingBottom="3dp">
+        android:orientation="horizontal"
+        android:paddingBottom="3dp"
+        android:layout_weight="1">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/tripNameLabel"
+            android:textColor="#ffffffff"
+            android:textSize="14dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:text="Trip Name" />
+        <EditText
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/tripNameInput"
+            android:layout_weight="1"
+            android:textSize="15sp"
+            android:textAlignment="center"
+            android:layout_marginRight="30dp"
+            android:drawableTint="#ffffffff"
+            android:backgroundTint="#ffffff"
+            android:textColor="#ffffff"
+            android:hint="My Vacation"
+            android:textColorHint="#ffffff" />
+    </LinearLayout>
+    <LinearLayout
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/relativeLayout2"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
+        android:layout_weight="1">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="17.0dp"
             android:id="@+id/currentLocLabel"
             android:textColor="#ffffffff"
             android:textSize="14dp"
@@ -40,7 +74,8 @@
         android:id="@+id/fromLocationContainer"
         android:paddingTop="3dp"
         android:orientation="horizontal"
-        android:paddingBottom="3dp">
+        android:paddingBottom="3dp"
+        android:layout_weight="1">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -71,7 +106,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/relativeLayout2"
         android:paddingTop="3dp"
-        android:paddingBottom="3dp">
+        android:orientation="horizontal"
+        android:paddingBottom="3dp"
+        android:layout_weight="1">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -102,7 +139,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/relativeLayout2"
         android:paddingTop="3dp"
-        android:paddingBottom="3dp">
+        android:paddingBottom="3dp"
+        android:layout_weight="1">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -117,16 +155,18 @@
             android:layout_height="wrap_content"
             android:id="@+id/travelModeSpinner" />
     </LinearLayout>
-    <RelativeLayout
+    <LinearLayout
         android:minWidth="25px"
         android:minHeight="25px"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/relativeLayout3"
         android:paddingTop="10dp"
-        android:paddingBottom="10dp">
+        android:paddingBottom="10dp"
+        android:orientation="horizontal"
+        android:layout_weight="1">
         <include
             layout="@layout/save_button"
             android:id="@+id/save_button" />
-    </RelativeLayout>
+    </LinearLayout>
 </LinearLayout>

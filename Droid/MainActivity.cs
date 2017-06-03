@@ -523,13 +523,11 @@ namespace Clockwise.Droid
 					settingTitle.Text = title;
                     modType = Settings.Modules.TRAFFIC;
                     settingImage.SetImageResource(Resource.Drawable.traffic_icon);
-					isSeparateActivity = true;
-					navButton.Click += delegate {
-						Intent i = new Intent(ApplicationContext, typeof(TrafficActivity));
-						i.PutExtra("alarm_index", index);
-						i.PutExtra("subindex", subindex);
-						StartActivity(i);
-					};
+                    editor = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.new_traffic, null);
+					editor.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent);
+                    NewTraffic traffic = new NewTraffic(ApplicationContext, index, editor);
+                    traffic.EditSetup(subindex, navButton);
+					modules.Add(traffic);
                     break;
 			}
 
