@@ -73,11 +73,10 @@ namespace Clockwise.Droid
 			                                    FindViewById<LinearLayout>(Resource.Id.reminders_settings));
 			reminders.CreateSetup(this, FindViewById<ImageView>(Resource.Id.addReminders));
 
-			FindViewById(Resource.Id.addTraffic).Click += delegate {
-				Intent i = new Intent(ApplicationContext, typeof(TrafficActivity));
-                i.PutExtra("alarm_index", alarmIndex);
-                StartActivity(i);
-			};
+            NewTraffic newTraffic = new NewTraffic(ApplicationContext, alarmIndex,
+									FindViewById<LinearLayout>(Resource.Id.traffic_settings));
+            newTraffic.CreateSetup(this, FindViewById<ImageView>(Resource.Id.addTraffic));
+
 
 			
 			//Toggle setup
