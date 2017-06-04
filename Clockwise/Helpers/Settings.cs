@@ -1127,7 +1127,10 @@ namespace Clockwise.Helpers
 
 		public static string GetAlarmField(int index, AlarmField field)
 		{
-			return Alarms.Split('|')[index].Split('#')[(int)field];
+			string[] alarms = Alarms.Split('|');
+			if (index < alarms.Length)
+				return Alarms.Split('|')[index].Split('#')[(int)field];
+			else return null;
 		}
 
 		public static string[] GetActiveModules(int index)
@@ -1175,6 +1178,23 @@ namespace Clockwise.Helpers
 					final.Add(setting);
 			}
 			return final.ToArray();
+		}
+
+		public static bool IsNewAlarmTime(long millis)
+		{
+			int alarmIndex = 0;
+			string number = GetAlarmField(alarmIndex, AlarmField.Millis);
+			while (number != null)
+			{
+				if (Math.Abs(Int64.Parse(number) - millis) < 20000)
+				{
+					
+					return false;
+				}
+				alarmIndex++;
+				number = GetAlarmField(alarmIndex, AlarmField.Millis);
+			}
+			return true;
 		}
 	}
 }

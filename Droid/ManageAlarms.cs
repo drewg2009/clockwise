@@ -216,6 +216,7 @@ namespace Clockwise.Droid
                                                            selectedYear, hourSet, minutepicker.Value,
                                        Settings.Alarms == string.Empty ? 0 : currentAlarms.Length, repeatDaysResult,
                                        int.Parse(snoozeValues[snoozeBar.Progress]), (volume.Progress + 1), alarmName);
+					dateOutput.Text = "";
                 }
                 else
                 {
@@ -233,69 +234,70 @@ namespace Clockwise.Droid
 
                 repeatDaysResult = 0;
 
-                //Add view
-                LinearLayout alarmViwer = (LinearLayout)FindViewById(Resource.Id.alarm_viewer);
-                LinearLayout alarmRow = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.alarm_display, null);
-                LinearLayout editLayout = alarmRow.FindViewById<LinearLayout>(Resource.Id.edit_alarm_layout);
-                View deleteImage = alarmRow.FindViewById(Resource.Id.delete_button);
-                if (alarmName != "")
-                {
-                    if (alarmName.Length > 12)
-                    {
-                        alarmName = alarmName.Substring(0, 12) + "...";
-                    }
-                    TextView alarmNameText = alarmRow.FindViewById<TextView>(Resource.Id.name_text);
-                    alarmNameText.Text = alarmName;
-                }
+				if (alarmTimeInMillis > 0)
+				{
+					//Add view
+					LinearLayout alarmViwer = (LinearLayout)FindViewById(Resource.Id.alarm_viewer);
+					LinearLayout alarmRow = (LinearLayout)LayoutInflater.Inflate(Resource.Layout.alarm_display, null);
+					LinearLayout editLayout = alarmRow.FindViewById<LinearLayout>(Resource.Id.edit_alarm_layout);
+					View deleteImage = alarmRow.FindViewById(Resource.Id.delete_button);
+					if (alarmName != "")
+					{
+						if (alarmName.Length > 12)
+						{
+							alarmName = alarmName.Substring(0, 12) + "...";
+						}
+						TextView alarmNameText = alarmRow.FindViewById<TextView>(Resource.Id.name_text);
+						alarmNameText.Text = alarmName;
+					}
 
-                TextView dateText = alarmRow.FindViewById<TextView>(Resource.Id.date_text);
-                dateText.Typeface = fontLight;
-                Calendar calender = Calendar.Instance;
-                calender.TimeInMillis = alarmTimeInMillis;
-                int dayOfWeek = calender.Get(CalendarField.DayOfWeek) - 1;
-                int month = calender.Get(CalendarField.Month);
-                int date = calender.Get(CalendarField.DayOfMonth);
-                dateText.Text = Resources.GetStringArray(Resource.Array.week_days)[dayOfWeek]
-                    + ", " + Resources.GetStringArray(Resource.Array.months)[month]
-                    + " " + date;
+					TextView dateText = alarmRow.FindViewById<TextView>(Resource.Id.date_text);
+					dateText.Typeface = fontLight;
+					Calendar calender = Calendar.Instance;
+					calender.TimeInMillis = alarmTimeInMillis;
+					int dayOfWeek = calender.Get(CalendarField.DayOfWeek) - 1;
+					int month = calender.Get(CalendarField.Month);
+					int date = calender.Get(CalendarField.DayOfMonth);
+					dateText.Text = Resources.GetStringArray(Resource.Array.week_days)[dayOfWeek]
+						+ ", " + Resources.GetStringArray(Resource.Array.months)[month]
+						+ " " + date;
 
-                editLayout.Tag = Settings.Alarms.Split('|').Length - 1;
-                editLayout.Click += delegate
-                {
-                    Intent editAlarm = new Intent(Application.Context, typeof(MainActivity));
-                    editAlarm.PutExtra("alarm_number", (int)editLayout.Tag);
-                    StartActivity(editAlarm);
-                };
+					editLayout.Tag = Settings.Alarms.Split('|').Length - 1;
+					editLayout.Click += delegate
+					{
+						Intent editAlarm = new Intent(Application.Context, typeof(MainActivity));
+						editAlarm.PutExtra("alarm_number", (int)editLayout.Tag);
+						StartActivity(editAlarm);
+					};
 
-                var metrics = Resources.DisplayMetrics;
-                alarmRow.LayoutParameters = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent,
-                                                                          (int)(metrics.HeightPixels * .1));
-                TextView alarmTime = alarmRow.FindViewById<TextView>(Resource.Id.alarm_time);
-                ImageView alarmStatus = alarmRow.FindViewById<ImageView>(Resource.Id.alarm_status);
-                alarmStatus.SetImageResource(Resource.Drawable.alarm_on);
+					var metrics = Resources.DisplayMetrics;
+					alarmRow.LayoutParameters = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent,
+																			  (int)(metrics.HeightPixels * .1));
+					TextView alarmTime = alarmRow.FindViewById<TextView>(Resource.Id.alarm_time);
+					ImageView alarmStatus = alarmRow.FindViewById<ImageView>(Resource.Id.alarm_status);
+					alarmStatus.SetImageResource(Resource.Drawable.alarm_on);
 
-                deleteImage.Click += delegate
-                {
-                    Console.Write("deleting alarm");
-                    int status = int.Parse(Settings.GetAlarmField((int)alarmRow.Tag, Settings.AlarmField.Status));
-                    if (status == (int)Settings.AlarmStatus.ALARM_ON)
-                        AlarmUtils.Cancel(Application.Context, (int)editLayout.Tag, false);
-                    Settings.DeleteAlarm((int)editLayout.Tag);
-                    Console.Write("New alarms: " + Settings.Alarms);
-                    RefreshAlarms();
-                };
+					deleteImage.Click += delegate
+					{
+						Console.Write("deleting alarm");
+						int status = int.Parse(Settings.GetAlarmField((int)alarmRow.Tag, Settings.AlarmField.Status));
+						if (status == (int)Settings.AlarmStatus.ALARM_ON)
+							AlarmUtils.Cancel(Application.Context, (int)editLayout.Tag, false);
+						Settings.DeleteAlarm((int)editLayout.Tag);
+						Console.Write("New alarms: " + Settings.Alarms);
+						RefreshAlarms();
+					};
 
-                alarmTime.Typeface = fontLight;
-                alarmTime.Text = hourpicker.Value + ":" + minutepicker.Value.ToString("00") + " " + (ampmpicker.Value == 0 ? "am" : "pm");
+					alarmTime.Typeface = fontLight;
+					alarmTime.Text = hourpicker.Value + ":" + minutepicker.Value.ToString("00") + " " + (ampmpicker.Value == 0 ? "am" : "pm");
 
-                View gap = new View(Application.Context);
-                LinearLayout.LayoutParams gap_params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MatchParent, (int)(10 * metrics.Density));
-                gap.LayoutParameters = gap_params;
-                alarmViwer.AddView(gap);
-                alarmViwer.AddView(alarmRow);
-
-                dateOutput.Text = "";
+					View gap = new View(Application.Context);
+					LinearLayout.LayoutParams gap_params = new LinearLayout.LayoutParams(
+						LinearLayout.LayoutParams.MatchParent, (int)(10 * metrics.Density));
+					gap.LayoutParameters = gap_params;
+					alarmViwer.AddView(gap);
+					alarmViwer.AddView(alarmRow);
+				}
             };
 
 
