@@ -162,11 +162,11 @@ namespace Clockwise.Droid
             //if there is no saved module, add new traffic module
             if (subIndex == -1)
             {
-                Helpers.Settings.AddTraffic(index, locationName, fromLocation, toLocation, transportationMethod);
+                //Helpers.Settings.AddTraffic(index, locationName, fromLocation, toLocation, transportationMethod);
             }
             else
             {
-                Helpers.Settings.EditTraffic(index, subIndex, locationName, fromLocation, toLocation, transportationMethod);
+                //Helpers.Settings.EditTraffic(index, subIndex, locationName, fromLocation, toLocation, transportationMethod);
 
             }
         }
