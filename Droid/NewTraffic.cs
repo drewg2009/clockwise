@@ -25,7 +25,7 @@ namespace Clockwise.Droid
 {
     public class NewTraffic : Module
     {
-        private EditText startUrl;
+        private AutoCompleteTextView startUrl;
         private EditText destUrl;
         private EditText tripName;
         private ImageView currentLocationToggle;
@@ -49,7 +49,7 @@ namespace Clockwise.Droid
             view.FindViewById<EditText>(Resource.Id.destinationLocationInput).Typeface = font;
             view.FindViewById<TextView>(Resource.Id.travelModeLabel).Typeface = font;
 
-            startUrl = v.FindViewById<EditText>(Resource.Id.fromLocationInput);
+            startUrl = v.FindViewById<AutoCompleteTextView>(Resource.Id.fromLocationInput);
             destUrl = v.FindViewById<EditText>(Resource.Id.destinationLocationInput);
             tripName = v.FindViewById<EditText>(Resource.Id.tripNameInput);
 
@@ -88,8 +88,16 @@ namespace Clockwise.Droid
                     dynamic firstDecode = JsonConvert.DeserializeObject(e.Result);
                     dynamic resultAsObject = JsonConvert.DeserializeObject(firstDecode);
                     dynamic resultsProp = resultAsObject["results"];
-                    //ArrayAdapter autoCompleteAdapter = new ArrayAdapter(context, Android.Resource.Layout.SimpleDropDownItem1Line, autoCompleteOptions);
+                    List<string> list = new List<string>();
 
+                    foreach(dynamic item in resultsProp){
+						GooglePlaceObject gpo = new GooglePlaceObject((string)item["formatted_address"], (string)item["name"]);
+                        list.Add(gpo.Name + " " + gpo.FormattedAddress);
+					}
+
+
+                    ArrayAdapter autoCompleteAdapter = new ArrayAdapter(context, Android.Resource.Layout.SimpleDropDownItem1Line,list.ToArray());
+                    startUrl.Adapter = autoCompleteAdapter;
 				};
 
             }

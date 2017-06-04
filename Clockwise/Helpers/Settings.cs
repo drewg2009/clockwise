@@ -1127,10 +1127,16 @@ namespace Clockwise.Helpers
 
 		public static string GetAlarmField(int index, AlarmField field)
 		{
-			string[] alarms = Alarms.Split('|');
-			if (index < alarms.Length)
-				return Alarms.Split('|')[index].Split('#')[(int)field];
-			else return null;
+            if(Alarms != string.Empty){
+				string[] alarms = Alarms.Split('|');
+				if (index < alarms.Length)
+					return Alarms.Split('|')[index].Split('#')[(int)field];
+				else return null;
+            }
+            else {
+                return null;
+            }
+
 		}
 
 		public static string[] GetActiveModules(int index)
