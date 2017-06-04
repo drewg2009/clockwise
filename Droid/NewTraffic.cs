@@ -14,11 +14,13 @@ using Android.Graphics;
 using Android.Locations;
 using Android.OS;
 using Android.Runtime;
+using Android.Text;
 using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using Clockwise.Helpers;
 using Geolocator.Plugin;
+using Java.Lang;
 using Newtonsoft.Json;
 
 namespace Clockwise.Droid
@@ -34,7 +36,8 @@ namespace Clockwise.Droid
         string travelModeString = "driving";
         bool useCurrentLocation;
         private string placesURL = "http://phplaravel-43928-259989.cloudwaysapps.com/get/nearbyLocations";
-        string parameters = "placesQuery=";
+
+        public IntPtr Handle => throw new NotImplementedException();
 
         public NewTraffic(Context c, int index, View v, TextView tv = null) : base(c, index, v, tv)
         {
@@ -53,17 +56,19 @@ namespace Clockwise.Droid
             destUrl = v.FindViewById<EditText>(Resource.Id.destinationLocationInput);
             tripName = v.FindViewById<EditText>(Resource.Id.tripNameInput);
 
-            startUrl.TextChanged += (sender, e) =>
-            {
-                parameters += GetUrlFormattedString(startUrl.Text.Trim());
-                GetApiData(placesURL, parameters);
-            };
 
-            currentLocationToggle = v.FindViewById<ImageView>(Resource.Id.locationToggleBtn);
+    //        startUrl.FocusChange += (object sender, View.FocusChangeEventArgs e) => {
+				//string parameters = "placesQuery=" + GetUrlFormattedString(startUrl.Text.Trim());
+				//GetApiData(placesURL, parameters); 
+            //};
+           string [] test = {"apple", "ball", "chris" };
+			ArrayAdapter autoCompleteAdapter = new ArrayAdapter(context, Android.Resource.Layout.SimpleDropDownItem1Line,test);
+            startUrl.Adapter = autoCompleteAdapter;
+
+			currentLocationToggle = v.FindViewById<ImageView>(Resource.Id.locationToggleBtn);
             travelModeSpinner = v.FindViewById<Spinner>(Resource.Id.travelModeSpinner);
             var adapter = ArrayAdapter.CreateFromResource(
-                c, Resource.Array.transportation_methods, Android.Resource.Layout.SimpleSpinnerItem);
-            adapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
+                c, Resource.Array.transportation_methods, Android.Resource.Layout.SimpleDropDownItem1Line);
             travelModeSpinner.Adapter = adapter;
             travelModeSpinner.ItemSelected += (object sender, AdapterView.ItemSelectedEventArgs e) =>
             {
@@ -151,7 +156,7 @@ namespace Clockwise.Droid
                 }
 
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
                 string error = ex.StackTrace;
                 Console.Write(error);
@@ -162,7 +167,7 @@ namespace Clockwise.Droid
 
         private string GetAddressString(Address addr)
         {
-            StringBuilder sb = new StringBuilder();
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
 
             for (int i = 0; i < addr.MaxAddressLineIndex; i++)
             {
@@ -325,7 +330,7 @@ namespace Clockwise.Droid
             };
 
 
+        
         }
-
     }
 }
