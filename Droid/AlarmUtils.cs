@@ -63,14 +63,22 @@ namespace Clockwise.Droid
 			calendar.Set(CalendarField.HourOfDay, hour);
 			calendar.Set(CalendarField.Minute, minute);
 
-			if ((int)Build.VERSION.SdkInt >= 21)
+			if (Settings.IsNewAlarmTime(calendar.Time.Time))
 			{
-				AlarmManager.AlarmClockInfo info = new AlarmManager.AlarmClockInfo(calendar.TimeInMillis, notificationClickIntents[alarmIndex]);
-				am.SetAlarmClock(info, pendingIntents[alarmIndex]);
+				if ((int)Build.VERSION.SdkInt >= 21)
+				{
+					AlarmManager.AlarmClockInfo info = new AlarmManager.AlarmClockInfo(calendar.TimeInMillis, notificationClickIntents[alarmIndex]);
+					am.SetAlarmClock(info, pendingIntents[alarmIndex]);
+				}
+				else
+				{
+					am.SetExact(AlarmType.RtcWakeup, calendar.TimeInMillis, notificationClickIntents[alarmIndex]);
+				}
 			}
 			else
 			{
-				am.SetExact(AlarmType.RtcWakeup, calendar.TimeInMillis, notificationClickIntents[alarmIndex]);
+				Toast.MakeText(context, "An alarm already exists for that time!", ToastLength.Long).Show();
+				return -1;
 			}
 
 			//Toast
@@ -156,13 +164,22 @@ namespace Clockwise.Droid
 
 			Console.WriteLine("offset: " + offset);
 			calendar.TimeInMillis = calendar.TimeInMillis + offset;
-			if ((int)Build.VERSION.SdkInt >= 21)
+			if (Settings.IsNewAlarmTime(calendar.Time.Time))
 			{
-				AlarmManager.AlarmClockInfo info = new AlarmManager.AlarmClockInfo(calendar.TimeInMillis, notificationClickIntents[alarmIndex]);
-				am.SetAlarmClock(info, pendingIntents[alarmIndex]);
+				if ((int)Build.VERSION.SdkInt >= 21)
+				{
+					AlarmManager.AlarmClockInfo info = new AlarmManager.AlarmClockInfo(calendar.TimeInMillis, notificationClickIntents[alarmIndex]);
+					am.SetAlarmClock(info, pendingIntents[alarmIndex]);
+				}
+				else
+				{
+					am.SetExact(AlarmType.RtcWakeup, calendar.TimeInMillis, notificationClickIntents[alarmIndex]);
+				}
 			}
-			else {
-				am.SetExact(AlarmType.RtcWakeup, calendar.TimeInMillis, notificationClickIntents[alarmIndex]);
+			else
+			{
+				Toast.MakeText(context, "An alarm already exists for that time!", ToastLength.Long).Show();
+				return -1;
 			}
 
 			//Toast
