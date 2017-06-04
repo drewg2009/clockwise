@@ -59,8 +59,6 @@ namespace Clockwise.Droid
 			NumberPicker minutepicker = FindViewById<NumberPicker>(Resource.Id.minute);
 			NumberPicker ampmpicker = FindViewById<NumberPicker>(Resource.Id.ampm);
 
-			//string[] hours = 
-			//hourpicker.SetDisplayedValues(Enumerable.Range(1, 12).Select(n => n.ToString()).ToArray());
 			hourpicker.MinValue = 1;
 			hourpicker.MaxValue = 12;
 
@@ -74,21 +72,28 @@ namespace Clockwise.Droid
 
 			hourpicker.ValueChanged += delegate {
 				int hourSet = (hourpicker.Value + ampmpicker.Value * 12);
-				if (hourSet == 12 && ampmpicker.Value == 0) hourSet = 0; 
-				Settings.SetAlarmField(alarm_number, Settings.AlarmField.Hour, 
-				                       "" + hourSet);
+				if (hourSet == 12 && ampmpicker.Value == 0) hourSet = 0;
+				if (Settings.IsAlarmOn(alarm_number))
+				{
+					alarm_toggle.PerformClick();
+				}
 			};
 
 
 			minutepicker.ValueChanged += delegate
 			{
-				Settings.SetAlarmField(alarm_number, Settings.AlarmField.Minute, "" + minutepicker.Value);
+				if (Settings.IsAlarmOn(alarm_number))
+				{
+					alarm_toggle.PerformClick();
+				}
 			};
 
 			ampmpicker.ValueChanged += delegate
 			{
-				Settings.SetAlarmField(alarm_number, Settings.AlarmField.Hour,
-									   "" + (hourpicker.Value + ampmpicker.Value * 12));
+				if (Settings.IsAlarmOn(alarm_number))
+				{
+					alarm_toggle.PerformClick();
+				}
 			};
 
 			alarm_toggle = FindViewById<ImageSwitcher>(Resource.Id.alarm_toggle);
@@ -115,12 +120,9 @@ namespace Clockwise.Droid
 			ampmpicker.Value = (am ? 0 : 1);
 
 			alarm_toggle.Click += delegate {
-				int temp = int.Parse(Settings.GetAlarmField(alarm_number, Settings.AlarmField.Status));
-
-				if (temp == (int)Settings.AlarmStatus.ALARM_OFF) //if alarm is off
+				if (!Settings.IsAlarmOn(alarm_number)) //if alarm is off
 				{
 					//Turn alarm on
-					Settings.SetAlarmField(alarm_number, Settings.AlarmField.Status, "" + (int)Settings.AlarmStatus.ALARM_ON);
 					alarm_toggle.SetImageResource(Resource.Drawable.on_toggle);
 					alarm_toggle.Activated = true;
 					int hourSet = int.Parse(Settings.GetAlarmField(alarm_number, Settings.AlarmField.Hour));
@@ -131,7 +133,6 @@ namespace Clockwise.Droid
 				}
 				else {
 					//Turn alarm off
-					Settings.SetAlarmField(alarm_number, Settings.AlarmField.Status, "" + (int)Settings.AlarmStatus.ALARM_OFF);
 					alarm_toggle.SetImageResource(Resource.Drawable.off_toggle);
 					alarm_toggle.Activated = false;
 					AlarmUtils.Cancel(Application.Context, alarm_number, false);
@@ -175,17 +176,10 @@ namespace Clockwise.Droid
 					repeatDaysResult = repeatDaysResult ^ temp;
 					Settings.SetAlarmField(alarm_number, Settings.AlarmField.RepeatDays, "" + repeatDaysResult);
 
-					//
-					//LOOK INTO
-					//
-					if (repeatDaysResult == 0 && alarm_toggle.Activated)
+					if (Settings.IsAlarmOn(alarm_number))
 					{
 						//Turn alarm off
-						Settings.SetAlarmField(alarm_number, Settings.AlarmField.Status, 
-						                       "" + (int)Settings.AlarmStatus.ALARM_OFF);
-						alarm_toggle.SetImageResource(Resource.Drawable.off_toggle);
-						alarm_toggle.Activated = false;
-						AlarmUtils.Cancel(Application.Context, alarm_number, false);
+						alarm_toggle.PerformClick();
 					}
 				};
 
@@ -637,6 +631,7 @@ namespace Clockwise.Droid
 
 						if (currentModuleTab.GetType() == typeof(Weather))
 						{
+							Console.WriteLine("\nRefreshing weather");
 							((Weather)currentModuleTab).Reset();
 						}
 						else if (currentModuleTab.GetType() == typeof(Reddit))

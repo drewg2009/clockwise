@@ -1127,9 +1127,13 @@ namespace Clockwise.Helpers
 
 		public static string GetAlarmField(int index, AlarmField field)
 		{
-			string[] alarms = Alarms.Split('|');
-			if (index < alarms.Length)
-				return Alarms.Split('|')[index].Split('#')[(int)field];
+			if (Alarms != string.Empty)
+			{
+				string[] alarms = Alarms.Split('|');
+				if (index < alarms.Length)
+					return Alarms.Split('|')[index].Split('#')[(int)field];
+				else return null;
+			}
 			else return null;
 		}
 
@@ -1180,13 +1184,13 @@ namespace Clockwise.Helpers
 			return final.ToArray();
 		}
 
-		public static bool IsNewAlarmTime(long millis)
+		public static bool IsNewAlarmTime(long millis, int exceptionIndex = -1)
 		{
 			int alarmIndex = 0;
 			string number = GetAlarmField(alarmIndex, AlarmField.Millis);
 			while (number != null)
 			{
-				if (Math.Abs(Int64.Parse(number) - millis) < 20000)
+				if (Math.Abs(Int64.Parse(number) - millis) < 20000 && alarmIndex != exceptionIndex)
 				{
 					
 					return false;
@@ -1195,6 +1199,12 @@ namespace Clockwise.Helpers
 				number = GetAlarmField(alarmIndex, AlarmField.Millis);
 			}
 			return true;
+		}
+
+		public static bool IsAlarmOn(int index)
+		{
+			return int.Parse(Settings.GetAlarmField(index, Settings.AlarmField.Status))
+				      == (int)Settings.AlarmStatus.ALARM_ON;
 		}
 	}
 }

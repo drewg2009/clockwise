@@ -63,7 +63,7 @@ namespace Clockwise.Droid
 			calendar.Set(CalendarField.HourOfDay, hour);
 			calendar.Set(CalendarField.Minute, minute);
 
-			if (Settings.IsNewAlarmTime(calendar.Time.Time))
+			if (Settings.IsNewAlarmTime(calendar.Time.Time, alarmIndex))
 			{
 				if ((int)Build.VERSION.SdkInt >= 21)
 				{
@@ -74,6 +74,7 @@ namespace Clockwise.Droid
 				{
 					am.SetExact(AlarmType.RtcWakeup, calendar.TimeInMillis, notificationClickIntents[alarmIndex]);
 				}
+				//Settings.SetAlarmField(alarmIndex, Settings.AlarmField.Status, "" + (int)Settings.AlarmStatus.ALARM_ON);
 			}
 			else
 			{
@@ -164,7 +165,7 @@ namespace Clockwise.Droid
 
 			Console.WriteLine("offset: " + offset);
 			calendar.TimeInMillis = calendar.TimeInMillis + offset;
-			if (Settings.IsNewAlarmTime(calendar.Time.Time))
+			if (Settings.IsNewAlarmTime(calendar.Time.Time, alarmIndex))
 			{
 				if ((int)Build.VERSION.SdkInt >= 21)
 				{
@@ -175,6 +176,7 @@ namespace Clockwise.Droid
 				{
 					am.SetExact(AlarmType.RtcWakeup, calendar.TimeInMillis, notificationClickIntents[alarmIndex]);
 				}
+				//Settings.SetAlarmField(alarmIndex, Settings.AlarmField.Status, "" + (int)Settings.AlarmStatus.ALARM_ON);
 			}
 			else
 			{
@@ -234,17 +236,10 @@ namespace Clockwise.Droid
 
 		public static void Cancel(Context context, int alarmIndex, bool addingAlarm)
 		{
-			//Helpers.Settings.AlarmTime = string.Empty;
-			String[] currentAlarms = Settings.Alarms.Split('|');
-			List<String> currentAlarmsList = new List<String>(currentAlarms);
-			currentAlarmsList.RemoveAt(alarmIndex);
-			string newAlarmSetting = "";
-			for (int i = 0; i < currentAlarmsList.Count; i++)
-			{
-				newAlarmSetting += "" + i + ":" + currentAlarmsList[i].Substring(currentAlarmsList[i].IndexOf(':')+1);
-			}
 			if (am == null) Init(context, addingAlarm);
 			am.Cancel(pendingIntents[alarmIndex]);
+			Settings.SetAlarmField(alarmIndex, Settings.AlarmField.Status, 
+						                       "" + (int)Settings.AlarmStatus.ALARM_OFF);
 		}
 
 		public static void PostNotification(Context context, int alarm_index)
