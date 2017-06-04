@@ -80,14 +80,17 @@ namespace Clockwise.Droid
 
         private void GetApiData(string URI, string reqParams)
         {
-            string content = "";
             using (WebClient wc = new WebClient())
             {
                 wc.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
                 wc.UploadStringAsync(new Uri(URI), reqParams);
                 wc.UploadStringCompleted += (object sender, UploadStringCompletedEventArgs e) => {
-                    content = e.Result.ToString();
-                };
+                    dynamic firstDecode = JsonConvert.DeserializeObject(e.Result);
+                    dynamic resultAsObject = JsonConvert.DeserializeObject(firstDecode);
+                    dynamic resultsProp = resultAsObject["results"];
+                    //ArrayAdapter autoCompleteAdapter = new ArrayAdapter(context, Android.Resource.Layout.SimpleDropDownItem1Line, autoCompleteOptions);
+
+				};
 
             }
         }
