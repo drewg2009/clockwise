@@ -14,7 +14,7 @@ using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using Clockwise.Helpers;
-using Geolocator.Plugin;
+using Plugin.Geolocator;
 
 
 namespace Clockwise.Droid
@@ -30,7 +30,7 @@ namespace Clockwise.Droid
         string travelModeString = "driving";
         bool useCurrentLocation;
         GoogleApiClient apiClient;
-        LocationRequest locRequest;
+        //LocationRequest locRequest;
         Location location;
         bool _isGooglePlayServicesInstalled;
 
@@ -178,7 +178,7 @@ namespace Clockwise.Droid
 
         private void SaveModule(ImageView addButton, Activity activity, string trip, string fromDestination, string toDestination, string mode)
         {
-            Settings.AddTraffic(index, trip, fromDestination, toDestination, mode);
+            //Settings.AddTraffic(index, trip, fromDestination, toDestination, mode);
             addButton.PerformClick();
 
             View v = activity.CurrentFocus;
@@ -194,7 +194,7 @@ namespace Clockwise.Droid
         private void EditModule(ImageView navButton, int subindex, string trip, string fromDestination, string toDestination, string mode)
         {
             navButton.PerformClick();
-            Settings.EditTraffic(index, subindex, trip, fromDestination, toDestination, mode);
+            //Settings.EditTraffic(index, subindex, trip, fromDestination, toDestination, mode);
             Toast.MakeText(context, "Traffic module saved.", ToastLength.Short).Show();
         }
 
