@@ -85,18 +85,18 @@
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:text="From Location" />
-        <EditText
-            android:layout_width="wrap_content"
+        <AutoCompleteTextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/fromLocationInput"
             android:hint="123 Street, Park CA"
             android:textSize="15sp"
-            android:textAlignment="center"
-            android:layout_marginRight="30dp"
             android:drawableTint="#ffffffff"
             android:backgroundTint="#ffffff"
-            android:textColorHint="#ffffff"
             android:textColor="#ffffff"
+            android:textColorHint="#ffffff"
+            android:textAlignment="center"
+            android:layout_marginRight="30dp"
             android:layout_weight="1" />
     </LinearLayout>
     <LinearLayout
