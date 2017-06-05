@@ -19,7 +19,7 @@ using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using Clockwise.Helpers;
-using Geolocator.Plugin;
+using Plugin.Geolocator;
 using Java.Lang;
 using Newtonsoft.Json;
 
@@ -61,8 +61,8 @@ namespace Clockwise.Droid
 				//string parameters = "placesQuery=" + GetUrlFormattedString(startUrl.Text.Trim());
 				//GetApiData(placesURL, parameters); 
             //};
-           string [] test = {"apple", "ball", "chris" };
-			ArrayAdapter autoCompleteAdapter = new ArrayAdapter(context, Android.Resource.Layout.SimpleDropDownItem1Line,test);
+           string [] test = {"apple", "appleseed","ball", "chris" };
+			ArrayAdapter autoCompleteAdapter = new ArrayAdapter(context, Resource.Layout.autocomplete_textview,test);
             startUrl.Adapter = autoCompleteAdapter;
 
 			currentLocationToggle = v.FindViewById<ImageView>(Resource.Id.locationToggleBtn);
