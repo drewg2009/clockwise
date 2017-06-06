@@ -19,9 +19,9 @@ using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using Clockwise.Helpers;
-using Plugin.Geolocator;
 using Java.Lang;
 using Newtonsoft.Json;
+using Geolocator.Plugin;
 
 namespace Clockwise.Droid
 {
@@ -57,15 +57,17 @@ namespace Clockwise.Droid
             tripName = v.FindViewById<EditText>(Resource.Id.tripNameInput);
 
 
-    //        startUrl.FocusChange += (object sender, View.FocusChangeEventArgs e) => {
-				//string parameters = "placesQuery=" + GetUrlFormattedString(startUrl.Text.Trim());
-				//GetApiData(placesURL, parameters); 
-            //};
-           string [] test = {"apple", "appleseed","ball", "chris" };
-			ArrayAdapter autoCompleteAdapter = new ArrayAdapter(context, Resource.Layout.autocomplete_textview,test);
+            startUrl.TextChanged += (object sender, TextChangedEventArgs e) =>
+            {
+                string parameters = "placesQuery=" + GetUrlFormattedString(startUrl.Text.Trim());
+                GetApiData(placesURL, parameters);
+            };
+
+            string[] array = { };
+            ArrayAdapter autoCompleteAdapter = new ArrayAdapter(context, Resource.Layout.autocomplete_textview, array);
             startUrl.Adapter = autoCompleteAdapter;
 
-			currentLocationToggle = v.FindViewById<ImageView>(Resource.Id.locationToggleBtn);
+            currentLocationToggle = v.FindViewById<ImageView>(Resource.Id.locationToggleBtn);
             travelModeSpinner = v.FindViewById<Spinner>(Resource.Id.travelModeSpinner);
             var adapter = ArrayAdapter.CreateFromResource(
                 c, Resource.Array.transportation_methods, Android.Resource.Layout.SimpleDropDownItem1Line);
@@ -81,29 +83,37 @@ namespace Clockwise.Droid
 
         }
 
-
-
         private void GetApiData(string URI, string reqParams)
         {
             using (WebClient wc = new WebClient())
             {
                 wc.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
                 wc.UploadStringAsync(new Uri(URI), reqParams);
-                wc.UploadStringCompleted += (object sender, UploadStringCompletedEventArgs e) => {
-                    dynamic firstDecode = JsonConvert.DeserializeObject(e.Result);
-                    dynamic resultAsObject = JsonConvert.DeserializeObject(firstDecode);
-                    dynamic resultsProp = resultAsObject["results"];
-                    List<string> list = new List<string>();
+                wc.UploadStringCompleted += (object sender, UploadStringCompletedEventArgs e) =>
+                {
 
-                    foreach(dynamic item in resultsProp){
-						GooglePlaceObject gpo = new GooglePlaceObject((string)item["formatted_address"], (string)item["name"]);
-                        list.Add(gpo.Name + " " + gpo.FormattedAddress);
+                    try
+                    {
+                        dynamic firstDecode = JsonConvert.DeserializeObject(e.Result);
+                        dynamic resultAsObject = JsonConvert.DeserializeObject(firstDecode);
+                        dynamic resultsProp = resultAsObject["results"];
+                        List<string> list = new List<string>();
+
+                        foreach (dynamic item in resultsProp)
+                        {
+                            GooglePlaceObject gpo = new GooglePlaceObject((string)item["formatted_address"], (string)item["name"]);
+                            list.Add(gpo.Name + " ");
+                            list.Sort();
+                        }
+
+                        ArrayAdapter autoCompleteAdapter = new ArrayAdapter(context, Resource.Layout.autocomplete_textview, list.ToArray());
+                        //autoCompleteAdapter.
+                        startUrl.Adapter = autoCompleteAdapter;
+                    }
+                    catch(System.Exception ex){
+						Toast.MakeText(context, "Search filter error.", ToastLength.Long).Show();
 					}
-
-
-                    ArrayAdapter autoCompleteAdapter = new ArrayAdapter(context, Android.Resource.Layout.SimpleDropDownItem1Line,list.ToArray());
-                    startUrl.Adapter = autoCompleteAdapter;
-				};
+                };
 
             }
         }
@@ -119,7 +129,8 @@ namespace Clockwise.Droid
                 {
                     s += splitQuery[i];
                 }
-                else{
+                else
+                {
                     s += splitQuery[i] + "+";
                 }
 
@@ -330,7 +341,7 @@ namespace Clockwise.Droid
             };
 
 
-        
+
         }
     }
 }
