@@ -70,7 +70,8 @@ namespace Clockwise.Droid
             currentLocationToggle = v.FindViewById<ImageView>(Resource.Id.locationToggleBtn);
             travelModeSpinner = v.FindViewById<Spinner>(Resource.Id.travelModeSpinner);
             var adapter = ArrayAdapter.CreateFromResource(
-                c, Resource.Array.transportation_methods, Android.Resource.Layout.SimpleDropDownItem1Line);
+				c, Resource.Array.transportation_methods, Resource.Layout.autocomplete_textview);
+			
             travelModeSpinner.Adapter = adapter;
             travelModeSpinner.ItemSelected += (object sender, AdapterView.ItemSelectedEventArgs e) =>
             {
