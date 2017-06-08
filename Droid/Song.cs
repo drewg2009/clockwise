@@ -46,6 +46,8 @@ namespace Clockwise.Droid
 			Bitmap bm = null;
 			try
 			{
+				BitmapFactory.Options opts = new BitmapFactory.Options();
+				opts.InSampleSize = 8;
 				Android.Net.Uri sArtworkUri = Android.Net.Uri.Parse("content://media/external/audio/albumart");
 				Android.Net.Uri uri = ContentUris.WithAppendedId(sArtworkUri, albumId);
 				ParcelFileDescriptor pfd = context.ContentResolver.OpenFileDescriptor(uri, "r");
@@ -53,7 +55,8 @@ namespace Clockwise.Droid
 				if (pfd != null)
 				{
 					FileDescriptor fd = pfd.FileDescriptor;
-					bm = BitmapFactory.DecodeFileDescriptor(fd);
+					//bm = BitmapFactory.DecodeFileDescriptor(fd);
+					bm = BitmapFactory.DecodeFileDescriptor(fd, null, opts);
 				}
 			}
 			catch (Exception e)

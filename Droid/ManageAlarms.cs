@@ -318,7 +318,7 @@ namespace Clockwise.Droid
 
             if (defaultList == null)
             {
-                new GetDefaults().Execute();
+                //new GetDefaults().Execute();
             }
 
             //External Songs
@@ -335,12 +335,12 @@ namespace Clockwise.Droid
                 else
                 {
                     //songList = sm.getSongList();
-                    new GetSongs().Execute();
+                    //new GetSongs().Execute();
                 }
             }
             else
             {
-                new GetSongs().Execute();
+                //new GetSongs().Execute();
             }
 
 
@@ -558,7 +558,7 @@ namespace Clockwise.Droid
                             Toast.MakeText(Android.App.Application.Context, "Permission granted to access song files", ToastLength.Short).Show();
                             //sm = SongManager.getInstance(this);
                             //songList = sm.getSongList();
-                            new GetSongs().Execute();
+                            //new GetSongs().Execute();
                         }
                         else
                         {

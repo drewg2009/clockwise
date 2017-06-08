@@ -29,7 +29,8 @@ namespace Clockwise.Droid
 
 		public override Android.Support.V4.App.Fragment GetItem(int position)
 		{
-			return PageFragment.newInstance(position, alarmIndex);
+			//return PageFragment.newInstance(position, alarmIndex);
+			return AlarmTonesPageFragment.newInstance(position, alarmIndex);
 		}
 
 		int PAGE_COUNT = 2;

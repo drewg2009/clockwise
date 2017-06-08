@@ -8,8 +8,8 @@ namespace Clockwise.Droid
 {
 	public class SongManager
 	{
-		List<Song> songList;
-		List<Song> defaultList;
+		static List<Song> songList = new List<Song>();
+		static List<Song> defaultList = new List<Song>();
 
 		Context c;
 		public int playingIndex = -1;
@@ -17,8 +17,6 @@ namespace Clockwise.Droid
 
 		private SongManager(Context c)
 		{
-			this.songList = new List<Song>();
-			this.defaultList = new List<Song>();
 			this.c = c;
 		}
 
@@ -33,65 +31,70 @@ namespace Clockwise.Droid
 
 		public List<Song> getSongList()
 		{
-			songList = new List<Song>();
-			//retrieve song info
-			ContentResolver musicResolver = c.ContentResolver;
-			var musicUri = MediaStore.Audio.Media.ExternalContentUri;
-			var musicCursor = musicResolver.Query(musicUri, null, null, null, null);
-
-			if (musicCursor != null && musicCursor.MoveToFirst())
+			if (songList.Count == 0)
 			{
-				//get columns
-				int titleColumn = musicCursor.GetColumnIndex
-                         (MediaStore.Audio.Media.InterfaceConsts.Title);
-				int idColumn = musicCursor.GetColumnIndex
-						(MediaStore.Audio.Media.InterfaceConsts.Id);
-				int artistColumn = musicCursor.GetColumnIndex
-						(MediaStore.Audio.Media.InterfaceConsts.ArtistId);
-				int albumIdColumn = musicCursor.GetColumnIndex(MediaStore.Audio.Media.InterfaceConsts.AlbumId);
-				//add songs to list
-				do
-				{
-					long thisId = musicCursor.GetLong(idColumn);
-					String thisTitle = musicCursor.GetString(titleColumn);
-					String thisArtist = musicCursor.GetString(artistColumn);					
-					Android.Net.Uri contentUri = ContentUris.WithAppendedId(
-						MediaStore.Audio.Media.ExternalContentUri, thisId);
-					long thisAlbumId = musicCursor.GetLong(albumIdColumn);
-					songList.Add(new Song(c, thisId, thisTitle, thisArtist, contentUri, thisAlbumId));
-				}
-				while (musicCursor.MoveToNext());
-				musicCursor.Close();
-			}
+				//retrieve song info
+				ContentResolver musicResolver = c.ContentResolver;
+				var musicUri = MediaStore.Audio.Media.ExternalContentUri;
+				var musicCursor = musicResolver.Query(musicUri, null, null, null, null);
 
-			songList.Sort((x, y) => string.Compare(x.Title, y.Title, StringComparison.Ordinal));
+				if (musicCursor != null && musicCursor.MoveToFirst())
+				{
+					//get columns
+					int titleColumn = musicCursor.GetColumnIndex
+							 (MediaStore.Audio.Media.InterfaceConsts.Title);
+					int idColumn = musicCursor.GetColumnIndex
+							(MediaStore.Audio.Media.InterfaceConsts.Id);
+					int artistColumn = musicCursor.GetColumnIndex
+							(MediaStore.Audio.Media.InterfaceConsts.ArtistId);
+					int albumIdColumn = musicCursor.GetColumnIndex(MediaStore.Audio.Media.InterfaceConsts.AlbumId);
+					//add songs to list
+					do
+					{
+						long thisId = musicCursor.GetLong(idColumn);
+						String thisTitle = musicCursor.GetString(titleColumn);
+						String thisArtist = musicCursor.GetString(artistColumn);
+						Android.Net.Uri contentUri = ContentUris.WithAppendedId(
+							MediaStore.Audio.Media.ExternalContentUri, thisId);
+						long thisAlbumId = musicCursor.GetLong(albumIdColumn);
+						songList.Add(new Song(c, thisId, thisTitle, thisArtist, contentUri, thisAlbumId));
+					}
+					while (musicCursor.MoveToNext());
+					musicCursor.Close();
+				}
+
+				songList.Sort((x, y) => string.Compare(x.Title, y.Title, StringComparison.Ordinal));
+			}
 			return songList;
 		}
 
 		public List<Song> getDefaultList()
 		{
-			defaultList = new List<Song>();
-			RingtoneManager manager = new RingtoneManager(c);
-			manager.SetType(RingtoneType.Alarm);
-			var cursor = manager.Cursor;
-			int titleColumn = cursor.GetColumnIndex
-					 (MediaStore.Audio.Media.InterfaceConsts.Title);
-			int idColumn = cursor.GetColumnIndex
-						(MediaStore.Audio.Media.InterfaceConsts.Id);
-			if (cursor != null && cursor.MoveToFirst())
+			if (defaultList.Count == 0)
 			{
-				do
+				defaultList = new List<Song>();
+				RingtoneManager manager = new RingtoneManager(c);
+				manager.SetType(RingtoneType.Alarm);
+				var cursor = manager.Cursor;
+				int titleColumn = cursor.GetColumnIndex
+						 (MediaStore.Audio.Media.InterfaceConsts.Title);
+				int idColumn = cursor.GetColumnIndex
+							(MediaStore.Audio.Media.InterfaceConsts.Id);
+				if (cursor != null && cursor.MoveToFirst())
 				{
-					String title = cursor.GetString(titleColumn);
-					Android.Net.Uri ringtoneURI = manager.GetRingtoneUri(cursor.Position);
-					long thisId = cursor.GetLong(idColumn);
-					defaultList.Add(new Song(c, thisId, title, null, ringtoneURI, -1));
+					do
+					{
+						String title = cursor.GetString(titleColumn);
+						Android.Net.Uri ringtoneURI = manager.GetRingtoneUri(cursor.Position);
+						long thisId = cursor.GetLong(idColumn);
+						defaultList.Add(new Song(c, thisId, title, null, ringtoneURI, -1));
 
-				}while (cursor.MoveToNext());
-				cursor.Close();
+					} while (cursor.MoveToNext());
+					cursor.Close();
+				}
+
+				defaultList.Sort((x, y) => string.Compare(x.Title, y.Title, StringComparison.Ordinal));
 			}
-
-			defaultList.Sort((x, y) => string.Compare(x.Title, y.Title, StringComparison.Ordinal));
 			return defaultList;
 		}
 

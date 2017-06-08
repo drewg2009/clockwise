@@ -32,7 +32,8 @@ namespace Clockwise.Droid
 
 			// Get the ViewPager and set it's PagerAdapter so that it can display items
 			ViewPager viewPager = FindViewById<ViewPager>(Resource.Id.viewpager);
-			viewPager.Adapter = new SongPageAdapter(SupportFragmentManager,ApplicationContext, alarm_index);
+			//viewPager.Adapter = new SongPageAdapter(SupportFragmentManager,ApplicationContext, alarm_index);
+			viewPager.Adapter = new SongPageAdapter(SupportFragmentManager, ApplicationContext, alarm_index);
 			
 
 			// Give the TabLayout the ViewPager

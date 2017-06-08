@@ -122,11 +122,15 @@ namespace Clockwise.Droid
 			alarm_toggle.Click += delegate {
 				if (!Settings.IsAlarmOn(alarm_number)) //if alarm is off
 				{
+					//Save Time
+					int hourSet = (hourpicker.Value + ampmpicker.Value * 12);
+					if (hourSet == 12 && ampmpicker.Value == 0) hourSet = 0;
+					int minuteSet = minutepicker.Value;
+					Settings.SetAlarmField(alarm_number, Settings.AlarmField.Hour, "" + hourSet);
+					Settings.SetAlarmField(alarm_number, Settings.AlarmField.Minute, "" + minuteSet);
 					//Turn alarm on
 					alarm_toggle.SetImageResource(Resource.Drawable.on_toggle);
 					alarm_toggle.Activated = true;
-					int hourSet = int.Parse(Settings.GetAlarmField(alarm_number, Settings.AlarmField.Hour));
-					int minuteSet = int.Parse(Settings.GetAlarmField(alarm_number, Settings.AlarmField.Minute));
 					int days = int.Parse(Settings.GetAlarmField(alarm_number, Settings.AlarmField.RepeatDays));
 					AlarmUtils.SetTime(Application.Context, hourSet, minuteSet, alarm_number, days, false);
 					Console.WriteLine("set time: " + hourSet + ":" + minuteSet);

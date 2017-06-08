@@ -460,94 +460,152 @@ namespace Clockwise.Helpers
 			Weather = newWeatherSetting.TrimEnd('|');
 		}
 
-		public static void AddNews(int index, string category, int count)
+		public static bool AddNews(int index, string category, int count)
 		{
 			String[] news = News.Split('|');
-			if (news[index] == EMPTY_MODULE)
-				news[index] = "news:" + category + ":" + count;
+			string newNewsSetting = category + ":" + count;
+			if (GetNews(index).Contains(newNewsSetting))
+			{
+				return false;
+			}
 			else
-				news[index] += "," + category + ":" + count;
+			{
+				if (news[index] == EMPTY_MODULE)
+					news[index] = "news:" + newNewsSetting;
+				else
+					news[index] += "," + newNewsSetting;
 
-			string newSetting = string.Empty;
-			foreach (String s in news)
-				newSetting += s + "|";
+				string newSetting = string.Empty;
+				foreach (String s in news)
+					newSetting += s + "|";
 
-			News = newSetting.TrimEnd('|');
+				News = newSetting.TrimEnd('|');
+				return true;
+			}
 		}
 
-		public static void AddTwitter(int index, string username, int count)
+		public static bool AddTwitter(int index, string username, int count)
 		{
 			String[] twitters = Twitter.Split('|');
-			if (twitters[index] == EMPTY_MODULE)
-				twitters[index] = "twitter:" + username + ":" + count;
+			string newTwitterSetting = username + ":" + count;
+			if (GetTwitter(index).Contains(newTwitterSetting))
+			{
+				return false;
+			}
 			else
-				twitters[index] += "," + username + ":" + count;
+			{
+				if (twitters[index] == EMPTY_MODULE)
+					twitters[index] = "twitter:" + newTwitterSetting;
+				else
+					twitters[index] += "," + newTwitterSetting;
 
-			string newSetting = string.Empty;
-			foreach (String s in twitters)
-				newSetting += s + "|";
+				string newSetting = string.Empty;
+				foreach (String s in twitters)
+					newSetting += s + "|";
 
-			Twitter = newSetting.TrimEnd('|');
+				Twitter = newSetting.TrimEnd('|');
+				return true;
+			}
 		}
 
-		public static void AddReddit(int index, string subreddit, int count)
+		public static bool AddReddit(int index, string subreddit, int count)
 		{
 			String[] reddits = Reddit.Split('|');
-			if (reddits[index] == EMPTY_MODULE)
-				reddits[index] = "reddit:" + subreddit + ":" + count;
+			string newRedditSetting = subreddit + ":" + count;
+
+			if (GetReddit(index).Contains(newRedditSetting))
+			{
+				return false;
+			}
 			else
-				reddits[index] += "," + subreddit + ":" + count;
+			{
+				if (reddits[index] == EMPTY_MODULE)
+					reddits[index] = "reddit:" + newRedditSetting;
+				else
+					reddits[index] += "," + newRedditSetting;
 
-			string newSetting = string.Empty;
-			foreach (String s in reddits)
-				newSetting += s + "|";
+				string newSetting = string.Empty;
+				foreach (String s in reddits)
+					newSetting += s + "|";
 
-			Reddit = newSetting.TrimEnd('|');
+				Reddit = newSetting.TrimEnd('|');
+				return true;
+			}
 		}
 
-		public static void AddCountdown(int index, string eventName, string date)
+		public static bool AddCountdown(int index, string eventName, string date)
 		{
 			String[] countdowns = Countdown.Split('|');
-			if (countdowns[index] == EMPTY_MODULE)
-				countdowns[index] = "countdown:" + eventName + ":" + date;
+			string newCountdownSetting = eventName + ":" + date;
+
+			if (GetCountdown(index).Contains(newCountdownSetting))
+			{
+				return false;
+			}
 			else
-				countdowns[index] += "," + eventName + ":" + date;
+			{
+				if (countdowns[index] == EMPTY_MODULE)
+					countdowns[index] = "countdown:" + newCountdownSetting;
+				else
+					countdowns[index] += "," + newCountdownSetting;
 
-			string newSetting = string.Empty;
-			foreach (String s in countdowns)
-				newSetting += s + "|";
+				string newSetting = string.Empty;
+				foreach (String s in countdowns)
+					newSetting += s + "|";
 
-			Countdown = newSetting.TrimEnd('|');
+				Countdown = newSetting.TrimEnd('|');
+				return true;
+			}
 		}
 
-		public static void AddReminders(int index, string listName, string list)
+		public static bool AddReminders(int index, string listName, string list)
 		{
 			String[] reminders = Reminders.Split('|');
-			if (reminders[index] == EMPTY_MODULE)
-				reminders[index] = "reminders:" + listName + ":" + list;
+			string newRemindersSeting = listName + ":" + list;
+
+			if (GetReminders(index).Contains(newRemindersSeting))
+			{
+				return false;
+			}
 			else
-				reminders[index] += "," + listName + ":" + list;
+			{
+				if (reminders[index] == EMPTY_MODULE)
+					reminders[index] = "reminders:" + newRemindersSeting;
+				else
+					reminders[index] += "," + newRemindersSeting;
 
-			string newSetting = string.Empty;
-			foreach (String s in reminders)
-				newSetting += s + "|";
+				string newSetting = string.Empty;
+				foreach (String s in reminders)
+					newSetting += s + "|";
 
-			Reminders = newSetting.TrimEnd('|');
+				Reminders = newSetting.TrimEnd('|');
+				return true;
+			}
 		}
 
-		public static void AddTraffic(int index, string destName, float startLat, float startLon, float destLat, float destLon, string mode)
+		public static bool AddTraffic(int index, string destName, float startLat, float startLon, float destLat, float destLon, string mode)
 		{
 			String[] traffics = Traffic.Split('|');
-			if (traffics[index] == EMPTY_MODULE)
-				traffics[index] = "traffic:" + destName + ":" + startLat + ":" + startLon + ":" + destLat + ":" +destLon + ":" + mode;
+			string newTrafficSetting = destName + ":" + startLat + ":" + startLon + ":" + destLat + ":" +destLon + ":" + mode;
+
+			if (GetTraffic(index).Contains(newTrafficSetting))
+			{
+				return false;
+			}
 			else
-				traffics[index] += "," + destName + ":" + startLat + ":" + startLon + ":" + destLat + ":" +destLon + ":" + mode;
+			{
+				if (traffics[index] == EMPTY_MODULE)
+					traffics[index] = "traffic:" + newTrafficSetting;
+				else
+					traffics[index] += "," + newTrafficSetting;
 
-			string newSetting = string.Empty;
-			foreach (String s in traffics)
-				newSetting += s + "|";
+				string newSetting = string.Empty;
+				foreach (String s in traffics)
+					newSetting += s + "|";
 
-			Traffic = newSetting.TrimEnd('|');
+				Traffic = newSetting.TrimEnd('|');
+				return true;
+			}
 		}
 
 		public static void EditFact(int index, bool on)
