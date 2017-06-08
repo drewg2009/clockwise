@@ -1,17 +1,7 @@
 ﻿
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
 using Android.Content;
-using Android.OS;
-using Android.Runtime;
 using Android.Support.V4.App;
-using Android.Util;
-using Android.Views;
-using Android.Widget;
 
 namespace Clockwise.Droid
 {
@@ -29,7 +19,6 @@ namespace Clockwise.Droid
 
 		public override Android.Support.V4.App.Fragment GetItem(int position)
 		{
-			//return PageFragment.newInstance(position, alarmIndex);
 			return AlarmTonesPageFragment.newInstance(position, alarmIndex);
 		}
 
@@ -48,7 +37,5 @@ namespace Clockwise.Droid
 			
 			return new Java.Lang.String(tabTitles[position]);
 		}
-
-
 	}
 }

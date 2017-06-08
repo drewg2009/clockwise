@@ -53,14 +53,16 @@ namespace Clockwise.Droid
                     if (sm.isPlaying()) sm.stop();
 					sm.play(defaultsList[position].getUri().ToString());
 					sm.playingIndex = position;
-					Helpers.Settings.SetAlarmField(alarmIndex, Helpers.Settings.AlarmField.Song,
-					                               defaultsList[position].getUri().ToString());
+					if (alarmIndex != -1)
+						Helpers.Settings.SetAlarmField(alarmIndex, Helpers.Settings.AlarmField.Song,
+												   defaultsList[position].getUri().ToString());
+					else SongSelect.result = defaultsList[position].Title + "|" + defaultsList[position].getUri();
 					if (selectedRadio != null) selectedRadio.Checked = false;
 					row.RadioButton.Checked = true;
 					selectedRadio = row.RadioButton;
                 };
 
-				if (defaultsList[position].getUri().ToString()
+				if (alarmIndex != -1 && defaultsList[position].getUri().ToString()
 				   == Helpers.Settings.GetAlarmField(alarmIndex, Helpers.Settings.AlarmField.Song))
 				{
 					row.RadioButton.Checked = true;
@@ -78,15 +80,17 @@ namespace Clockwise.Droid
                     if (sm.isPlaying()) sm.stop();
 					sm.play(songList[position].getUri().ToString());
 					sm.playingIndex = position;
-					Helpers.Settings.SetAlarmField(alarmIndex, Helpers.Settings.AlarmField.Song,
+					if(alarmIndex != -1)
+						Helpers.Settings.SetAlarmField(alarmIndex, Helpers.Settings.AlarmField.Song,
 					                               songList[position].getUri().ToString());
+					else SongSelect.result = songList[position].Title + "|" + songList[position].getUri();
 					
 					if (selectedRadio != null) selectedRadio.Checked = false;
 					row.RadioButton.Checked = true;
 					selectedRadio = row.RadioButton;
                 };
 
-				if (songList[position].getUri().ToString()
+				if (alarmIndex != -1 && songList[position].getUri().ToString()
 				   == Helpers.Settings.GetAlarmField(alarmIndex, Helpers.Settings.AlarmField.Song))
 				{
 					row.RadioButton.Checked = true;
@@ -95,8 +99,6 @@ namespace Clockwise.Droid
 				
 				row.Image.SetImageBitmap(s.getAlbumArt());
 			}
-
-
 		}
 
 

@@ -52,7 +52,7 @@ namespace Clockwise.Droid
 		}
 
 		public static long SetTime(Context context, int month, int dayOfMonth, int year, int hour, int minute, int alarmIndex, int repeatDays,
-								   int snooze = -1, int volume = -1, string name = null)
+								   int snooze = -1, int volume = -1, string name = "null", string song = "null")
 		{
 			Init(context, true);
 			am.Cancel(pendingIntents[alarmIndex]);
@@ -74,7 +74,6 @@ namespace Clockwise.Droid
 				{
 					am.SetExact(AlarmType.RtcWakeup, calendar.TimeInMillis, notificationClickIntents[alarmIndex]);
 				}
-				//Settings.SetAlarmField(alarmIndex, Settings.AlarmField.Status, "" + (int)Settings.AlarmStatus.ALARM_ON);
 			}
 			else
 			{
@@ -104,14 +103,14 @@ namespace Clockwise.Droid
 				toast2 += " at " + hour + ":" + (minute).ToString("00") + (ispm ? "pm" : "am");
 			}
 
-			Settings.EditAlarm(alarmIndex, hour, minute, repeatDays, calendar.TimeInMillis, snooze, volume, name);
+			Settings.EditAlarm(alarmIndex, hour, minute, repeatDays, calendar.TimeInMillis, snooze, volume, name, song);
 			Toast.MakeText(context, toast2, ToastLength.Long).Show();
 
 			return calendar.TimeInMillis;
 		}
 
 		public static long SetTime(Context context, int hour, int minute, int alarmIndex, int repeatDays, bool addingAlarm,
-		                           int snooze = -1, int volume = -1, string name = "null")
+		                           int snooze = -1, int volume = -1, string name = "null", string song = "null")
 		{
 			Init(context, addingAlarm);
 			am.Cancel(pendingIntents[alarmIndex]);
@@ -176,7 +175,6 @@ namespace Clockwise.Droid
 				{
 					am.SetExact(AlarmType.RtcWakeup, calendar.TimeInMillis, notificationClickIntents[alarmIndex]);
 				}
-				//Settings.SetAlarmField(alarmIndex, Settings.AlarmField.Status, "" + (int)Settings.AlarmStatus.ALARM_ON);
 			}
 			else
 			{
@@ -209,7 +207,7 @@ namespace Clockwise.Droid
 			}
 
 			if (addingAlarm)
-				Settings.EditAlarm(alarmIndex, hour, minute, repeatDays, calendar.TimeInMillis, snooze, volume, name);
+				Settings.EditAlarm(alarmIndex, hour, minute, repeatDays, calendar.TimeInMillis, snooze, volume, name, song);
 			else
 				Settings.EditAlarm(alarmIndex, hour, minute, repeatDays, calendar.TimeInMillis);
 

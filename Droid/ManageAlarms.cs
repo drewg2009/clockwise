@@ -1,8 +1,6 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Android.Animation;
 using Android.App;
 using Android.Content;
@@ -34,6 +32,10 @@ namespace Clockwise.Droid
         private int selectedDayOfMonth;
         private int selectedYear;
 		public List<LinearLayout> alarmRows = null;
+		private TextView toneText = null;
+		private string toneResult = string.Empty;
+		private RelativeLayout alarmToneRow;
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -115,6 +117,8 @@ namespace Clockwise.Droid
 
             }
 
+			toneText = FindViewById<TextView>(Resource.Id.tone_text);
+
             FindViewById<TextView>(Resource.Id.date_text).Typeface = fontLight;
 
             //Options
@@ -125,10 +129,10 @@ namespace Clockwise.Droid
             ScrollView scrollView = FindViewById<ScrollView>(Resource.Id.settings_scroller);
             LinearLayout settings = (LinearLayout)((ViewGroup)scrollView).GetChildAt(0);
             SeekBar volume = settings.FindViewById<SeekBar>(Resource.Id.volume_seek_bar);
-            RelativeLayout alarmToneRow = settings.FindViewById<RelativeLayout>(Resource.Id.alarm_tone_row);
+            alarmToneRow = settings.FindViewById<RelativeLayout>(Resource.Id.alarm_tone_row);
             alarmToneRow.Click += delegate
             {
-                StartActivity(typeof(SongSelect));
+				StartActivityForResult(typeof(SongSelect), 0);
             };
 
             RelativeLayout alarmNameRow = settings.FindViewById<RelativeLayout>(Resource.Id.alarm_name_row);
@@ -187,7 +191,8 @@ namespace Clockwise.Droid
                     volume.Progress = 10;
                     snoozeBar.Progress = 2;
                     nameText.Text = "None";
-
+					toneText.Text = "Default";
+					alarmToneRow.Tag = "null";
                 }
             };
 
@@ -196,10 +201,11 @@ namespace Clockwise.Droid
             FindViewById<TextView>(Resource.Id.save_button).Click += delegate
             {
                 String alarmName = "";
+				String songName = "null";
                 if (scrollView.Height > 0)
                 {
                     if (nameText.Text != "None") alarmName = nameText.Text;
-
+					if (toneText.Text != "Default") songName = (string)alarmToneRow.Tag;
                     options.PerformClick();
                 }
                 String[] currentAlarms = Settings.Alarms.Split('|');
@@ -215,14 +221,17 @@ namespace Clockwise.Droid
                     alarmTimeInMillis = AlarmUtils.SetTime(Application.Context, selectedMonth, selectedDayOfMonth,
                                                            selectedYear, hourSet, minutepicker.Value,
                                        Settings.Alarms == string.Empty ? 0 : currentAlarms.Length, repeatDaysResult,
-                                       int.Parse(snoozeValues[snoozeBar.Progress]), (volume.Progress + 1), alarmName);
+                                       int.Parse(snoozeValues[snoozeBar.Progress]), (volume.Progress + 1), alarmName,
+					                                       songName);
 					dateOutput.Text = "";
                 }
                 else
                 {
+					Console.WriteLine("\nSong: {0}", songName);
                     alarmTimeInMillis = AlarmUtils.SetTime(Application.Context, hourSet, minutepicker.Value,
                                        Settings.Alarms == string.Empty ? 0 : currentAlarms.Length, repeatDaysResult, true,
-                                       int.Parse(snoozeValues[snoozeBar.Progress]), (volume.Progress + 1), alarmName);
+                                       int.Parse(snoozeValues[snoozeBar.Progress]), (volume.Progress + 1), alarmName,
+					                                       songName);
                 }
 
 
@@ -313,13 +322,6 @@ namespace Clockwise.Droid
             songParent.RemoveView(songsRadioGroup);
 
             sm = SongManager.getInstance(this);
-            //defaultList = sm.getDefaultList();
-            //sm = SongManager.getInstance(this);
-
-            if (defaultList == null)
-            {
-                //new GetDefaults().Execute();
-            }
 
             //External Songs
             if ((int)Build.VERSION.SdkInt >= 23)
@@ -332,18 +334,7 @@ namespace Clockwise.Droid
                             new String[] { Android.Manifest.Permission.ReadExternalStorage },
                             1);
                 }
-                else
-                {
-                    //songList = sm.getSongList();
-                    //new GetSongs().Execute();
-                }
             }
-            else
-            {
-                //new GetSongs().Execute();
-            }
-
-
 
             //Date picker
             View dateLayout = FindViewById(Resource.Id.date_layout);
@@ -538,7 +529,26 @@ namespace Clockwise.Droid
 			return alarmRows[index];
 		}
 
-
+		protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+		{
+			base.OnActivityResult(requestCode, resultCode, data);
+			if (resultCode == Result.Ok)
+			{
+				string result = data.Data.ToString();
+				if (result != string.Empty)
+				{
+					toneResult = data.Data.ToString();
+					string songName = toneResult.Split('|')[0];
+					string uri = toneResult.Split('|')[1];
+					if (songName != string.Empty)
+					{
+						toneText.Text = toneResult.Split('|')[0];
+						alarmToneRow.Tag = uri;
+						Console.WriteLine("\nPreSong: {0}", (string)alarmToneRow.Tag);
+					}
+				}
+			}
+		}
 
         public override async void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
         {
@@ -571,114 +581,6 @@ namespace Clockwise.Droid
                         break;
                     }
             }
-        }
-
-        public class GetDefaults : AsyncTask
-        {
-
-            protected override void OnPreExecute()
-            {
-            }
-
-            protected override Java.Lang.Object DoInBackground(params Java.Lang.Object[] @params)
-            {
-                defaultList = SongManager.getInstance(instance).getDefaultList();
-                var metrics = instance.Resources.DisplayMetrics;
-
-                for (int i = 0; i < defaultList.Count; i++)
-                {
-                    RadioButton rb = new RadioButton(instance.ApplicationContext);
-                    rb.Text = defaultList[i].Title;
-                    rb.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent);
-                    rb.SetTextColor(Color.Gray);
-                    rb.Typeface = fontLight;
-                    rb.TextSize = 20;
-                    rb.SetPadding(0, (int)(12 * metrics.Density), 0, (int)(12 * metrics.Density));
-                    rb.LetterSpacing = .1f;
-
-                    int temp = i;
-                    rb.Click += delegate
-                    {
-                        //play
-                        if (sm.isPlaying()) sm.stop();
-                        sm.play(defaultList[temp].getUri().ToString());
-                        sm.playingIndex = temp;
-                    };
-
-                    //Space
-                    View space = new View(instance.ApplicationContext);
-                    space.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent, 1);
-                    space.SetBackgroundColor(Color.Gray);
-                    space.SetPadding((int)(10 * metrics.Density), 0, 0, 0);
-
-                    defaultsRadioGroup.AddView(rb);
-                    defaultsRadioGroup.AddView(space);
-                }
-
-
-                return null;
-            }
-
-            protected override void OnPostExecute(Java.Lang.Object result)
-            {
-            }
-        }
-
-        public class GetSongs : AsyncTask
-        {
-            protected override void OnPreExecute()
-            {
-            }
-
-            protected override Java.Lang.Object DoInBackground(params Java.Lang.Object[] @params)
-            {
-                songList = SongManager.getInstance(instance).getSongList();
-
-                if (songList != null && songList.Count > 0)
-                {
-                    var metrics = instance.Resources.DisplayMetrics;
-                    for (int i = 0; i < songList.Count; i++)
-                    {
-                        RadioButton rb = new RadioButton(instance.ApplicationContext);
-                        rb.Text = songList[i].Title;
-                        rb.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent);
-                        rb.SetTextColor(Color.Gray);
-
-                        rb.Typeface = fontLight;
-                        rb.TextSize = 20;
-                        rb.SetPadding(0, (int)(12 * metrics.Density), 0, (int)(12 * metrics.Density));
-                        rb.LetterSpacing = .1f;
-
-                        int temp = i;
-                        rb.Click += delegate
-                        {
-                            //play
-                            if (sm.isPlaying()) sm.stop();
-                            sm.play(songList[temp].getUri().ToString());
-                            sm.playingIndex = temp;
-                        };
-
-                        //Space
-                        View space = new View(instance.ApplicationContext);
-                        space.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent, 1);
-                        space.SetBackgroundColor(Color.Gray);
-                        space.SetPadding((int)(10 * metrics.Density), 0, 0, 0);
-
-                        songsRadioGroup.AddView(rb);
-                        songsRadioGroup.AddView(space);
-                    }
-
-                }
-
-                return null;
-            }
-
-            protected override void OnPostExecute(Java.Lang.Object result)
-            {
-            }
-
-
-
         }
 
 		private void RequestNewInterstitial()

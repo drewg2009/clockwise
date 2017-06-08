@@ -65,18 +65,22 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:paddingTop="20dp"
-        android:paddingBottom="20dp">
+        android:paddingBottom="20dp"
+        android:tag="null">
         <TextView
             android:text="Alarm Tone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView1" />
+            android:id="@+id/textView1"
+            android:textSize="17dp" />
         <TextView
-            android:text="Text"
+            android:text="Default"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tone_text"
-            android:layout_alignParentRight="true" />
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="0.0dp"
+            android:textSize="15dp" />
     </RelativeLayout>
     <View
         android:layout_width="match_parent"
@@ -146,12 +150,14 @@
             android:text="Alarm name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView1" />
+            android:id="@+id/textView1"
+            android:textSize="17dp" />
         <TextView
             android:text="None"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/name_text"
-            android:layout_alignParentRight="true" />
+            android:layout_alignParentRight="true"
+            android:textSize="15dp" />
     </RelativeLayout>
 </LinearLayout>

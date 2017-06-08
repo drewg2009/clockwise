@@ -24,6 +24,7 @@ namespace Clockwise.Droid
 		List<Song> songList;
 		SongManager sm;
 		RadioGroup radioList;
+		public static String result;
 		protected override void OnCreate(Bundle savedInstanceState)
 		{
 			base.OnCreate(savedInstanceState);
@@ -32,7 +33,6 @@ namespace Clockwise.Droid
 
 			// Get the ViewPager and set it's PagerAdapter so that it can display items
 			ViewPager viewPager = FindViewById<ViewPager>(Resource.Id.viewpager);
-			//viewPager.Adapter = new SongPageAdapter(SupportFragmentManager,ApplicationContext, alarm_index);
 			viewPager.Adapter = new SongPageAdapter(SupportFragmentManager, ApplicationContext, alarm_index);
 			
 
@@ -46,6 +46,7 @@ namespace Clockwise.Droid
 			{
 				volume.LayoutParameters.Height = 0;
 				FindViewById<RelativeLayout>(Resource.Id.relativeLayout1).LayoutParameters.Height = 0;
+				result = string.Empty;
 			}
 			else
 			{
@@ -62,6 +63,14 @@ namespace Clockwise.Droid
 		{
 			if (sm != null) { sm.stop(); }
 			base.OnStop();
+		}
+
+		public override void OnBackPressed()
+		{
+			Intent d = new Intent();
+			d.SetData(Android.Net.Uri.Parse(result));
+			SetResult(Result.Ok, d);
+			base.OnBackPressed();
 		}
 	}
 }

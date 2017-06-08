@@ -217,7 +217,7 @@ namespace Clockwise.Helpers
 			set { AppSettings.AddOrUpdateValue<string>(AndroidFileAccessKey, value); }
 		}
 
-		public static void EditAlarm(int index, int hour, int minute, int repeatDays, long millis, int snooze = 10, int volume = 10, string name = "null")
+		public static void EditAlarm(int index, int hour, int minute, int repeatDays, long millis, int snooze = 10, int volume = 10, string name = "null", string song = "null")
 		{
 			String[] currentAlarms = Settings.Alarms.Split('|');
 			if (name == string.Empty) name = EMPTY_MODULE;
@@ -226,14 +226,14 @@ namespace Clockwise.Helpers
 			if (Alarms == string.Empty)
 			{
 				Alarms = "" + index + "#" + hour + "#" + minute + "#" + repeatDays + "#"
-					+ (int)status + "#" + snooze + "#" + volume + "#" + EMPTY_MODULE + "#" + name + "#" + millis;
+					+ (int)status + "#" + snooze + "#" + volume + "#" + song + "#" + name + "#" + millis;
 				ModuleOrder = DefaultModuleOrder;
 				AddModules();
 			}
 			else if (index == currentAlarms.Length)
 			{
 				string newAlarm = "" + index + "#" + hour + "#" + minute + "#" + repeatDays + "#"
-					+ (int)status + "#" + snooze + "#" + volume + "#" + EMPTY_MODULE + "#" + name + "#" + millis;
+					+ (int)status + "#" + snooze + "#" + volume + "#" + song + "#" + name + "#" + millis;
 				Alarms += "|" + newAlarm;
 				AddModules();
 			}

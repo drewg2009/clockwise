@@ -695,19 +695,6 @@ namespace Clockwise.Droid
 			RefreshModules(Intent.GetIntExtra("alarm_number", -1));
 
 			scrollView.setOnScrollChangedListener(new HorizontalScrollListener());
-			if ((int)Build.VERSION.SdkInt >= 23)
-			{
-				if (CheckSelfPermission(Android.Manifest.Permission.ReadExternalStorage)
-			   == Permission.Granted && ManageAlarms.songsRadioGroup == null)
-				{
-					new ManageAlarms.GetSongs().Execute();
-				}
-			}
-			else if (ManageAlarms.songsRadioGroup == null)
-			{
-				new ManageAlarms.GetSongs().Execute();
-			}
-				
 		}
 
 		protected override void OnPause()
