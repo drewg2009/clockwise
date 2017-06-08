@@ -426,6 +426,7 @@ namespace Clockwise.Droid
 			TextView settingTitle = rl.FindViewById<TextView>(Resource.Id.setting_title);
 			ImageView settingImage = rl.FindViewById<ImageView>(Resource.Id.moduleImage);
 			ImageView navButton = rl.FindViewById<ImageView>(Resource.Id.navButton);
+			ImageView delButton = rl.FindViewById<ImageView>(Resource.Id.delete_button);
 			RelativeLayout titleRow = module.FindViewById<RelativeLayout>(Resource.Id.title_row);
 
 			settingTitle.Typeface = Typeface.CreateFromAsset(Resources.Assets, "HelveticaNeueLight.ttf");
@@ -544,7 +545,7 @@ namespace Clockwise.Droid
 
 			if (isToggle)
 			{
-				navButton.SetImageResource(Resource.Drawable.delete2);
+				navButton.SetImageResource(Resource.Drawable.delete);
 				navButton.Click += delegate
 				{
 					//Delete module
@@ -557,17 +558,59 @@ namespace Clockwise.Droid
 					{
 						scrollView.AnimateScrollTo(0);
 					}
-					//scrollView.scr
 					//3) remove module
 					Handler handler = new Handler();
 					handler.PostDelayed(delegate
 					{
 						FindViewById<LinearLayout>(Resource.Id.module_layout).RemoveView(rl);
 					}, 200);
+					//1 -> 1
+					//3 -> 2
+					//5 -> 3
+					int numModules = (tabHolder.ChildCount + 1) / 2;
+					RefreshTabs(numModules - 1);
 				};
 			}
 			else if(!isSeparateActivity)
 			{
+				delButton.Clickable = false;
+				delButton.Click += delegate {
+					//Delete module
+					Settings.DeleteModule(index, modType, subindex);
+					//Update scrollview layout-----
+					//1) Fade module
+					rl.Animate().Alpha(0).SetDuration(50).Start();
+					//2) Scroll to another module. Scroll left if possible
+					if (scrollView.ScrollX > 0)
+					{
+						scrollView.AnimateScrollTo(0);
+					}
+					//3) remove module
+					Handler handler = new Handler();
+					handler.PostDelayed(delegate
+					{
+						FindViewById<LinearLayout>(Resource.Id.module_layout).RemoveView(rl);
+					}, 200);
+					int numModules = (tabHolder.ChildCount + 1) / 2;
+					RefreshTabs(numModules - 1);
+					//Expand clock
+					AnimationHelper clockHeight = new AnimationHelper(clock_settings_layout, new AnimationManager(clock_settings_layout.Height > 0));
+					AnimationHelper moduleFrameHeight = new AnimationHelper(moduleFrame, new AnimationManager(clock_settings_layout.Height == 0));
+					AnimationHelper alarmToggleFade = new AnimationHelper(alarm_toggle, null);
+					AnimationHelper addModuleBtnFade = new AnimationHelper(addModuleBtn, null);
+					AnimationHelper snoozeBtnFade = new AnimationHelper(snoozeButton, null);
+					AnimationHelper toneBtnFade = new AnimationHelper(toneButton, null);
+
+					clockHeight.expand(200, (int)(metrics.HeightPixels * .4));
+					moduleFrameHeight.expand(200, (int)(metrics.HeightPixels * .6));
+					alarmToggleFade.Fade(100, 1f);
+					addModuleBtnFade.Fade(100, 1f);
+					snoozeBtnFade.Fade(100, 1f);
+					snoozeButton.Enabled = true;
+					toneBtnFade.Fade(100, 1f);
+					toneButton.Enabled = true;
+				};
+
 				navButton.Click += delegate
 				{
 					AnimationHelper editorFade = new AnimationHelper(editor, null);
@@ -604,6 +647,8 @@ namespace Clockwise.Droid
 
 						scrollView.HorizontalScrollBarEnabled = false;
 						currentModuleNavButton = navButton;
+						delButton.Clickable = true;
+						delButton.Animate().Alpha(1f).SetDuration(100).Start();
 					}
 					else
 					{ //close editor
@@ -623,6 +668,9 @@ namespace Clockwise.Droid
 							toneButton.Enabled = true;
 						}
 
+						delButton.Clickable = false;
+						delButton.Animate().Alpha(0f).SetDuration(100).Start();
+
 						View focus = CurrentFocus;
 						if (focus != null)
 						{
@@ -632,6 +680,7 @@ namespace Clockwise.Droid
 
 						currentModuleNavButton = null;
 						Module currentModuleTab = modules[selectedTab];
+
 
 						if (currentModuleTab.GetType() == typeof(Weather))
 						{
@@ -658,6 +707,7 @@ namespace Clockwise.Droid
 						{
 							((Twitter)currentModuleTab).Reset(subindex);
 						}
+						
 					}
 				};
 			}

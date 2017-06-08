@@ -17,13 +17,22 @@
         <ImageView
             android:src="@drawable/edit_button"
             android:id="@+id/navButton"
-            android:layout_marginTop="16dp"
             android:layout_alignParentEnd="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxWidth="30dp"
             android:maxHeight="30dp"
-            android:adjustViewBounds="true" />
+            android:adjustViewBounds="true"
+            android:layout_centerVertical="true" />
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/delete_button"
+            android:src="@drawable/delete"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/navButton"
+            android:layout_marginRight="10dp"
+            android:alpha="0" />
         <TextView
             android:text="Module Title"
             android:id="@+id/setting_title"
