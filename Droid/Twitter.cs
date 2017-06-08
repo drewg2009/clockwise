@@ -65,7 +65,7 @@ namespace Clockwise.Droid
 				if (int.TryParse(amountInput.Text, out result) &&
 					int.Parse(amountInput.Text) > 0 && int.Parse(amountInput.Text) <= 10)
 				{
-					Settings.AddTwitter(index, usernameInput.Text, int.Parse(amountInput.Text));
+					bool success = Settings.AddTwitter(index, usernameInput.Text, int.Parse(amountInput.Text));
 
 					addButton.PerformClick();
 
@@ -76,7 +76,10 @@ namespace Clockwise.Droid
 						imm.HideSoftInputFromWindow(focus.WindowToken, 0);
 					}
 
-					Toast.MakeText(activity.ApplicationContext, "Twitter module saved.", ToastLength.Short).Show();
+					if(success)
+						Toast.MakeText(activity.ApplicationContext, "Twitter module saved.", ToastLength.Short).Show();
+					else
+						Toast.MakeText(activity.ApplicationContext, "Twitter module already exists.", ToastLength.Short).Show();
 				}
 				else
 				{
@@ -102,8 +105,11 @@ namespace Clockwise.Droid
 					int.Parse(amountInput.Text) > 0 && int.Parse(amountInput.Text) <= 10)
 				{
 					navButton.PerformClick();
-					Settings.EditTwitter(index, subindex, usernameInput.Text, int.Parse(amountInput.Text));
-					Toast.MakeText(context, "Twitter module saved.", ToastLength.Short).Show();
+					bool success = Settings.EditTwitter(index, subindex, usernameInput.Text, int.Parse(amountInput.Text));
+					if(success)
+						Toast.MakeText(context.ApplicationContext, "Twitter module saved.", ToastLength.Short).Show();
+					else
+						Toast.MakeText(context.ApplicationContext, "Twitter module already exists.", ToastLength.Short).Show();
 				}
 				else
 				{

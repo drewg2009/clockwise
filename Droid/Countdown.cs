@@ -103,7 +103,7 @@ namespace Clockwise.Droid
 			{
 				if (eventNameInput.Text != string.Empty && eventDateInput.Text != string.Empty)
 				{
-					Settings.AddCountdown(index, eventNameInput.Text, eventDateInput.Text);
+					bool success = Settings.AddCountdown(index, eventNameInput.Text, eventDateInput.Text);
 
 					//Collapse
 					addButton.PerformClick();
@@ -114,7 +114,10 @@ namespace Clockwise.Droid
 						InputMethodManager imm = (InputMethodManager)activity.ApplicationContext.GetSystemService("input_method");
 						imm.HideSoftInputFromWindow(focus.WindowToken, 0);
 					}
-					Toast.MakeText(activity.ApplicationContext, "Countdown module saved.", ToastLength.Short).Show();
+					if(success)
+						Toast.MakeText(activity.ApplicationContext, "Countdown module saved.", ToastLength.Short).Show();
+					else
+						Toast.MakeText(activity.ApplicationContext, "Countdown module already exists.", ToastLength.Short).Show();
 				}
 				else
 				{
@@ -139,8 +142,11 @@ namespace Clockwise.Droid
 				if (eventNameInput.Text != string.Empty && eventDateInput.Text != string.Empty)
 				{
 					navButton.PerformClick();
-					Settings.EditCountdown(index, subindex, eventNameInput.Text, eventDateInput.Text);
-					Toast.MakeText(context, "Countdown module saved.", ToastLength.Short).Show();
+					bool success = Settings.EditCountdown(index, subindex, eventNameInput.Text, eventDateInput.Text);
+					if(success)
+						Toast.MakeText(context, "Countdown module saved.", ToastLength.Short).Show();
+					else
+						Toast.MakeText(context, "Countdown module already exists.", ToastLength.Short).Show();
 				}
 				else
 				{

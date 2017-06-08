@@ -464,7 +464,7 @@ namespace Clockwise.Helpers
 		{
 			String[] news = News.Split('|');
 			string newNewsSetting = category + ":" + count;
-			if (GetNews(index).Contains(newNewsSetting))
+			if (GetNews(index).Contains(category))
 			{
 				return false;
 			}
@@ -488,7 +488,7 @@ namespace Clockwise.Helpers
 		{
 			String[] twitters = Twitter.Split('|');
 			string newTwitterSetting = username + ":" + count;
-			if (GetTwitter(index).Contains(newTwitterSetting))
+			if (GetTwitter(index).Contains(username))
 			{
 				return false;
 			}
@@ -513,7 +513,7 @@ namespace Clockwise.Helpers
 			String[] reddits = Reddit.Split('|');
 			string newRedditSetting = subreddit + ":" + count;
 
-			if (GetReddit(index).Contains(newRedditSetting))
+			if (GetReddit(index).Contains(subreddit))
 			{
 				return false;
 			}
@@ -538,7 +538,7 @@ namespace Clockwise.Helpers
 			String[] countdowns = Countdown.Split('|');
 			string newCountdownSetting = eventName + ":" + date;
 
-			if (GetCountdown(index).Contains(newCountdownSetting))
+			if (GetCountdown(index).Contains(eventName))
 			{
 				return false;
 			}
@@ -562,8 +562,10 @@ namespace Clockwise.Helpers
 		{
 			String[] reminders = Reminders.Split('|');
 			string newRemindersSeting = listName + ":" + list;
-
-			if (GetReminders(index).Contains(newRemindersSeting))
+			string thisReminder = GetReminders(index);
+			if(thisReminder != EMPTY_MODULE)
+				thisReminder = thisReminder.Substring(10);
+			if (GetReminders(index).Contains(listName + ":"))
 			{
 				return false;
 			}
@@ -588,7 +590,7 @@ namespace Clockwise.Helpers
 			String[] traffics = Traffic.Split('|');
 			string newTrafficSetting = destName + ":" + startLat + ":" + startLon + ":" + destLat + ":" +destLon + ":" + mode;
 
-			if (GetTraffic(index).Contains(newTrafficSetting))
+			if (GetTraffic(index).Contains(destName))
 			{
 				return false;
 			}
@@ -641,9 +643,11 @@ namespace Clockwise.Helpers
 			TDIH = newTDIHSetting.TrimEnd('|');
 		}
 
-		public static void EditReddit(int index, int subindex, string subreddit, int count)
+		public static bool EditReddit(int index, int subindex, string subreddit, int count)
 		{
 			string[] reddits = Reddit.Split('|');
+			if (GetReddit(index).Contains(subreddit))
+			   return false;
 			string thisReddit = reddits[index]; //reddit:subreddit:count,subreddit:count, ...
 			List<string> moduleList = new List<string>(thisReddit.Substring(thisReddit.IndexOf(':') + 1).Split(','));
 			moduleList[subindex] = subreddit + ":" + count;
@@ -659,10 +663,13 @@ namespace Clockwise.Helpers
 				newSetting += s + "|";
 
 			Reddit = newSetting.TrimEnd('|');
+			return true;
 		}
 
-		public static void EditTwitter(int index, int subindex, string username, int count)
+		public static bool EditTwitter(int index, int subindex, string username, int count)
 		{
+			if (GetTwitter(index).Contains(username))
+				return false;
 			string[] twitters = Twitter.Split('|');
 			string thisTwitter = twitters[index]; //twitter:subreddit:count,subreddit:count, ...
 			List<string> moduleList = new List<string>(thisTwitter.Substring(thisTwitter.IndexOf(':') + 1).Split(','));
@@ -679,10 +686,13 @@ namespace Clockwise.Helpers
 				newSetting += s + "|";
 
 			Twitter = newSetting.TrimEnd('|');
+			return true;
 		}
 
-		public static void EditCountdown(int index, int subindex, string eventName, string date)
+		public static bool EditCountdown(int index, int subindex, string eventName, string date)
 		{
+			if (GetCountdown(index).Contains(eventName))
+				return false;
 			string[] countdowns = Countdown.Split('|');
 			string thisCountdown = countdowns[index]; //countdown:subreddit:count,subreddit:count, ...
 			List<string> moduleList = new List<string>(thisCountdown.Substring(thisCountdown.IndexOf(':') + 1).Split(','));
@@ -699,10 +709,13 @@ namespace Clockwise.Helpers
 				newSetting += s + "|";
 
 			Countdown = newSetting.TrimEnd('|');
+			return true;
 		}
 
-		public static void EditTraffic(int index, int subindex, string destName, float startLat, float startLon, float destLat, float destLon, string mode)
+		public static bool EditTraffic(int index, int subindex, string destName, float startLat, float startLon, float destLat, float destLon, string mode)
 		{
+			if (GetTraffic(index).Contains(destName))
+				return false;
 			string[] traffics = Traffic.Split('|');
 			string thisTraffic = traffics[index]; //traffic:subreddit:count,subreddit:count, ...
 			List<string> moduleList = new List<string>(thisTraffic.Substring(thisTraffic.IndexOf(':') + 1).Split(','));
@@ -719,10 +732,18 @@ namespace Clockwise.Helpers
 				newSetting += s + "|";
 
 			Traffic = newSetting.TrimEnd('|');
+			return true;
 		}
 
-		public static void EditReminders(int index, int subindex, string listName, string list)
+		public static bool EditReminders(int index, int subindex, string listName, string list)
 		{
+			string thisReminder = GetReminders(index);
+			if(thisReminder != EMPTY_MODULE)
+				thisReminder = thisReminder.Substring(10);
+			if (GetReminders(index).Contains(listName + ":"))
+			{
+				return false;
+			}
 			string[] reminders = Reminders.Split('|');
 			string thisReminders = reminders[index];
 			List<string> moduleList = new List<string>(thisReminders.Substring(thisReminders.IndexOf(':') + 1).Split(','));
@@ -739,10 +760,13 @@ namespace Clockwise.Helpers
 				newSetting += s + "|";
 
 			Reminders = newSetting.TrimEnd('|');
+			return true;
 		}
 
-		public static void EditNews(int index, int subindex, string category, int count)
+		public static bool EditNews(int index, int subindex, string category, int count)
 		{
+			if (GetNews(index).Contains(category))
+				return false;
 			string[] news = News.Split('|');
 			string thisNews = news[index]; //twitter:subreddit:count,subreddit:count, ...
 			List<string> moduleList = new List<string>(thisNews.Substring(thisNews.IndexOf(':') + 1).Split(','));
@@ -759,6 +783,7 @@ namespace Clockwise.Helpers
 				newSetting += s + "|";
 
 			News = newSetting.TrimEnd('|');
+			return true;
 		}
 
 		public static bool GetFact(int index)

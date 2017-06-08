@@ -693,8 +693,20 @@ namespace Clockwise.Droid
 			LinearLayout moduleLayout = FindViewById<LinearLayout>(Resource.Id.module_layout);
 			while(moduleLayout.ChildCount > 0) moduleLayout.RemoveViewAt(0);
 			RefreshModules(Intent.GetIntExtra("alarm_number", -1));
-
 			scrollView.setOnScrollChangedListener(new HorizontalScrollListener());
+
+			if (tabHolder.ChildCount > 0)
+			{
+				LinearLayout scroll_layout = (LinearLayout)((ViewGroup)scrollView).GetChildAt(0);
+				int moduleWidth = DisplayMetrics.WidthPixels;
+				currentModule = (scrollView.ScrollX + (moduleWidth / 2)) / moduleWidth;
+				int target = currentModule * moduleWidth;
+
+				tabHolder.GetChildAt(0).Alpha = .15f;
+				tabHolder.GetChildAt(currentModule * 2).Alpha = .4f;
+				selectedTab = currentModule;
+			}
+
 		}
 
 		protected override void OnPause()

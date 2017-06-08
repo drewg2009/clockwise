@@ -106,14 +106,19 @@ namespace Clockwise.Droid
 				if (listTitleInput.Text.Length > 0 && reminderViews.Count > 0
 					&& (reminderViews[0].FindViewById<EditText>(Resource.Id.reminderInput)).Text.Trim() != string.Empty)
 				{
-					Settings.AddReminders(index, listTitleInput.Text, remindersSB.ToString().TrimEnd(';'));
-					Toast.MakeText(context, "Reminders Module Saved", ToastLength.Short).Show();
 					View focus = activity.CurrentFocus;
 					if (focus != null)
 					{
 						InputMethodManager imm = (InputMethodManager)activity.ApplicationContext.GetSystemService("input_method");
 						imm.HideSoftInputFromWindow(focus.WindowToken, 0);
 					}
+
+					bool success = Settings.AddReminders(index, listTitleInput.Text, remindersSB.ToString().TrimEnd(';'));
+					if(success)
+						Toast.MakeText(context, "Reminders module saved.", ToastLength.Short).Show();
+					else 
+						Toast.MakeText(context, "Reminders module already exists.", ToastLength.Short).Show();
+
 
 					addButton.PerformClick();
 				}
@@ -158,8 +163,12 @@ namespace Clockwise.Droid
 					&& (reminderViews[0].FindViewById<EditText>(Resource.Id.reminderInput)).Text.Trim() != string.Empty)
 				{
 					navButton.PerformClick();
-					Settings.EditReminders(index, subindex, listTitleInput.Text, remindersSB.ToString());
-					Toast.MakeText(context, "Reminders Module Saved", ToastLength.Short).Show();
+
+					bool success = Settings.EditReminders(index, subindex, listTitleInput.Text, remindersSB.ToString());
+					if(success)
+						Toast.MakeText(context, "Reminders module saved.", ToastLength.Short).Show();
+					else 
+						Toast.MakeText(context, "Reminders module already exists.", ToastLength.Short).Show();
 				}
 				else
 				{

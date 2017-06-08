@@ -67,7 +67,7 @@ namespace Clockwise.Droid
 				if (int.TryParse(amountInput.Text, out result) && 
 				    int.Parse(amountInput.Text) > 0 && int.Parse(amountInput.Text) <= 10)
 				{
-					Settings.AddNews(index, spinner.SelectedItem.ToString(), int.Parse(amountInput.Text));
+					bool success = Settings.AddNews(index, spinner.SelectedItem.ToString(), int.Parse(amountInput.Text));
 					addButton.PerformClick();
 					View focus = activity.CurrentFocus;
 					if (focus != null)
@@ -76,7 +76,10 @@ namespace Clockwise.Droid
 						imm.HideSoftInputFromWindow(focus.WindowToken, 0);
 					}
 
-					Toast.MakeText(activity.ApplicationContext, "News module saved.", ToastLength.Short).Show();
+					if(success)
+						Toast.MakeText(activity.ApplicationContext, "News module saved.", ToastLength.Short).Show();
+					else
+						Toast.MakeText(activity.ApplicationContext, "News module already exists.", ToastLength.Short).Show();
 				}
 				else
 				{
@@ -107,8 +110,11 @@ namespace Clockwise.Droid
 					int.Parse(amountInput.Text) > 0 && int.Parse(amountInput.Text) <= 10)
 				{
 					navButton.PerformClick();
-					Settings.EditNews(index, subindex, spinner.SelectedItem.ToString(), int.Parse(amountInput.Text));
-					Toast.MakeText(context, "News module saved.", ToastLength.Short).Show();
+					bool success = Settings.EditNews(index, subindex, spinner.SelectedItem.ToString(), int.Parse(amountInput.Text));
+					if(success)
+						Toast.MakeText(context, "News module saved.", ToastLength.Short).Show();
+					else
+						Toast.MakeText(context, "News module already exists.", ToastLength.Short).Show();
 				}
 				else
 				{

@@ -63,7 +63,7 @@ namespace Clockwise.Droid
 				if (int.TryParse(amountInput.Text, out result) &&
 					int.Parse(amountInput.Text) > 0 && int.Parse(amountInput.Text) <= 10)
 				{
-					Settings.AddReddit(index, subredditInput.Text, int.Parse(amountInput.Text));
+					bool success = Settings.AddReddit(index, subredditInput.Text, int.Parse(amountInput.Text));
 
 					addButton.PerformClick();
 
@@ -74,7 +74,10 @@ namespace Clockwise.Droid
 						imm.HideSoftInputFromWindow(view.WindowToken, 0);
 					}
 
-					Toast.MakeText(context, "Reddit module saved.", ToastLength.Short).Show();
+					if(success)
+						Toast.MakeText(context, "Reddit module saved.", ToastLength.Short).Show();
+					else
+						Toast.MakeText(context, "Reddit module already exists.", ToastLength.Short).Show();
 				}
 				else
 				{
@@ -101,8 +104,11 @@ namespace Clockwise.Droid
 					int.Parse(amountInput.Text) > 0 && int.Parse(amountInput.Text) <= 10)
 				{
 					navButton.PerformClick();
-					Settings.EditReddit(index, subindex, subredditInput.Text, int.Parse(amountInput.Text));
-					Toast.MakeText(context, "Reddit module saved.", ToastLength.Short).Show();
+					bool success = Settings.EditReddit(index, subindex, subredditInput.Text, int.Parse(amountInput.Text));
+					if(success)
+						Toast.MakeText(context, "Reddit module saved.", ToastLength.Short).Show();
+					else 
+						Toast.MakeText(context, "Reddis module already exists.", ToastLength.Short).Show();
 				}
 				else
 				{
